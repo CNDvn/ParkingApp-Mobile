@@ -1,8 +1,9 @@
-class AppColor {
-  static final lightButton = Color(#3da9fc);
-  static final blackParagraph = Color(##5f6c7b);
-  static final whiteTextButton  = Color(##fffffe);
-  static final blackHeadline = Color(#094067);
+import 'package:parkingappmobile/utils/hex_color.dart';
 
-  
+class AppColor {
+  static final HexColor lightButton = HexColor("#3da9fc");
+  static final HexColor blackParagraph = HexColor("#5f6c7b");
+  static final HexColor whiteText = HexColor("#fffffe");
+  static final HexColor blackHeadline = HexColor("#094067");
+  static final HexColor blackText= HexColor("#3B414B");
 }
