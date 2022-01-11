@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parkingappmobile/constants/assets_path.dart';
 
 class RootPage extends StatelessWidget {
   const RootPage({Key? key}) : super(key: key);
@@ -9,7 +10,9 @@ class RootPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Root Page"),
       ),
-      body: Container(),
+      body: Column(
+        children: [Image.asset(AssetPath.posterCity)],
+      ),
     );
   }
 }

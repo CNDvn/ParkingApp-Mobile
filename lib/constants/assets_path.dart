@@ -1,1 +1,4 @@
-// nơi ghi file path ảnh 
+class AssetPath {
+  static const String prePath = "assets/images";
+  static const String posterCity = '$prePath/city.png';
+}
