@@ -48,22 +48,22 @@ class SignInProvider with ChangeNotifier {
   void checkPhone(String value) {
     // String p = r'^(?:[+0]9)?[0-9]{10}$';
     // RegExp regExp = RegExp(p);
-    if (submitValid && value.isEmpty) {
-      _phone = ValidationItem(null, "Phone is empty");
-    } else if (submitValid &&/*!regExp.hasMatch(value)*/value.length < 10) {
-      _phone = ValidationItem(null, "Phone is invalid Pattern");
-    }else {
-      _phone = ValidationItem(value, null);      
+    if (value.isEmpty) {
+      _phone = ValidationItem(value, "Phone is empty");
+    } else if (value.length < 10) {
+      _phone = ValidationItem(value, "Phone is invalid Pattern");
+    } else {
+      _phone = ValidationItem(value, null);
     }
     notifyListeners();
   }
 
   void checkPassword(String value) {
-    if (submitValid && value.isEmpty) {
-      _password = ValidationItem(null, "Password is empty");
-    } else if (submitValid && value.length < 8) {
-      _password = ValidationItem(null, "Password must 8 charactor"); 
-    }else {
+    if (value.isEmpty) {
+      _password = ValidationItem(value, "Password is empty");
+    } else if (value.length < 8) {
+      _password = ValidationItem(value, "Password must 8 charactor");
+    } else {
       _password = ValidationItem(value, null);
     }
     notifyListeners();
@@ -79,28 +79,25 @@ class SignInProvider with ChangeNotifier {
     if (_password.value != null && field.contains('password')) {
       FocusScope.of(context).unfocus();
       submitData(context);
-   }
+    }
   }
 
   bool get isValid {
-    if (_phone.value !=null && _password.value !=null) {
+    if (_phone.value != null && _password.value != null) {
       return true;
-    } else { 
-    return false;
+    } else {
+      return false;
     }
   }
 
   void submitData(BuildContext context) {
-    submitValid = _phone.value != null &&
-        _phone.error == null &&
-        _password.value != null &&
-        _password.error== null;
-    if (!submitValid) {
+    submitValid = _phone.error != null || _password.error != null || _phone.value == null || password.value == null;
+    if (submitValid) {
       submitValid = true;
       checkPhone(_phone.value ?? "");
       checkPassword(_password.value ?? "");
       notifyListeners();
-    } else if (submitValid && isValid){
+    } else if (!submitValid && isValid) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const RootPage()),
           (route) => false);

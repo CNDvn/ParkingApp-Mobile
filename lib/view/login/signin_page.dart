@@ -35,7 +35,7 @@ class SignInPage extends StatelessWidget {
                             )
                           : null,
                       labelText: "Phone number",
-                      errorText: signInProvider.phone.error
+                      errorText: signInProvider.submitValid ? signInProvider.phone.error : null
                     ),
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.done,
@@ -58,7 +58,7 @@ class SignInPage extends StatelessWidget {
                       IconButton(icon: signInProvider.isPasswordVariable? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
                       onPressed: ()=> signInProvider.changePasswordVariable()): null,
                       labelText: "Password",
-                      errorText: signInProvider.password.error
+                      errorText: signInProvider.submitValid ? signInProvider.password.error : null
                     ),
                     obscureText: signInProvider.isPasswordVariable,
                     keyboardType: TextInputType.multiline,
