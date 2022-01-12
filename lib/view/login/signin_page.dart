@@ -28,15 +28,17 @@ class SignInPage extends StatelessWidget {
                   width: size.width * 0.9,
                   child: TextField(
                     decoration: InputDecoration(
-                      suffixIcon: signInProvider.textPhone.isNotEmpty
-                          ? IconButton(
-                              icon:const Icon(Icons.close),
-                              onPressed: () => signInProvider.clearPhoneController(),
-                            )
-                          : null,
-                      labelText: "Phone number",
-                      errorText: signInProvider.submitValid ? signInProvider.phone.error : null
-                    ),
+                        suffixIcon: signInProvider.textPhone.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () =>
+                                    signInProvider.clearPhoneController(),
+                              )
+                            : null,
+                        labelText: "Phone number",
+                        errorText: signInProvider.submitValid
+                            ? signInProvider.phone.error
+                            : null),
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.done,
                     controller: signInProvider.phoneController,
@@ -54,16 +56,34 @@ class SignInPage extends StatelessWidget {
                   width: size.width * 0.9,
                   child: TextField(
                     decoration: InputDecoration(
-                      suffixIcon: signInProvider.textPassword.isNotEmpty? 
-                      IconButton(icon: signInProvider.isPasswordVariable? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
-                      onPressed: ()=> signInProvider.changePasswordVariable()): null,
-                      labelText: "Password",
-                      errorText: signInProvider.submitValid ? signInProvider.password.error : null
-                    ),
+                        suffixIcon: signInProvider.textPassword.isNotEmpty
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () => signInProvider
+                                        .clearPasswordController(),
+                                  ),
+                                  IconButton(
+                                      icon: signInProvider.isPasswordVariable
+                                          ? const Icon(Icons.visibility)
+                                          : const Icon(Icons.visibility_off),
+                                      onPressed: () => signInProvider
+                                          .changePasswordVariable()),
+                                ],
+                              )
+                            : null,
+                        labelText: "Password",
+                        errorText: signInProvider.submitValid
+                            ? signInProvider.password.error
+                            : null),
                     obscureText: signInProvider.isPasswordVariable,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.done,
-                    controller: signInProvider.passwordController, 
+                    controller: signInProvider.passwordController,
                     onChanged: (String value) {
                       signInProvider.checkPassword(value);
                     },

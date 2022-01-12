@@ -46,12 +46,10 @@ class SignInProvider with ChangeNotifier {
   }
 
   void checkPhone(String value) {
-    // String p = r'^(?:[+0]9)?[0-9]{10}$';
-    // RegExp regExp = RegExp(p);
     if (value.isEmpty) {
       _phone = ValidationItem(value, "Phone is empty");
     } else if (value.length < 10) {
-      _phone = ValidationItem(value, "Phone is invalid Pattern");
+      _phone = ValidationItem(value, "Phone must 10 charactor");
     } else {
       _phone = ValidationItem(value, null);
     }
@@ -85,15 +83,16 @@ class SignInProvider with ChangeNotifier {
   bool get isValid {
     if (_phone.value != null && _password.value != null) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   void submitData(BuildContext context) {
-    submitValid = _phone.error != null || _password.error != null || _phone.value == null || password.value == null;
+    submitValid = _phone.error != null ||
+        _password.error != null ||
+        _phone.value == null ||
+        password.value == null;
     if (submitValid) {
-      submitValid = true;
       checkPhone(_phone.value ?? "");
       checkPassword(_password.value ?? "");
       notifyListeners();
