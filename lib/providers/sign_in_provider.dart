@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/view/rootPage/root_page.dart';
 
@@ -49,15 +48,10 @@ class SignInProvider with ChangeNotifier {
   void checkPhone(String value) {
     // String p = r'^(?:[+0]9)?[0-9]{10}$';
     // RegExp regExp = RegExp(p);
-    print("VVVVVVVVVVVVVVVVVVV"+ _phone.value.toString()+ " VS "+ _phone.error.toString());
-    print(submitValid);
-    print(value.isEmpty);
-    print(value.length < 10);
-    print(submitValid && value.length < 10);
     if (submitValid && value.isEmpty) {
       _phone = ValidationItem(null, "Phone is empty");
     } else if (submitValid &&/*!regExp.hasMatch(value)*/value.length < 10) {
-      _phone = ValidationItem(null, "Phone is invalid Pattern");      
+      _phone = ValidationItem(null, "Phone is invalid Pattern");
     }else {
       _phone = ValidationItem(value, null);      
     }
@@ -65,7 +59,6 @@ class SignInProvider with ChangeNotifier {
   }
 
   void checkPassword(String value) {
-    print("YYYYYYYYYYYYYYY");
     if (submitValid && value.isEmpty) {
       _password = ValidationItem(null, "Password is empty");
     } else if (submitValid && value.length < 8) {
@@ -78,7 +71,7 @@ class SignInProvider with ChangeNotifier {
 
   void changeFocus(BuildContext context, String field) {
     var newFocus = _phoneFocus;
-    if (_phone.value != null && field.contains('phone')) {
+    if (_phone.value != null && field.contains("phone")) {
       newFocus = _passwordFocus;
       FocusScope.of(context).requestFocus(newFocus);
       return;
@@ -92,17 +85,16 @@ class SignInProvider with ChangeNotifier {
   bool get isValid {
     if (_phone.value !=null && _password.value !=null) {
       return true;
-    }
+    } else { 
     return false;
+    }
   }
 
-  void submitData(BuildContext context) {   
-    print("***********"+submitValid.toString()); 
+  void submitData(BuildContext context) {
     submitValid = _phone.value != null &&
         _phone.error == null &&
         _password.value != null &&
-        _password.error == null;
-    print("==========="+submitValid.toString());
+        _password.error== null;
     if (!submitValid) {
       submitValid = true;
       checkPhone(_phone.value ?? "");

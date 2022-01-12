@@ -37,12 +37,10 @@ class SignInPage extends StatelessWidget {
                       labelText: "Phone number",
                       errorText: signInProvider.phone.error
                     ),
-                    //autofocus: false,
                     keyboardType: TextInputType.phone,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     controller: signInProvider.phoneController,
                     onChanged: (String value) {
-                      print(value);
                       signInProvider.checkPhone(value);
                     },
                     focusNode: signInProvider.phoneFocus,
@@ -62,7 +60,6 @@ class SignInPage extends StatelessWidget {
                       labelText: "Password",
                       errorText: signInProvider.password.error
                     ),
-                    //autofocus: false,
                     obscureText: signInProvider.isPasswordVariable,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.done,
@@ -90,7 +87,6 @@ class SignInPage extends StatelessWidget {
                   child: ButtonDefault(
                     content: "Login",
                     voidCallBack: () {
-                      print("%%%%lOGIN NE`");
                       signInProvider.submitData(context);
                     },
                   ),
