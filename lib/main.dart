@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/providers/sign_in_provider.dart';
+import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view/rootPage/root_page.dart';
 import 'package:provider/provider.dart';
 
@@ -23,9 +24,10 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Parking App',
           theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "OpenSans"),
-          initialRoute: "/",
+          initialRoute: "/SignIn",
           routes: {
             "/":(context) =>const RootPage(),
+            "/SignIn":(context) =>const SignInPage()
           },
           //home: const RootPage()
           ),

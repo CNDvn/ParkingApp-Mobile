@@ -15,22 +15,22 @@ class AppTextStyles {
   static final h2 = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 24,
-    color: AppColor.whiteText
+    color: AppColor.blackText
   );
    static final h3 = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 18,
-    color: AppColor.whiteText
+    color: AppColor.blackText
   );
    static final h4 = TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 16,
-    color: AppColor.whiteText
+    color: AppColor.blackText
   );
    static final h5 = TextStyle(
     fontWeight: FontWeight.w300,
     fontSize: 13,
-    color: AppColor.whiteText
+    color: AppColor.blackText
   );
 
 }

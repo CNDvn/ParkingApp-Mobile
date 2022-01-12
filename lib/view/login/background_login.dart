@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 
-class BackGroundLogin extends StatelessWidget {
+class BackGroundSignIn extends StatelessWidget {
   final Widget widget_child;
-  const BackGroundLogin({ Key? key,required this.widget_child }) : super(key: key);
+  const BackGroundSignIn({ Key? key,required this.widget_child }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
