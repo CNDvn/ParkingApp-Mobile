@@ -6,10 +6,10 @@ class ValidationItem {
   final String? error;
   ValidationItem(this.value, this.error);
 }
-
 class SignInProvider with ChangeNotifier {
   ValidationItem _phone = ValidationItem(null, null);
   ValidationItem _password = ValidationItem(null, null);
+  
   bool isPasswordVariable = true;
   bool submitValid = false;
 
@@ -24,6 +24,7 @@ class SignInProvider with ChangeNotifier {
 
   TextEditingController get phoneController => _phoneTextEditController;
   TextEditingController get passwordController => _passwordTextEditController;
+
   String get textPhone => phoneController.text;
   String get textPassword => passwordController.text;
 
@@ -88,10 +89,12 @@ class SignInProvider with ChangeNotifier {
   }
 
   void submitData(BuildContext context) {
+
     submitValid = _phone.error != null ||
         _password.error != null ||
         _phone.value == null ||
         password.value == null;
+        
     if (submitValid) {
       checkPhone(_phone.value ?? "");
       checkPassword(_password.value ?? "");

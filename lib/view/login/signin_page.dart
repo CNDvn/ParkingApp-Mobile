@@ -40,7 +40,7 @@ class SignInPage extends StatelessWidget {
                             ? signInProvider.phone.error
                             : null),
                     keyboardType: TextInputType.phone,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.next,
                     controller: signInProvider.phoneController,
                     onChanged: (String value) {
                       signInProvider.checkPhone(value);
