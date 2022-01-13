@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/providers/sign_in_provider.dart';
-import 'package:parkingappmobile/view/login/signin_page.dart';
-import 'package:parkingappmobile/view/rootPage/root_page.dart';
+import 'package:parkingappmobile/configs/routes/routes.dart';
+import 'package:parkingappmobile/providers/main_providers/main_providers.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -15,20 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-         ChangeNotifierProvider<SignInProvider>(
-          create: (context) => SignInProvider(),
-        ),
-      ],
+      providers: MainProviders.providers,
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Parking App',
           theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "OpenSans"),
           initialRoute: "/SignIn",
-          routes: {
-            "/":(context) =>const RootPage(),
-            "/SignIn":(context) =>const SignInPage()
-          },
+          routes: Routes.routes,
           //home: const RootPage()
           ),
     );
