@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/view/rootPage/root_page.dart';
-import 'package:provider/provider.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
+
 
 void main() {
   runApp(const MyApp());
