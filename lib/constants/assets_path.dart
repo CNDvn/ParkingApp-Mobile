@@ -6,4 +6,8 @@ class AssetPath {
   static const String history = '$prePath/history.png';
   static const String customerService = '$prePath/customerService.png';
   static const String setting = '$prePath/settings.png';
+  static const String logout = '$prePath/logout.png';
+  static const String avataMenu =
+      'https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg';
+  static const String close = '$prePath/close.png';
 }
