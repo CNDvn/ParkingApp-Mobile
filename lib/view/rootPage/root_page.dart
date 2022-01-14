@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
+import 'package:parkingappmobile/widgets/button/button.dart';
 
 class RootPage extends StatelessWidget {
   const RootPage({Key? key}) : super(key: key);
@@ -11,6 +12,6 @@ class RootPage extends StatelessWidget {
         appBar: AppBar(
           title: const Text("Root Page"),
         ),
-        body: UserProfile());
+        body: Container());
   }
 }
