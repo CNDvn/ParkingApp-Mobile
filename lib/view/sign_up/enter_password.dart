@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:parkingappmobile/providers/enter_password_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:provider/provider.dart';
 
 class EnterPassword extends StatelessWidget {
   const EnterPassword({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    EnterPasswordProvider provider =
+        Provider.of<EnterPasswordProvider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -39,26 +43,45 @@ class EnterPassword extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.1,
                     width: size.width * 0.9,
-                    child: const TextField(
-                      decoration: InputDecoration(
-                          labelText: "Password", fillColor: Colors.grey),
-                      autofocus: false,
-                    ),
+                    child: TextField(
+                        decoration: InputDecoration(
+                            labelText: 'Password',
+                            errorText: provider.clickButtonFlag
+                                ? provider.password.error
+                                : null),
+                        autofocus: true,
+                        onEditingComplete: () {
+                          provider.nodeConfirmPassword.requestFocus();
+                        },
+                        onChanged: (String value) {
+                          provider.checkPassword(value);
+                        }),
                   ),
                   SizedBox(
                     height: size.height * 0.18,
                     width: size.width * 0.9,
-                    child: const TextField(
-                      decoration: InputDecoration(
-                          labelText: "Confirm Password",
-                          fillColor: Colors.grey),
-                      autofocus: false,
-                    ),
+                    child: TextField(
+                        decoration: InputDecoration(
+                            labelText: 'Confirm Password',
+                            errorText: provider.clickButtonFlag
+                                ? provider.confirmPassword.error
+                                : null),
+                        focusNode: provider.nodeConfirmPassword,
+                        onEditingComplete: () {
+                          provider.nodeConfirmPassword.unfocus();
+                          provider.submit();
+                        },
+                        onChanged: (String value) {
+                          provider.checkConfirmPassword(value);
+                        }),
                   ),
                   SizedBox(
                       width: size.width * 0.9,
                       child: ButtonDefault(
-                          content: "Create Account", voidCallBack: () {}))
+                          content: "Create Account",
+                          voidCallBack: () {
+                            provider.submit();
+                          }))
                 ],
               ),
             ),

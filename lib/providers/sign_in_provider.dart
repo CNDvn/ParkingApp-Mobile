@@ -1,5 +1,3 @@
 import 'package:flutter/material.dart';
 
-class SignInProvider with ChangeNotifier {
-  
-}
+class SignInProvider with ChangeNotifier {}

@@ -17,8 +17,8 @@ class RootPage extends StatelessWidget {
       //   children: [Image.asset(AssetPath.posterCity)],
       // ),
       // body: EnterPhoneNumber(),
-      body: EnterVerificationCode(),
-      // body: EnterPassword(),
+      // body: EnterVerificationCode(),
+      body: EnterPassword(),
     );
   }
 }
