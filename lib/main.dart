@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Parking App',
           theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "OpenSans"),
-          initialRoute: "/SignIn",
+          initialRoute: "/",
           routes: Routes.routes,
           //home: const RootPage()
           ),
