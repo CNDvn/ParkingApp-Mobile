@@ -7,4 +7,8 @@ class AppColor {
   static final HexColor blackHeadline = HexColor("#094067");
   static final HexColor blackText= HexColor("#3B414B");
   static final HexColor whiteBackground = HexColor("#fffffe");
+  static final HexColor greyText = HexColor("#757F8C");
+  static final HexColor blueBackground = HexColor("#b0e5fc") ;
+  static final HexColor blueText = HexColor("#249efc") ;
+  static final HexColor greyBackground = HexColor("#9ca3ac");
 }
