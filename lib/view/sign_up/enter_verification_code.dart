@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
+import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
 class EnterVerificationCode extends StatelessWidget {
@@ -9,13 +10,13 @@ class EnterVerificationCode extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColor.whiteBackground,
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(20),
           alignment: Alignment.bottomCenter,
           child: Container(
-            color: Colors.white,
+            color: AppColor.whiteBackground,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 50, 0, 70),
               child: Column(
@@ -32,7 +33,7 @@ class EnterVerificationCode extends StatelessWidget {
                       "Enter verification code",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.grey[700],
+                          color: AppColor.greyText,
                           fontSize: 17,
                           fontWeight: FontWeight.w400),
                     ),

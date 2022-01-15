@@ -4,6 +4,8 @@ import 'package:parkingappmobile/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/view/rootPage/root_page.dart';
 import 'package:parkingappmobile/view/sign_up/enter_password.dart';
+import 'package:parkingappmobile/view/sign_up/enter_phone_number.dart';
+import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +39,9 @@ class MyApp extends StatelessWidget {
         routes: {
           "/": (context) => const RootPage(),
           "/userProfile": (context) => const UserProfile(),
-          "/EnterPassword": (context) => const EnterPassword()
+          "/EnterPassword": (context) => const EnterPassword(),
+          "/EnterPhoneNumber": (context) => const EnterPhoneNumber(),
+          "/EnterVerificationCode": (context) => const EnterVerificationCode()
         },
         //home: const RootPage()
       ),
