@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/providers/enter_password_provider.dart';
 import 'package:parkingappmobile/providers/sign_in_provider.dart';
+import 'package:parkingappmobile/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/view/rootPage/root_page.dart';
 import 'package:parkingappmobile/view/sign_up/enter_password.dart';
+import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SignInProvider>(
           create: (context) => SignInProvider(),
         ),
+        ChangeNotifierProvider<UserProfileProvider>(
+          create: (context) => UserProfileProvider(),
+        ),
         ChangeNotifierProvider<EnterPasswordProvider>(
           create: (context) => EnterPasswordProvider(),
         ),
@@ -31,7 +36,8 @@ class MyApp extends StatelessWidget {
         initialRoute: "/EnterPassword",
         routes: {
           "/": (context) => const RootPage(),
-          "/EnterPassword": (context) => const EnterPassword(),
+          "/userProfile": (context) => const UserProfile(),
+          "/EnterPassword": (context) => const EnterPassword()
         },
         //home: const RootPage()
       ),
