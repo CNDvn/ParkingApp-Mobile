@@ -57,6 +57,10 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    /*Handle Geocoder google map*/
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
 }
 
 flutter {
