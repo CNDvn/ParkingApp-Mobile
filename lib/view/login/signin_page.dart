@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
-import 'package:parkingappmobile/view/rootPage/root_page.dart';
+import 'package:parkingappmobile/view/sign_up/enter_phone_number.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
 
@@ -14,8 +14,8 @@ class SignInPage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     SignInProvider signInProvider = Provider.of<SignInProvider>(context);
     return Scaffold(
-      body: BackGroundSignIn(
-        widget_child: SingleChildScrollView(
+      body: BackGround(
+        widgetChild: SingleChildScrollView(
           child: Container(
             height: size.height,
             width: size.width,
@@ -126,7 +126,7 @@ class SignInPage extends StatelessWidget {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return const RootPage();
+                              return const EnterPhoneNumber();
                             }));
                           }),
                     ],

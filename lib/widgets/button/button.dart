@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 
 class ButtonDefault extends StatelessWidget {
   const ButtonDefault(
@@ -22,10 +23,7 @@ class ButtonDefault extends StatelessWidget {
       height: height,
       child: ElevatedButton(
         onPressed: voidCallBack,
-        child: Text(
-          content,
-          style: TextStyle(color: AppColor.whiteText),
-        ),
+        child: Text(content, style: AppTextStyles.h3Bold),
         style: ElevatedButton.styleFrom(primary: AppColor.lightButton),
       ),
     );
