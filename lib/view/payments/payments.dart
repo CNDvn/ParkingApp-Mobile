@@ -11,9 +11,6 @@ class _PaymentsState extends State<Payments> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Payments'),
-      ),
       body: Center(
         child: Text(
           'Payments',

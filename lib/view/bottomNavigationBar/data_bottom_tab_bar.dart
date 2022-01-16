@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
-import 'package:parkingappmobile/view/bottomNavigationBar/setting.dart';
 import 'package:parkingappmobile/view/history/history.dart';
 import 'package:parkingappmobile/view/home/home.dart';
 import 'package:parkingappmobile/view/payments/payments.dart';
+import 'package:parkingappmobile/view/setting/setting.dart';
 
 int currentTab = 0;
 
