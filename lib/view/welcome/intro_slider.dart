@@ -3,6 +3,7 @@ import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
+import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view/welcome/data_slides.dart';
 
 class IntroSliderPage extends StatefulWidget {
@@ -17,12 +18,11 @@ class _IntroSliderPageState extends State<IntroSliderPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     dataSlides.forEach((slide) => {
           slides.add(
-            new Slide(
+             Slide(
               title: slide.title,
               styleTitle: AppTextStyles.h2Black,
               description: slide.description,
@@ -36,17 +36,17 @@ class _IntroSliderPageState extends State<IntroSliderPage> {
   }
 
   void onDonePress() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => HomePage()),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) =>const SignInPage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return new IntroSlider(
+    return  IntroSlider(
       // List slides
-      slides: this.slides,
+      slides: slides,
 
       // Skip button
       renderSkipBtn: Text(
@@ -68,7 +68,7 @@ class _IntroSliderPageState extends State<IntroSliderPage> {
         style: TextStyle(color: AppColor.blueText),
       ),
       doneButtonStyle: dotButtonStyle(),
-      onDonePress: this.onDonePress,
+      onDonePress: onDonePress,
 
       // Dot indicator
       colorDot: AppColor.greyBackground,
