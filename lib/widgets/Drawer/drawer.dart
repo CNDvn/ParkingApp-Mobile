@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
+import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
 class DrawerDefault extends StatelessWidget {
@@ -11,6 +13,7 @@ class DrawerDefault extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     double sizeImage = size.width * 0.08;
     return Drawer(
+      backgroundColor: AppColor.whiteBackground,
       child: ListView(
         children: [
           SizedBox(
@@ -21,23 +24,30 @@ class DrawerDefault extends StatelessWidget {
                     Container(
                         margin: const EdgeInsets.fromLTRB(20, 30, 0, 0),
                         child: IconButton(
-                          icon: 
-                          Image.asset(AssetPath.close),
+                          icon: Image.asset(AssetPath.close),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                        )
-                        ),
+                        )),
                   ],
                 ),
                 CircleAvatar(
                   radius: size.width * 0.1,
-                  backgroundImage: const NetworkImage(AssetPath.avataMenu),
+                  //backgroundImage: 
+                  //const NetworkImage(AssetPath.profilePhoto)
+                  child: Image.asset(AssetPath.profilePhoto),
+                  backgroundColor: AppColor.whiteBackground,
                 ),
-                const Text(
-                  "Cam Tròn",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900, fontSize: 18, height: 2),
+                TextButton(
+                  child: Text("Meo` 4`",
+                      style: AppTextStyles.h2Black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UserProfile()),
+                    );
+                  },
                 )
               ],
             ),
@@ -47,8 +57,7 @@ class DrawerDefault extends StatelessWidget {
             endIndent: 20,
           ),
           ListTile(
-            leading: 
-            Image.asset(
+            leading: Image.asset(
               AssetPath.creditCardPayment,
               width: sizeImage,
               height: sizeImage,
@@ -62,8 +71,7 @@ class DrawerDefault extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: 
-            Image.asset(
+            leading: Image.asset(
               AssetPath.history,
               width: sizeImage,
               height: sizeImage,
@@ -77,8 +85,7 @@ class DrawerDefault extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: 
-            Image.asset(
+            leading: Image.asset(
               AssetPath.promotions,
               width: sizeImage,
               height: sizeImage,
@@ -96,8 +103,7 @@ class DrawerDefault extends StatelessWidget {
             endIndent: 20,
           ),
           ListTile(
-            leading: 
-            Image.asset(
+            leading: Image.asset(
               AssetPath.customerService,
               width: sizeImage,
               height: sizeImage,
@@ -111,8 +117,7 @@ class DrawerDefault extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: 
-            Image.asset(
+            leading: Image.asset(
               AssetPath.setting,
               width: sizeImage,
               height: sizeImage,
@@ -130,8 +135,7 @@ class DrawerDefault extends StatelessWidget {
             endIndent: 20,
           ),
           ListTile(
-            leading: 
-            Image.asset(
+            leading: Image.asset(
               AssetPath.logout,
               width: sizeImage,
               height: sizeImage,
