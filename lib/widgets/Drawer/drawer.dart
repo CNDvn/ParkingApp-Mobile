@@ -21,11 +21,13 @@ class DrawerDefault extends StatelessWidget {
                     Container(
                         margin: const EdgeInsets.fromLTRB(20, 30, 0, 0),
                         child: IconButton(
-                          icon: Image.asset(AssetPath.close),
+                          icon: 
+                          Image.asset(AssetPath.close),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                        )),
+                        )
+                        ),
                   ],
                 ),
                 CircleAvatar(
@@ -35,7 +37,7 @@ class DrawerDefault extends StatelessWidget {
                 const Text(
                   "Cam Tròn",
                   style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 2),
+                      fontWeight: FontWeight.w900, fontSize: 18, height: 2),
                 )
               ],
             ),
@@ -45,7 +47,8 @@ class DrawerDefault extends StatelessWidget {
             endIndent: 20,
           ),
           ListTile(
-            leading: Image.asset(
+            leading: 
+            Image.asset(
               AssetPath.creditCardPayment,
               width: sizeImage,
               height: sizeImage,
@@ -59,7 +62,8 @@ class DrawerDefault extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Image.asset(
+            leading: 
+            Image.asset(
               AssetPath.history,
               width: sizeImage,
               height: sizeImage,
@@ -73,7 +77,8 @@ class DrawerDefault extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Image.asset(
+            leading: 
+            Image.asset(
               AssetPath.promotions,
               width: sizeImage,
               height: sizeImage,
@@ -91,7 +96,8 @@ class DrawerDefault extends StatelessWidget {
             endIndent: 20,
           ),
           ListTile(
-            leading: Image.asset(
+            leading: 
+            Image.asset(
               AssetPath.customerService,
               width: sizeImage,
               height: sizeImage,
@@ -105,7 +111,8 @@ class DrawerDefault extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Image.asset(
+            leading: 
+            Image.asset(
               AssetPath.setting,
               width: sizeImage,
               height: sizeImage,
@@ -123,7 +130,8 @@ class DrawerDefault extends StatelessWidget {
             endIndent: 20,
           ),
           ListTile(
-            leading: Image.asset(
+            leading: 
+            Image.asset(
               AssetPath.logout,
               width: sizeImage,
               height: sizeImage,
