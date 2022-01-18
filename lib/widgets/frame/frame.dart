@@ -5,7 +5,8 @@ import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 
 class Frame extends StatefulWidget {
-  const Frame({ Key? key }) : super(key: key);
+  final Widget widget;
+  const Frame({ Key? key,required this.widget }) : super(key: key);
 
   @override
   State<Frame> createState() => _FrameState();
@@ -19,43 +20,47 @@ class _FrameState extends State<Frame> {
     return  Scaffold(
       key: scaffoldKey,
       drawer: const DrawerDefault(),
-      body: Padding(
-          padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                    child: IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    color: Colors.black87,
-                  ),
-                  onPressed: () {
-                    scaffoldKey.currentState?.openDrawer();
-                  },
-                )),
-                SizedBox(
-                  child: ClipOval(
-                    child: Material(
-                      color: AppColor.blueBackground,
-                      child: InkWell(
-                        splashColor: AppColor.whiteBackground,
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const UserProfile();
-                          }));
-                        },
-                        child: SizedBox(
-                            width: 32,
-                            height: 32,
-                            child: Image.asset(AssetPath.profilePhoto)),
+      body: Stack(
+        children: [
+          widget,
+          Padding(
+            padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                      child: IconButton(
+                    icon: const Icon(
+                      Icons.menu,
+                      color: Colors.black87,
+                    ),
+                    onPressed: () {
+                      scaffoldKey.currentState?.openDrawer();
+                    },
+                  )),
+                  SizedBox(
+                    child: ClipOval(
+                      child: Material(
+                        color: AppColor.blueBackground,
+                        child: InkWell(
+                          splashColor: AppColor.whiteBackground,
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const UserProfile();
+                            }));
+                          },
+                          child: SizedBox(
+                              width: 32,
+                              height: 32,
+                              child: Image.asset(AssetPath.profilePhoto)),
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ]),
-        ),
+                  )
+                ]),
+          ),]
+      ),
     );
   }
 }
