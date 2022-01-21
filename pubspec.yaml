@@ -37,6 +37,7 @@ dependencies:
   google_maps_flutter: ^2.1.1
   http: ^0.13.4
   dio: ^4.0.4
+  intro_slider: ^3.0.2
 
 dev_dependencies:
   flutter_test:
