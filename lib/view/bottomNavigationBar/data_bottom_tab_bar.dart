@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/view/google_map/google_map.dart';
 import 'package:parkingappmobile/view/history/history.dart';
 import 'package:parkingappmobile/view/home/home.dart';
 import 'package:parkingappmobile/view/payments/payments.dart';
@@ -7,9 +8,9 @@ import 'package:parkingappmobile/view/setting/setting.dart';
 
 int currentTab = 0;
 
-Widget currentScreen = Home();
+Widget currentScreen = GoogleMap();
 
-final List<Widget> screens = [Home(), Payments(), History(), Setting()];
+final List<Widget> screens = [GoogleMap(), Payments(), History(), Setting()];
 
 final PageStorageBucket bucket = PageStorageBucket();
 
