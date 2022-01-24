@@ -27,8 +27,9 @@ class IconButtonStyle extends StatelessWidget {
   final int tab;
   @override
   Widget build(BuildContext context) {
+    double windowWidth = MediaQuery.of(context).size.width;
     return MaterialButton(
-      minWidth: 40,
+      minWidth: windowWidth / 5,
       onPressed: voidCallback,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +62,10 @@ class ActionButtonMid extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
         backgroundColor: AppColor.lightButton,
-        child: Icon(iconMid[currentTab], size: 36),
+        child: Icon(
+          iconMid[currentTab],
+          size: 36,
+        ),
         onPressed: () {});
   }
 }

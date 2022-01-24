@@ -9,21 +9,24 @@ class BottomTabBar extends StatefulWidget {
 }
 
 class _BottomTabBarState extends State<BottomTabBar> {
-  
   @override
   Widget build(BuildContext context) {
+    double windowHeight = MediaQuery.of(context).size.height;
+    double windowWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: PageStorage(
         child: currentScreen,
         bucket: bucket,
       ),
-      floatingActionButton: ActionButtonMid(currentTab: currentTab,),
+      floatingActionButton: ActionButtonMid(
+        currentTab: currentTab,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 10,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: windowWidth * 0.0155,
         child: Container(
-          height: 56,
+          height: windowHeight * 0.09,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
