@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 
-class ButtonDefault extends StatelessWidget {
-  const ButtonDefault(
+class ButtonViewPark extends StatelessWidget {
+  const ButtonViewPark(
       {Key? key,
-      this.width = 342,
-      this.height = 56,
+      this.width = 100,
+      this.height = 50,
       required this.content,
       this.color,
       required this.voidCallBack})
