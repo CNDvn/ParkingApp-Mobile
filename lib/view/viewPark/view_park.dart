@@ -4,14 +4,9 @@ import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 
-class ViewPark extends StatefulWidget {
+class ViewPark extends StatelessWidget {
   const ViewPark({ Key? key }) : super(key: key);
 
-  @override
-  _ViewParkState createState() => _ViewParkState();
-}
-
-class _ViewParkState extends State<ViewPark> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
