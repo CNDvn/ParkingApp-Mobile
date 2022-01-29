@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
-import 'package:parkingappmobile/widgets/button/button_view_park.dart';
+import 'package:parkingappmobile/configs/themes/app_text_style.dart';
+import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 
 class ViewPark extends StatefulWidget {
@@ -13,73 +14,73 @@ class ViewPark extends StatefulWidget {
 class _ViewParkState extends State<ViewPark> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.blueText,
-        iconTheme: const IconThemeData(color: Color(0xff3277DB)),
+        iconTheme: IconThemeData(color: AppColor.blackText),
         elevation: 0,
       ),
-      body: Column(
-        children: [Container(
-            constraints: const BoxConstraints.expand(height: 280),
-            color: AppColor.blueText,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(
-                  height: 40,
-                ),
-                Image.asset("assets/images/xe.png"),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-                  child: RichText(
-                    text: const TextSpan(
-                    text: "Parking App - ",
-                    style: TextStyle(color: Color(0xff606470), fontSize: 25, fontWeight: FontWeight.bold),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "20/hr",
-                        style: TextStyle(color: Color(0xff606470), fontSize: 16))
-                      ]),
-                    ),
-                ),
-              ],
-            ),
-          ),
-          const Padding(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                child: Text(
-                  "End time",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff333333)),
-                ),
-                ),
-                    Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 10,),
-                            SizedBox(
-                              // margin: const EdgeInsets.only(right: 20),
-                              child: ButtonViewPark(content: "Today", voidCallBack: (){})
-                            ),
-                            const SizedBox(width: 45,),
-                            SizedBox(
-                              // margin: const EdgeInsets.only(left: 15),
-                              child: ButtonViewPark(content: "Tomorrow", voidCallBack: (){})
-                            ),
-                            const SizedBox(width: 45,),
-                            SizedBox(
-                              // margin: const EdgeInsets.only(left: 70),
-                              child: ButtonViewPark(content: "Later", voidCallBack: (){})
-                            )
-                          ],
-                        ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [Container(
+              constraints: BoxConstraints.expand(height: size.height * 0.4),
+              color: AppColor.blueText,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Image.asset("assets/images/xe.png"),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
+                    child: RichText(
+                      text: TextSpan(
+                      text: "Parking App - ",
+                      style: AppTextStyles.h1Black,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: "20/hr",
+                          style: AppTextStyles.h2Black)
+                        ]),
                       ),
-                      const SizedBox(height: 130),
-                      ConfirmationSlider(
-                        onConfirmation: () {},
-                      )
-          ],),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                  child: Text(
+                    "End time",
+                    style: AppTextStyles.h2Black,
+                  ),
+                  ),
+                      Container(
+                          margin: const EdgeInsets.only(top: 15),
+                          child: Row(
+                            children: [
+                              SizedBox(width: size.width * 0.01,),
+                              SizedBox(
+                                child: ButtonDefault(content: "Today", voidCallBack: (){}, width: size.width * 0.24, height: size.height * 0.075)
+                              ),
+                              SizedBox(width: size.width * 0.14,),
+                              SizedBox(
+                                child: ButtonDefault(content: "Tomorrow", voidCallBack: (){}, width: size.width * 0.24, height: size.height * 0.075)
+                              ),
+                              SizedBox(width: size.width * 0.12,),
+                              SizedBox(
+                                child: ButtonDefault(content: "Later", voidCallBack: (){}, width: size.width * 0.24, height: size.height * 0.075)
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: size.height * 0.2),
+                        ConfirmationSlider(
+                          onConfirmation: () {},
+                        )
+            ],),
+      ),
     );
   }
 }
