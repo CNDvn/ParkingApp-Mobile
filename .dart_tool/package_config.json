@@ -141,7 +141,7 @@
     },
     {
       "name": "intro_slider",
-      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/intro_slider-3.0.2",
+      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/intro_slider-3.0.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -374,7 +374,7 @@
       "languageVersion": "2.15"
     }
   ],
-  "generated": "2022-01-16T12:13:27.326024Z",
+  "generated": "2022-01-24T01:54:30.736289Z",
   "generator": "pub",
   "generatorVersion": "2.15.1"
 }
