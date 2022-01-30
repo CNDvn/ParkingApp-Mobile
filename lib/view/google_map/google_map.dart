@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:parkingappmobile/configs/themes/app_color.dart';
-import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/view/userProfile/user_profile.dart';
-import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
-import 'package:parkingappmobile/widgets/frame/frame.dart';
 
 class GoogleMap extends StatefulWidget {
   const GoogleMap({Key? key}) : super(key: key);
@@ -16,20 +13,53 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
-  
   LatLng point = LatLng(10.794606, 106.721677);
   List<Address> location = [];
+  MapController mapController = MapController();
+
+  Future<void> _updatePosition() async {
+    Position pos = await _determinePosition();
+    // String _address = "";
+    // List pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+    setState(() {
+      //_address = pm[0].toString();
+      point = LatLng(pos.latitude, pos.longitude);
+      mapController.move(LatLng(point.latitude, point.longitude), 16.0);
+    });
+    // var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    // print(pos);
+    // print(point);
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissons are permanently denied, we cannot request permissions');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return 
-    Scaffold(
-      
-      
-      body: 
-      Stack(
-        children: [          
+    return Scaffold(
+      body: Stack(
+        children: [
           FlutterMap(
+            mapController: mapController,
             options: MapOptions(
               onTap: (p) async {
                 List<Address> tmp = [];
@@ -38,9 +68,11 @@ class _GoogleMapState extends State<GoogleMap> {
                 setState(() {
                   point = p;
                   location = tmp;
+                  mapController.move(
+                      LatLng(point.latitude, point.longitude), 16.0);
                 });
               },
-              center: LatLng(10.794606, 106.721677),
+              center: point,
               zoom: 16.0,
             ),
             layers: [
@@ -64,7 +96,7 @@ class _GoogleMapState extends State<GoogleMap> {
                 ],
               ),
             ],
-          ),         
+          ),
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 34.0),
@@ -96,7 +128,11 @@ class _GoogleMapState extends State<GoogleMap> {
             ),
           ),
         ],
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _updatePosition,
+        child: const Icon(Icons.change_circle_outlined),
+      ),
     );
   }
 }
