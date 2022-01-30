@@ -1,8 +1,8 @@
 class AssetPath {
   static const String prePath = "assets/images";
   static const String posterCity = '$prePath/city.png';
-  static const String processWatting = '$prePath/process.json'; 
   static const String logoPath = '$prePath/logo.png';
+  static const String processWatting = '$prePath/process.json'; 
   static const String profilePhoto = '$prePath/profile_photo.png';
   static const String promotions = '$prePath/promotions.png';
   static const String creditCardPayment = '$prePath/creditCardPayment.png';
