@@ -44,7 +44,7 @@ class BookSpace extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const <Widget>[
                       Text(
-                        "Lekki Gardens Car Park A   ",
+                        "Lekki Gardens Car Park ABC   ",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
