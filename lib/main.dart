@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/routes/routes.dart';
 import 'package:parkingappmobile/providers/main_providers/main_providers.dart';
+import 'package:parkingappmobile/view/rootPage/root_page.dart';
+import 'package:parkingappmobile/view/userProfile/user_profile.dart';
+import 'package:parkingappmobile/view/viewPark/view_park.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,9 +22,12 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Parking App',
           theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "OpenSans"),
-          initialRoute: "/",
-          routes: Routes.routes,
-          //home: const RootPage()
+           initialRoute: "/ViewPark",
+        routes: {
+          "/": (context) => const RootPage(),
+          "/userProfile": (context) => const UserProfile(),
+          "/ViewPark": (context) => const ViewPark()
+        },
           ),
     );
   }
