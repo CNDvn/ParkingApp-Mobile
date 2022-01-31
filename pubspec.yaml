@@ -55,6 +55,7 @@ dependencies:
   collection: ^1.14.0
   geolocator: ^8.0.4
   dropdownfield: ^1.0.3
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
