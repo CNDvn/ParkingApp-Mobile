@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/view/rootPage/root_page.dart';
+import 'package:parkingappmobile/view/google_map/google_map.dart';
 
 class ValidationItem {
   final String? value;
   final String? error;
   ValidationItem(this.value, this.error);
 }
+
 class SignInProvider with ChangeNotifier {
   ValidationItem _phone = ValidationItem(null, null);
   ValidationItem _password = ValidationItem(null, null);
-  
+
   bool isPasswordVariable = true;
   bool submitValid = false;
 
@@ -89,20 +90,19 @@ class SignInProvider with ChangeNotifier {
   }
 
   void submitData(BuildContext context) {
-
     submitValid = _phone.error != null ||
         _password.error != null ||
         _phone.value == null ||
         password.value == null;
-        
+
     if (submitValid) {
       checkPhone(_phone.value ?? "");
       checkPassword(_password.value ?? "");
       notifyListeners();
     } else if (!submitValid && isValid) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const RootPage()),
-          (route) => false);
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return const GoogleMap();
+      }));
     }
   }
 }

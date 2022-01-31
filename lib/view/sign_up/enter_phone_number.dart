@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/view/login/background_login.dart';
+import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
 class EnterPhoneNumber extends StatelessWidget {
@@ -11,48 +13,45 @@ class EnterPhoneNumber extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColor.whiteBackground,
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          alignment: Alignment.bottomCenter,
+      body: BackGround(
+        widgetChild: SingleChildScrollView(
           child: Container(
-            color: AppColor.whiteBackground,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 50, 0, 70),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    child: Image.asset(
-                      "assets/images/logo.png",
-                      fit: BoxFit.contain,
-                    ),
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 5, 0, 40),
+                  child: Text(
+                    "Enter your phone number",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: AppColor.greyText,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400),
                   ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-                    child: Text(
-                      "Enter your phone number",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: AppColor.greyText,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400),
-                    ),
+                ),
+                SizedBox(
+                  height: size.height * 0.16,
+                  width: size.width * 0.9,
+                  child: const TextField(
+                    decoration: InputDecoration(
+                        labelText: "Phone number", fillColor: Colors.grey),
+                    autofocus: false,
                   ),
-                  SizedBox(
-                    height: size.height * 0.16,
+                ),
+                SizedBox(
                     width: size.width * 0.9,
-                    child: const TextField(
-                      decoration: InputDecoration(
-                          labelText: "Phone number", fillColor: Colors.grey),
-                      autofocus: false,
-                    ),
-                  ),
-                  SizedBox(
-                      width: size.width * 0.9,
-                      child:
-                          ButtonDefault(content: "Next", voidCallBack: () {}))
-                ],
-              ),
+                    child: ButtonDefault(
+                        content: "Next",
+                        voidCallBack: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const EnterVerificationCode()),
+                          );
+                        }))
+              ],
             ),
           ),
         ),

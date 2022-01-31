@@ -7,13 +7,10 @@
         {
             "name": "projectPackingMobile",
             "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "projectPackingMobile (profile mode)",
-            "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
-        }
+            "args": [
+                "--no-sound-null-safety"
+            ]
+        },
     ]
 }

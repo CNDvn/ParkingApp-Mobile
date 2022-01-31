@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
+import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
 class DrawerDefault extends StatelessWidget {
@@ -11,6 +13,7 @@ class DrawerDefault extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     double sizeImage = size.width * 0.08;
     return Drawer(
+      backgroundColor: AppColor.whiteBackground,
       child: ListView(
         children: [
           SizedBox(
@@ -30,12 +33,21 @@ class DrawerDefault extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: size.width * 0.1,
-                  backgroundImage: const NetworkImage(AssetPath.avataMenu),
+                  //backgroundImage: 
+                  //const NetworkImage(AssetPath.profilePhoto)
+                  child: Image.asset(AssetPath.profilePhoto),
+                  backgroundColor: AppColor.whiteBackground,
                 ),
-                const Text(
-                  "Cam Tròn",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 2),
+                TextButton(
+                  child: Text("Meo` 4`",
+                      style: AppTextStyles.h2Black),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UserProfile()),
+                    );
+                  },
                 )
               ],
             ),

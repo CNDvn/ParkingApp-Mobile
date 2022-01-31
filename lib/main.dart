@@ -22,12 +22,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Parking App',
           theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "OpenSans"),
-           initialRoute: "/ViewPark",
-        routes: {
-          "/": (context) => const RootPage(),
-          "/userProfile": (context) => const UserProfile(),
-          "/ViewPark": (context) => const ViewPark()
-        },
+           initialRoute: "/",
+        routes: Routes.routes
           ),
     );
   }

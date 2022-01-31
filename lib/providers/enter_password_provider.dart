@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parkingappmobile/view/login/signin_page.dart';
 
 class ValidationPassword {
   String value;
@@ -43,12 +44,15 @@ class EnterPasswordProvider with ChangeNotifier {
     return flag;
   }
 
-  void submit() {
+  void submit(BuildContext context) {
     clickButtonFlag = true;
     bool isPassword = checkPassword(password.value);
     bool isConfirmPassword = checkConfirmPassword(confirmPassword.value);
 
     if (isPassword && isConfirmPassword) {}
+    Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const SignInPage()),
+          (route) => false);
     notifyListeners();
   }
 }
