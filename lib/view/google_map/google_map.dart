@@ -4,6 +4,8 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:parkingappmobile/view/google_map/data_point.dart';
+import 'package:searchfield/searchfield.dart';
 
 class GoogleMap extends StatefulWidget {
   const GoogleMap({Key? key}) : super(key: key);
@@ -14,8 +16,17 @@ class GoogleMap extends StatefulWidget {
 
 class _GoogleMapState extends State<GoogleMap> {
   LatLng point = LatLng(10.794606, 106.721677);
+  LatLng? destination;
   List<Address> location = [];
   MapController mapController = MapController();
+  double zoomMap = 16.0;
+
+  List<String> cities = [];
+  @override
+  void initState() {
+    super.initState();
+    dataPoint.forEach((value) => {cities.add(value.name)});
+  }
 
   Future<void> _updatePosition() async {
     Position pos = await _determinePosition();
@@ -24,7 +35,7 @@ class _GoogleMapState extends State<GoogleMap> {
     setState(() {
       //_address = pm[0].toString();
       point = LatLng(pos.latitude, pos.longitude);
-      mapController.move(LatLng(point.latitude, point.longitude), 16.0);
+      mapController.move(LatLng(point.latitude, point.longitude), zoomMap);
     });
     // var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     // print(pos);
@@ -69,17 +80,20 @@ class _GoogleMapState extends State<GoogleMap> {
                   point = p;
                   location = tmp;
                   mapController.move(
-                      LatLng(point.latitude, point.longitude), 16.0);
+                      LatLng(point.latitude, point.longitude), zoomMap);
                 });
               },
               center: point,
-              zoom: 16.0,
+              zoom: zoomMap,
+              minZoom: 0.0,
+              maxZoom: 18.0,
             ),
             layers: [
               TileLayerOptions(
-                  urlTemplate:
-                      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                  subdomains: ['a', 'b', 'c']),
+                urlTemplate:
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                subdomains: ['a', 'b', 'c'],
+              ),
               MarkerLayerOptions(
                 markers: [
                   Marker(
@@ -92,7 +106,18 @@ class _GoogleMapState extends State<GoogleMap> {
                         color: Colors.red,
                       ),
                     ),
-                  )
+                  ),
+                  Marker(
+                    width: 50,
+                    height: 50,
+                    point: destination,
+                    builder: (ctx) => const SizedBox(
+                      child: Icon(
+                        Icons.directions_car,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -106,10 +131,68 @@ class _GoogleMapState extends State<GoogleMap> {
                 Card(
                   margin: EdgeInsets.only(
                       left: 16.0, top: size.height * 0.2, right: 16.0),
-                  child: const TextField(
-                    decoration: InputDecoration(
+                  child: SearchField(
+                    hint: "Where are you going to?",
+                    searchInputDecoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(16.0),
-                      hintText: "Where are you going to?",
+                    ),
+                    maxSuggestionsInViewPort: 5,
+                    suggestions: cities,
+                    onTap: (p) {
+                      for (var i = 0; i < dataPoint.length; i++) {
+                        if (p == dataPoint[i].name) {
+                          setState(() {
+                            destination = LatLng(
+                              dataPoint[i].latitude,
+                              dataPoint[i].longitude,
+                            );
+                            mapController.move(
+                              LatLng(
+                                dataPoint[i].latitude,
+                                dataPoint[i].longitude,
+                              ),
+                              zoomMap,
+                            );
+                          });
+                        }
+                      }
+                    },
+                  ),
+                ),
+                Card(
+                  margin: EdgeInsets.only(left: size.width * 0.78),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                zoomMap += 0.5;
+                                mapController.move(
+                                  LatLng(
+                                    point.latitude,
+                                    point.longitude,
+                                  ),
+                                  zoomMap,
+                                );
+                              });
+                            },
+                            icon: const Icon(Icons.zoom_in)),
+                        const Text('—'),
+                        IconButton(
+                            onPressed: () {
+                              zoomMap -= 0.5;
+                              mapController.move(
+                                LatLng(
+                                  point.latitude,
+                                  point.longitude,
+                                ),
+                                zoomMap,
+                              );
+                            },
+                            icon: const Icon(Icons.zoom_out))
+                      ],
                     ),
                   ),
                 ),
