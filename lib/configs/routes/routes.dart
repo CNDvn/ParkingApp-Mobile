@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/google_map/google_map.dart';
+import 'package:parkingappmobile/view/google_map/map.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view/sign_up/enter_password.dart';
 import 'package:parkingappmobile/view/sign_up/enter_phone_number.dart';
@@ -16,6 +17,6 @@ class Routes {
     "/EnterPassword": (context) => const EnterPassword(),
     "/EnterPhoneNumber": (context) => const EnterPhoneNumber(),
     "/EnterVerificationCode": (context) => const EnterVerificationCode(),
-    "/": (context) => const BottomTabBar(),
+    "/": (context) => PolylineORSPage(),
   };
 }
