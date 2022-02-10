@@ -4,7 +4,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:parkingappmobile/view/google_map/data_point.dart';
+import 'package:parkingappmobile/providers/data_point_provider.dart';
 import 'package:searchfield/searchfield.dart';
 
 class GoogleMap extends StatefulWidget {
@@ -26,6 +26,20 @@ class _GoogleMapState extends State<GoogleMap> {
   void initState() {
     super.initState();
     dataPoint.forEach((value) => {cities.add(value.name)});
+  }
+
+  onTapDestination(p) {
+    for (var i = 0; i < dataPoint.length; i++) {
+      if (p == dataPoint[i].name) {
+        setState(() {
+          destination = LatLng(dataPoint[i].latitude, dataPoint[i].longitude);
+          mapController.move(
+            LatLng(dataPoint[i].latitude, dataPoint[i].longitude),
+            zoomMap,
+          );
+        });
+      }
+    }
   }
 
   Future<void> _updatePosition() async {
@@ -138,25 +152,7 @@ class _GoogleMapState extends State<GoogleMap> {
                     ),
                     maxSuggestionsInViewPort: 5,
                     suggestions: cities,
-                    onTap: (p) {
-                      for (var i = 0; i < dataPoint.length; i++) {
-                        if (p == dataPoint[i].name) {
-                          setState(() {
-                            destination = LatLng(
-                              dataPoint[i].latitude,
-                              dataPoint[i].longitude,
-                            );
-                            mapController.move(
-                              LatLng(
-                                dataPoint[i].latitude,
-                                dataPoint[i].longitude,
-                              ),
-                              zoomMap,
-                            );
-                          });
-                        }
-                      }
-                    },
+                    onTap: onTapDestination,
                   ),
                 ),
                 Card(
@@ -170,10 +166,7 @@ class _GoogleMapState extends State<GoogleMap> {
                               setState(() {
                                 zoomMap += 0.5;
                                 mapController.move(
-                                  LatLng(
-                                    point.latitude,
-                                    point.longitude,
-                                  ),
+                                  LatLng(point.latitude, point.longitude),
                                   zoomMap,
                                 );
                               });
@@ -182,14 +175,13 @@ class _GoogleMapState extends State<GoogleMap> {
                         const Text('—'),
                         IconButton(
                             onPressed: () {
-                              zoomMap -= 0.5;
-                              mapController.move(
-                                LatLng(
-                                  point.latitude,
-                                  point.longitude,
-                                ),
-                                zoomMap,
-                              );
+                              setState(() {
+                                zoomMap -= 0.5;
+                                mapController.move(
+                                  LatLng(point.latitude, point.longitude),
+                                  zoomMap,
+                                );
+                              });
                             },
                             icon: const Icon(Icons.zoom_out))
                       ],
