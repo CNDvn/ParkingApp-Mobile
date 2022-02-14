@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view/google_map/google_map.dart';
 import 'package:parkingappmobile/view/history/history.dart';
 import 'package:parkingappmobile/view/home/home.dart';
 import 'package:parkingappmobile/view/payments/payments.dart';
 import 'package:parkingappmobile/view/setting/setting.dart';
+import 'package:provider/provider.dart';
 
 int currentTab = 0;
 
@@ -61,12 +63,18 @@ class ActionButtonMid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
     return FloatingActionButton(
         backgroundColor: AppColor.lightButton,
         child: Icon(
           iconMid[currentTab],
           size: 36,
         ),
-        onPressed: () {});
+        onPressed: () {
+          if (currentTab == 0) {
+            mapProvider.updatePosition();
+          }
+          return;
+        });
   }
 }

@@ -5,6 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:parkingappmobile/providers/data_point_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
 class GoogleMap extends StatefulWidget {
@@ -15,12 +16,6 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
-  LatLng point = LatLng(10.794606, 106.721677);
-  LatLng? destination;
-  List<Address> location = [];
-  MapController mapController = MapController();
-  double zoomMap = 16.0;
-
   List<String> cities = [];
   @override
   void initState() {
@@ -28,77 +23,31 @@ class _GoogleMapState extends State<GoogleMap> {
     dataPoint.forEach((value) => {cities.add(value.name)});
   }
 
-  onTapDestination(p) {
-    for (var i = 0; i < dataPoint.length; i++) {
-      if (p == dataPoint[i].name) {
-        setState(() {
-          destination = LatLng(dataPoint[i].latitude, dataPoint[i].longitude);
-          mapController.move(
-            LatLng(dataPoint[i].latitude, dataPoint[i].longitude),
-            zoomMap,
-          );
-        });
-      }
-    }
-  }
-
-  Future<void> _updatePosition() async {
-    Position pos = await _determinePosition();
-    // String _address = "";
-    // List pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
-    setState(() {
-      //_address = pm[0].toString();
-      point = LatLng(pos.latitude, pos.longitude);
-      mapController.move(LatLng(point.latitude, point.longitude), zoomMap);
-    });
-    // var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    // print(pos);
-    // print(point);
-  }
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissons are permanently denied, we cannot request permissions');
-    }
-    return await Geolocator.getCurrentPosition();
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
     return Scaffold(
       body: Stack(
         children: [
           FlutterMap(
-            mapController: mapController,
+            mapController: mapProvider.mapController,
             options: MapOptions(
               onTap: (p) async {
                 List<Address> tmp = [];
                 tmp = await Geocoder.local.findAddressesFromCoordinates(
                     Coordinates(p.latitude, p.longitude));
                 setState(() {
-                  point = p;
-                  location = tmp;
-                  mapController.move(
-                      LatLng(point.latitude, point.longitude), zoomMap);
+                  mapProvider.point = p;
+                  mapProvider.location = tmp;
+                  mapProvider.mapController.move(
+                      LatLng(mapProvider.point.latitude,
+                          mapProvider.point.longitude),
+                      mapProvider.zoomMap);
                 });
               },
-              center: point,
-              zoom: zoomMap,
+              center: mapProvider.point,
+              zoom: mapProvider.zoomMap,
               minZoom: 0.0,
               maxZoom: 18.0,
             ),
@@ -113,7 +62,7 @@ class _GoogleMapState extends State<GoogleMap> {
                   Marker(
                     width: 50,
                     height: 50,
-                    point: point,
+                    point: mapProvider.point,
                     builder: (ctx) => const SizedBox(
                       child: Icon(
                         Icons.location_on,
@@ -124,7 +73,7 @@ class _GoogleMapState extends State<GoogleMap> {
                   Marker(
                     width: 50,
                     height: 50,
-                    point: destination,
+                    point: mapProvider.destination,
                     builder: (ctx) => const SizedBox(
                       child: Icon(
                         Icons.directions_car,
@@ -152,40 +101,7 @@ class _GoogleMapState extends State<GoogleMap> {
                     ),
                     maxSuggestionsInViewPort: 5,
                     suggestions: cities,
-                    onTap: onTapDestination,
-                  ),
-                ),
-                Card(
-                  margin: EdgeInsets.only(left: size.width * 0.78),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                zoomMap += 0.5;
-                                mapController.move(
-                                  LatLng(point.latitude, point.longitude),
-                                  zoomMap,
-                                );
-                              });
-                            },
-                            icon: const Icon(Icons.zoom_in)),
-                        const Text('—'),
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                zoomMap -= 0.5;
-                                mapController.move(
-                                  LatLng(point.latitude, point.longitude),
-                                  zoomMap,
-                                );
-                              });
-                            },
-                            icon: const Icon(Icons.zoom_out))
-                      ],
-                    ),
+                    onTap: (a) {},
                   ),
                 ),
                 Card(
@@ -194,7 +110,7 @@ class _GoogleMapState extends State<GoogleMap> {
                     child: Column(
                       children: [
                         Text(
-                            "${location.isNotEmpty ? location.first.countryName : ""},${location.isNotEmpty ? location.first.locality : ""},${location.isNotEmpty ? location.first.featureName : ""}")
+                            "${mapProvider.location.isNotEmpty ? mapProvider.location.first.countryName : ""},${mapProvider.location.isNotEmpty ? mapProvider.location.first.locality : ""},${mapProvider.location.isNotEmpty ? mapProvider.location.first.featureName : ""}")
                       ],
                     ),
                   ),
@@ -203,10 +119,6 @@ class _GoogleMapState extends State<GoogleMap> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _updatePosition,
-        child: const Icon(Icons.change_circle_outlined),
       ),
     );
   }
