@@ -13,59 +13,56 @@ class BottomTabBar extends StatefulWidget {
 }
 
 class _BottomTabBarState extends State<BottomTabBar> {
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     double windowHeight = MediaQuery.of(context).size.height;
     double windowWidth = MediaQuery.of(context).size.width;
-    GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldKey,
       drawer: const DrawerDefault(),
-      body: Stack(
-        children: [           
-          PageStorage(
+      body: Stack(children: [
+        PageStorage(
           child: currentScreen,
           bucket: bucket,
         ),
         Padding(
-            padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                      child: IconButton(
-                    icon: const Icon(
-                      Icons.menu,
-                      color: Colors.black87,
-                    ),
-                    onPressed: () {
-                      scaffoldKey.currentState!.openDrawer();
+          padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            SizedBox(
+                child: IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                scaffoldKey.currentState!.openDrawer();
+              },
+            )),
+            SizedBox(
+              child: ClipOval(
+                child: Material(
+                  color: AppColor.blueBackground,
+                  child: InkWell(
+                    splashColor: AppColor.whiteBackground,
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const UserProfile();
+                      }));
                     },
-                  )),
-                  SizedBox(
-                    child: ClipOval(
-                      child: Material(
-                        color: AppColor.blueBackground,
-                        child: InkWell(
-                          splashColor: AppColor.whiteBackground,
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return const UserProfile();
-                            }));
-                          },
-                          child: SizedBox(
-                              width: 32,
-                              height: 32,
-                              child: Image.asset(AssetPath.profilePhoto)),
-                        ),
-                      ),
-                    ),
-                  )
-                ]),
-          ),
-        ]
-      ),
+                    child: SizedBox(
+                        width: 32,
+                        height: 32,
+                        child: Image.asset(AssetPath.profilePhoto)),
+                  ),
+                ),
+              ),
+            )
+          ]),
+        ),
+      ]),
       floatingActionButton: ActionButtonMid(
         currentTab: currentTab,
       ),
