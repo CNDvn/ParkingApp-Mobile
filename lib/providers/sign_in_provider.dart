@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/view/google_map/google_map.dart';
+import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 
 class ValidationItem {
   final String? value;
@@ -101,7 +101,7 @@ class SignInProvider with ChangeNotifier {
       notifyListeners();
     } else if (!submitValid && isValid) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const GoogleMap();
+        return const BottomTabBar();
       }));
     }
   }
