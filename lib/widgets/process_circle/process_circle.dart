@@ -9,15 +9,17 @@ class ProcessCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: AppColor.whiteBackground,
-        child: Column(      
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-            child: Lottie.asset(AssetPath.processWatting),
-          ),]
+      body: SingleChildScrollView(
+        child: Container(
+          color: AppColor.whiteBackground,
+          child: Column(      
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+              child: Lottie.asset(AssetPath.processWatting),
+            ),]
+          ),
         ),
       ),
     );

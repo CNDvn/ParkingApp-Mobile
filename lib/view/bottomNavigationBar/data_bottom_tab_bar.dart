@@ -73,8 +73,8 @@ class ActionButtonMid extends StatelessWidget {
         onPressed: () {
           if (currentTab == 0) {
             mapProvider.updatePosition();
-          }
-          return;
+            return;
+          }          
         });
   }
 }

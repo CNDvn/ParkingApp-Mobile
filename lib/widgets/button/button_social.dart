@@ -1,31 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
-import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 
-class ButtonDefault extends StatelessWidget {
-  const ButtonDefault(
+class ButtonSocial extends StatelessWidget {
+  const ButtonSocial(
       {Key? key,
       this.width = 342,
       this.height = 56,
       required this.content,
       this.color,
-      required this.voidCallBack})
+      required this.voidCallBack,
+      required this.assetName})
       : super(key: key);
   final double? width;
   final double? height;
   final String content;
   final Color? color;
   final VoidCallback voidCallBack;
+  final String assetName;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
       height: height,
-      child: ElevatedButton(
+      child: OutlinedButton(
         onPressed: voidCallBack,
-        child: Text(content, style: AppTextStyles.h3Bold),
-        style: ElevatedButton.styleFrom(
-          primary: AppColor.lightButton,
+        child: Row(
+          children: <Widget>[
+            Image.asset(assetName),
+            const SizedBox(
+              width: 50,
+            ),
+            Text(content,
+                style: TextStyle(color: AppColor.blackText, fontSize: 16.0)),
+            Opacity(opacity: 0.0, child: Image.asset(assetName))
+          ],
+        ),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(width: 1.0, color: AppColor.blueText),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
