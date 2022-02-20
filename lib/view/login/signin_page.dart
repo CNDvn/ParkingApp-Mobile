@@ -1,9 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
+import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/providers/sign_in_provider.dart';
+import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
 import 'package:parkingappmobile/view/sign_up/enter_phone_number.dart';
+import 'package:parkingappmobile/view_model/auth.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:parkingappmobile/widgets/button/button_social.dart';
 import 'package:provider/provider.dart';
 
 class SignInPage extends StatelessWidget {
@@ -23,6 +29,10 @@ class SignInPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(
+                  height: size.height *0.2,
+                  width: size.width *0.9,
+                ),
                 SizedBox(
                   height: size.height * 0.12,
                   width: size.width * 0.9,
@@ -112,6 +122,15 @@ class SignInPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
+                  height: size.height * 0.02,
+                  width: size.width *0.9,
+                ),
+                SizedBox(
+                  height: size.height * 0.07,
+                  width: size.width * 0.9,
+                  child: ButtonSocial(content: "Login With Google", voidCallBack:() => signInProvider.signInWithGoogle(context), assetName: AssetPath.logoGoogle),
+                ),                
+                SizedBox(
                   height: size.height * 0.12,
                   width: size.width * 0.9,
                   child: Row(
@@ -121,7 +140,7 @@ class SignInPage extends StatelessWidget {
                       GestureDetector(
                           child: Text(
                             "Signup",
-                            style: AppTextStyles.h4,
+                            style: AppTextStyles.h4black,
                           ),
                           onTap: () {
                             Navigator.push(context,

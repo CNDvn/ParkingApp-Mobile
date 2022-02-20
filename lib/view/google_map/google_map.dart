@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:parkingappmobile/providers/data_point_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
@@ -55,7 +55,7 @@ class _GoogleMapState extends State<GoogleMap> {
                 child: FlutterMap(
               mapController: mapProvider.mapController,
               options: MapOptions(
-                onTap: (p) async {
+                onTap: (v,p) async {
                   List<Address> tmp = [];
                   tmp = await Geocoder.local.findAddressesFromCoordinates(
                       Coordinates(p.latitude, p.longitude));
@@ -63,8 +63,8 @@ class _GoogleMapState extends State<GoogleMap> {
                     mapProvider.point = p;
                     mapProvider.location = tmp;
                     mapProvider.mapController.move(
-                        LatLng(mapProvider.point!.latitude,
-                            mapProvider.point!.longitude),
+                        LatLng(mapProvider.point.latitude,
+                            mapProvider.point.longitude),
                         mapProvider.zoomMap);
                   });
                 },

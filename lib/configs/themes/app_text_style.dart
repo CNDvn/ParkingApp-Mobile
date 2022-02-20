@@ -18,4 +18,6 @@ class AppTextStyles {
       fontWeight: FontWeight.w300, fontSize: 13, color: AppColor.whiteText);
   static final h3Bold = TextStyle(
       fontWeight: FontWeight.w400, fontSize: 13, color: AppColor.whiteText);
+  static final h4black = TextStyle(
+      fontWeight: FontWeight.w400, fontSize: 16, color: AppColor.blackText);
 }

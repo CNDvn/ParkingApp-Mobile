@@ -1,12 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/routes/routes.dart';
 import 'package:parkingappmobile/providers/main_providers/main_providers.dart';
-import 'package:parkingappmobile/view/rootPage/root_page.dart';
-import 'package:parkingappmobile/view/userProfile/user_profile.dart';
-import 'package:parkingappmobile/view/viewPark/view_park.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
