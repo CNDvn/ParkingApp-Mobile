@@ -1,5 +1,15 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:parkingappmobile/configs/toast/toast.dart';
+import 'package:parkingappmobile/model/request/sign_in_req.dart';
+import 'package:parkingappmobile/model/response/sign_in_res.dart';
+import 'package:parkingappmobile/repository/auth_rep.dart';
+import 'package:parkingappmobile/repository/impl/auth_rep_impl.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
+import 'package:parkingappmobile/view/login/signin_page.dart';
 
 class ValidationItem {
   final String? value;
@@ -100,9 +110,34 @@ class SignInProvider with ChangeNotifier {
       checkPassword(_password.value ?? "");
       notifyListeners();
     } else if (!submitValid && isValid) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const BottomTabBar();
-      }));
+      AuthRepImpl()
+          .postSignIn(
+              "",
+              SignInReq(
+                  username: phone.value!,
+                  password: password.value!,
+                  role: "customer"))
+          .then((value) async {
+        const storage = FlutterSecureStorage();
+        await storage.write(key: "token", value: value.result!.accessToken);
+        await storage.write(key: "customer", value: value.result!.refreshToken);
+        showToastSuccess(value.result!.message);
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return const BottomTabBar();
+        }));
+      }).onError((error, stackTrace) {
+        log(error.toString());
+      });
+      // ;
+      // if (res != null) {
+      //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //     return const BottomTabBar();
+      //   }));
+      // } else {
+      //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //     return const SignInPage();
+      //   }));
+      // }
     }
   }
 }

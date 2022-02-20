@@ -11,4 +11,6 @@ class AppColor {
   static final HexColor blueBackground = HexColor("#b0e5fc") ;
   static final HexColor blueText = HexColor("#249efc") ;
   static final HexColor greyBackground = HexColor("#9ca3ac");
+  static final HexColor greenToast = HexColor("#1D741B");
+  static final HexColor redToast = HexColor("#ff0000");
 }

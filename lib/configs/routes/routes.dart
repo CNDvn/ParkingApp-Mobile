@@ -12,12 +12,12 @@ import 'package:parkingappmobile/view/welcome/welcome.dart';
 class Routes {
   static final Map<String, Widget Function(BuildContext)> routes = {
     // "/": (context) => const Welcome(),
-    "/SignInPage": (context) => const SignInPage(),
+    "/": (context) => const SignInPage(),
     "/userProfile": (context) => const UserProfile(),
     "/EnterPassword": (context) => const EnterPassword(),
     "/EnterPhoneNumber": (context) => const EnterPhoneNumber(),
     "/EnterVerificationCode": (context) => const EnterVerificationCode(),
-    "/": (context) => const BottomTabBar(),
+    "/BottomTabBar": (context) => const BottomTabBar(),
     "/ViewPark": (context) => const ViewPark(),
     "/BookingDetails": (context) => const BookingDetails()
   };

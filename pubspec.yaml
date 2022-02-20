@@ -57,6 +57,11 @@ dependencies:
   searchfield: ^0.5.6
   location: ^4.1.1
   http: ^0.13.4
+  # call api
+  dio: ^4.0.4
+  #show notifi
+  fluttertoast: ^8.0.8
+  flutter_secure_storage: ^5.0.2
   
 dev_dependencies:
   flutter_test:
