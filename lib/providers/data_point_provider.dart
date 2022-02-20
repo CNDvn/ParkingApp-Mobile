@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong/latlong.dart';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
+import 'package:parkingappmobile/configs/exception/exception.dart';
+import 'package:parkingappmobile/view_model/auth.dart';
 
 class ValidationItem {
   final String? value;
@@ -81,14 +84,14 @@ class MapProvider with ChangeNotifier {
   }
 
   MapController mapController = MapController();
-  LatLng? point;
-  LatLng? destination;
+  LatLng point = LatLng(10.841088, 106.809172);
+  LatLng destination = LatLng(10.837543, 106.730032);
   List<Address> location = [];
   double zoomMap = 16.0;
   //-------------------------
   final List<LatLng> polyPoints = [];
   var data;
-
+  
   double startLat = 10.841088;
   double startLng = 106.809172;
   double endLat = 10.837543;
@@ -100,10 +103,10 @@ class MapProvider with ChangeNotifier {
     log("**********" + point.toString());
 
     NetworkHelper network = NetworkHelper(
-      startLat: point == null ? startLat : point!.latitude,
-      startLng: point == null ? startLng : point!.longitude,
-      endLat: destination == null ? endLat : destination!.latitude,
-      endLng: destination == null ? endLng : destination!.longitude,
+      startLat: point.latitude,
+      startLng: point.longitude,
+      endLat: destination.latitude,
+      endLng: destination.longitude,
     );
 
     try {
@@ -126,7 +129,7 @@ class MapProvider with ChangeNotifier {
   Future<void> updatePosition() async {
     Position pos = await _determinePosition();
     point = LatLng(pos.latitude, pos.longitude);
-    mapController.move(LatLng(point!.latitude, point!.longitude), zoomMap);
+    mapController.move(LatLng(point.latitude, point.longitude), zoomMap);
   }
 
   Future<Position> _determinePosition() async {

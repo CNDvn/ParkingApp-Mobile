@@ -8,11 +8,12 @@ import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view/viewPark/view_park.dart';
 import 'package:parkingappmobile/view/welcome/welcome.dart';
+import 'package:parkingappmobile/view_model/auth.dart';
 
 class Routes {
   static final Map<String, Widget Function(BuildContext)> routes = {
-    // "/": (context) => const Welcome(),
-    "/": (context) => const SignInPage(),
+    "/": (context) => const Welcome(),
+    "/SignInPage": (context) => const  SignInPage(),
     "/userProfile": (context) => const UserProfile(),
     "/EnterPassword": (context) => const EnterPassword(),
     "/EnterPhoneNumber": (context) => const EnterPhoneNumber(),

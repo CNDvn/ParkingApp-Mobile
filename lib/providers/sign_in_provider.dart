@@ -10,6 +10,11 @@ import 'package:parkingappmobile/repository/auth_rep.dart';
 import 'package:parkingappmobile/repository/impl/auth_rep_impl.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:parkingappmobile/configs/exception/exception.dart';
+import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
+import 'package:parkingappmobile/view_model/auth.dart';
 
 class ValidationItem {
   final String? value;
@@ -138,6 +143,26 @@ class SignInProvider with ChangeNotifier {
       //     return const SignInPage();
       //   }));
       // }
+    }
+  }
+
+  void _showSignInError(BuildContext context, Exception exception) {
+    if (exception is FirebaseAuthException &&
+        exception.code == 'ERROR_ABORTED_BY_USER') return;
+    showExceptionAlertDialog(context,
+        title: 'Sign in failed', exception: exception);
+  }
+
+  final AuthBase auth = Auth();
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      User? user= await auth.signInWithGoogle();
+      if (user !=null) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return const BottomTabBar();}));
+      }
+    } on Exception catch (e) {
+      _showSignInError(context, e);
     }
   }
 }
