@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/providers/user_profile_provider.dart';
+import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
 

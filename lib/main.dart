@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/routes/routes.dart';
-import 'package:parkingappmobile/providers/main_providers/main_providers.dart';
+import 'package:parkingappmobile/view_model/providers/main_providers/main_providers.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {

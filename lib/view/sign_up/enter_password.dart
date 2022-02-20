@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
-import 'package:parkingappmobile/providers/enter_password_provider.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
+import 'package:parkingappmobile/view_model/providers/enter_password_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
 

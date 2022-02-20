@@ -4,7 +4,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:parkingappmobile/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
