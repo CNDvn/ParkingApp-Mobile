@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/request/sign_in_req.dart';
 import 'package:parkingappmobile/repository/impl/auth_rep_impl.dart';
@@ -8,6 +7,7 @@ import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
@@ -117,9 +117,9 @@ class SignInProvider with ChangeNotifier {
                   password: password.value!,
                   role: "customer"))
           .then((value) async {
-        const storage = FlutterSecureStorage();
-        await storage.write(key: "token", value: value.result!.accessToken);
-        await storage.write(key: "customer", value: value.result!.refreshToken);
+        final SecureStorage secureStorage = SecureStorage();
+        secureStorage.writeSecureData("token", value.result!.accessToken);
+        secureStorage.writeSecureData("customer", value.result!.refreshToken);
         showToastSuccess(value.result!.message);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const BottomTabBar();
