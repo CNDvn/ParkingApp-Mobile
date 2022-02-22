@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:parkingappmobile/model/entity/parking.dart';
+import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -17,12 +22,25 @@ class GoogleMap extends StatefulWidget {
 
 class _GoogleMapState extends State<GoogleMap> {
   List<String> cities = [];
+  List<DataPoint> dataPoint = [];
   @override
   void initState() {
     super.initState();
-    for (DataPoint value in dataPoint) {
-      cities.add(value.name);
-    }
+    List<Parking>? list = [];
+    ParkingImpl().getParkings(UrlApi.getAllParkings).then((value) async {
+      list = value.result!.data;
+      for (var item in list!) {
+        DataPoint dataPointt = DataPoint(
+            name: item.name,
+            latitude: item.coordinates.latitude,
+            longitude: item.coordinates.longitude);
+        dataPoint.add(dataPointt);
+      }
+      for (DataPoint value in dataPoint) {
+        cities.add(value.name);
+      }
+      log(dataPoint.length.toString());
+    });
   }
 
   @override
@@ -55,7 +73,7 @@ class _GoogleMapState extends State<GoogleMap> {
                 child: FlutterMap(
               mapController: mapProvider.mapController,
               options: MapOptions(
-                onTap: (v,p) async {
+                onTap: (v, p) async {
                   List<Address> tmp = [];
                   tmp = await Geocoder.local.findAddressesFromCoordinates(
                       Coordinates(p.latitude, p.longitude));
