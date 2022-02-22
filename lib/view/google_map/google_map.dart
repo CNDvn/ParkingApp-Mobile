@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
@@ -16,13 +18,17 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
-  List<String> cities = [];
+  
   @override
   void initState() {
     super.initState();
-    for (DataPoint value in dataPoint) {
-      cities.add(value.name);
-    }
+    
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -47,15 +53,29 @@ class _GoogleMapState extends State<GoogleMap> {
       mapProvider.getJsonData();
     }
 
+    if (mapProvider.point.latitude == 0) {
+      Future<void> updatePosition() async {
+        LatLng pos = await mapProvider.determinePosition();
+        setState(() {
+          mapProvider.point = pos;
+          mapProvider.mapController
+              .move(mapProvider.point, mapProvider.zoomMap);
+        });
+      }
+
+      updatePosition();
+    }
+
     return Scaffold(
       body: Stack(
         children: [
-          Column(children: [
+          Column(
+            children: [
             Flexible(
                 child: FlutterMap(
               mapController: mapProvider.mapController,
               options: MapOptions(
-                onTap: (v,p) async {
+                onTap: (v, p) async {
                   List<Address> tmp = [];
                   tmp = await Geocoder.local.findAddressesFromCoordinates(
                       Coordinates(p.latitude, p.longitude));
@@ -68,7 +88,7 @@ class _GoogleMapState extends State<GoogleMap> {
                         mapProvider.zoomMap);
                   });
                 },
-                center: LatLng(mapProvider.startLat, mapProvider.startLng),
+                center: mapProvider.point,
                 zoom: 16.0,
               ),
               layers: [
@@ -136,7 +156,7 @@ class _GoogleMapState extends State<GoogleMap> {
                           : null,
                     ),
                     maxSuggestionsInViewPort: 5,
-                    suggestions: cities,
+                    suggestions: [],
                     onTap: onTapDestination,
                   ),
                 ),

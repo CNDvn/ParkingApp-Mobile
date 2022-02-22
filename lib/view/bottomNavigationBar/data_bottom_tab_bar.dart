@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 
 int currentTab = 0;
 
-Widget currentScreen = GoogleMap();
+Widget currentScreen = const GoogleMap();
 
-final List<Widget> screens = [GoogleMap(), Payments(), History(), Setting()];
+List<Widget> screens = [const GoogleMap(),const Payments(),const History(),const Setting()];
 
 final PageStorageBucket bucket = PageStorageBucket();
 
@@ -73,7 +73,7 @@ class ActionButtonMid extends StatelessWidget {
           if (currentTab == 0) {
             mapProvider.updatePosition();
             return;
-          }          
+          }
         });
   }
 }
