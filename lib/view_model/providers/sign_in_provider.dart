@@ -7,6 +7,7 @@ import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 

@@ -8,6 +8,10 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+
+import 'package:parkingappmobile/configs/exception/exception.dart';
+import 'package:parkingappmobile/view_model/auth.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/model/entity/parking.dart';
 import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
@@ -77,8 +81,8 @@ class MapProvider with ChangeNotifier {
   }
 
   MapController mapController = MapController();
-  LatLng point = LatLng(10.841088, 106.809172);
-  LatLng destination = LatLng(10.837543, 106.730032);
+  var point = LatLng(0, 0);
+  var destination = LatLng(0, 0);
   List<Address> location = [];
   double zoomMap = 16.0;
   //-------------------------
@@ -89,6 +93,12 @@ class MapProvider with ChangeNotifier {
   double startLng = 106.809172;
   double endLat = 10.837543;
   double endLng = 106.730032;
+
+  List<String> cities = [];
+  
+  // for (DataPoint value in dataPoint) {
+  //     cities.add(value.name);
+  //   }
 
   void getJsonData() async {
     polyPoints.clear();
@@ -120,12 +130,12 @@ class MapProvider with ChangeNotifier {
   }
 
   Future<void> updatePosition() async {
-    Position pos = await _determinePosition();
-    point = LatLng(pos.latitude, pos.longitude);
-    mapController.move(LatLng(point.latitude, point.longitude), zoomMap);
+    LatLng pos = await determinePosition();
+    point = pos;
+    mapController.move(point, zoomMap);
   }
 
-  Future<Position> _determinePosition() async {
+  Future<LatLng> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -143,6 +153,7 @@ class MapProvider with ChangeNotifier {
       return Future.error(
           'Location permissons are permanently denied, we cannot request permissions');
     }
-    return await Geolocator.getCurrentPosition();
+    Position pos = await Geolocator.getCurrentPosition();
+    return LatLng(pos.latitude, pos.longitude);
   }
 }

@@ -65,10 +65,23 @@ class _GoogleMapState extends State<GoogleMap> {
       mapProvider.getJsonData();
     }
 
+    if (mapProvider.point.latitude == 0) {
+      Future<void> updatePosition() async {
+        LatLng pos = await mapProvider.determinePosition();
+        setState(() {
+          mapProvider.point = pos;
+          mapProvider.mapController
+              .move(mapProvider.point, mapProvider.zoomMap);
+        });
+      }
+      updatePosition();
+    }
+
     return Scaffold(
       body: Stack(
         children: [
-          Column(children: [
+          Column(
+            children: [
             Flexible(
                 child: FlutterMap(
               mapController: mapProvider.mapController,
@@ -86,7 +99,7 @@ class _GoogleMapState extends State<GoogleMap> {
                         mapProvider.zoomMap);
                   });
                 },
-                center: LatLng(mapProvider.startLat, mapProvider.startLng),
+                center: mapProvider.point,
                 zoom: 16.0,
               ),
               layers: [
