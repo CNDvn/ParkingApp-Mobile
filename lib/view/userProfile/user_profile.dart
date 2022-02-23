@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:parkingappmobile/widgets/input_date/input_date.dart';
 import 'package:provider/provider.dart';
 
 class UserProfile extends StatelessWidget {
@@ -52,22 +53,48 @@ class UserProfile extends StatelessWidget {
                       height: 100.0,
                       width: 100.0,
                     ))),
-            SizedBox(
-              height: sizeHeightInput,
-              child: TextField(
-                  decoration: InputDecoration(
-                      labelText: 'Full name',
-                      errorText: provider.clickButtonFlag
-                          ? provider.fullName.error
-                          : null),
-                  autofocus: true,
-                  controller: provider.fullNameController,
-                  onEditingComplete: () {
-                    provider.nodeEmail.requestFocus();
-                  },
-                  onChanged: (String value) {
-                    provider.checkFullName(value);
-                  }),
+            Row(
+              children: [
+                SizedBox(
+                  height: size.height * 0.12,
+                  width: size.width * 0.5,
+                  child: TextField(
+                      decoration: InputDecoration(
+                          labelText: 'First name',
+                          errorText: provider.clickButtonFlag
+                              ? provider.firstName.error
+                              : null),
+                      autofocus: true,
+                      controller: provider.firstNameController,
+                      onEditingComplete: () {
+                        provider.nodeLastName.requestFocus();
+                      },
+                      onChanged: (String value) {
+                        provider.checkFirstName(value);
+                      }),
+                ),
+                SizedBox(
+                  width: size.width * 0.05,
+                ),
+                SizedBox(
+                  height: size.height * 0.12,
+                  width: size.width * 0.345,
+                  child: TextField(
+                      decoration: InputDecoration(
+                          labelText: 'Last name',
+                          errorText: provider.clickButtonFlag
+                              ? provider.lastName.error
+                              : null),
+                      focusNode: provider.nodeLastName,
+                      controller: provider.lastNameController,
+                      onEditingComplete: () {
+                        provider.nodeEmail.requestFocus();
+                      },
+                      onChanged: (String value) {
+                        provider.checkLastName(value);
+                      }),
+                ),
+              ],
             ),
             SizedBox(
               height: sizeHeightInput,
@@ -77,6 +104,7 @@ class UserProfile extends StatelessWidget {
                     errorText:
                         provider.clickButtonFlag ? provider.email.error : null),
                 focusNode: provider.nodeEmail,
+                controller: provider.emailController,
                 onEditingComplete: () {
                   provider.nodePhone.requestFocus();
                 },
@@ -94,28 +122,13 @@ class UserProfile extends StatelessWidget {
                     errorText:
                         provider.clickButtonFlag ? provider.phone.error : null),
                 focusNode: provider.nodePhone,
-                onEditingComplete: () {
-                  provider.nodePassword.requestFocus();
-                },
+                controller: provider.phoneController,
                 onChanged: (value) {
                   provider.checkPhone(value);
                 },
               ),
             ),
-            SizedBox(
-              height: sizeHeightInput,
-              child: TextField(
-                decoration: InputDecoration(
-                    labelText: 'Password',
-                    errorText: provider.clickButtonFlag
-                        ? provider.password.error
-                        : null),
-                focusNode: provider.nodePassword,
-                onChanged: (value) {
-                  provider.checkPassword(value);
-                },
-              ),
-            ),
+            InputDate(provider: provider.dobController),
             Container(
               margin: EdgeInsets.fromLTRB(0, size.height * 0.07, 0, 0),
               child: ButtonDefault(

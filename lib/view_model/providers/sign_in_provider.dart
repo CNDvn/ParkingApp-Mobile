@@ -8,7 +8,6 @@ import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
-import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
@@ -122,17 +121,7 @@ class SignInProvider with ChangeNotifier {
         final SecureStorage secureStorage = SecureStorage();
         secureStorage.writeSecureData("token", value.result!.accessToken);
         secureStorage.writeSecureData("customer", value.result!.refreshToken);
-                UsersMeRepImpl()
-            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken).then((value) async {
-              final fullname = await secureStorage.readSecureData('fullname');
-              final emailAddress = await secureStorage.readSecureData('emailAddress');
-              final phoneNumber = await secureStorage.readSecureData('phoneNumber');
-              log(fullname);
-              log(emailAddress);
-              log(phoneNumber);
-            }).onError((error, stackTrace) {
-              log(error.toString());
-            });
+        UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
         showToastSuccess(value.result!.message);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const BottomTabBar();
@@ -153,10 +142,11 @@ class SignInProvider with ChangeNotifier {
   final AuthBase auth = Auth();
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
-      User? user= await auth.signInWithGoogle();
-      if (user !=null) {
+      User? user = await auth.signInWithGoogle();
+      if (user != null) {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const BottomTabBar();}));
+          return const BottomTabBar();
+        }));
       }
     } on Exception catch (e) {
       _showSignInError(context, e);

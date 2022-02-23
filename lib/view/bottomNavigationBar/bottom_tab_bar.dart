@@ -38,7 +38,8 @@ class _BottomTabBarState extends State<BottomTabBar> {
   Widget build(BuildContext context) {
     double windowHeight = MediaQuery.of(context).size.height;
     double windowWidth = MediaQuery.of(context).size.width;
-    UserProfileProvider userProvider = Provider.of<UserProfileProvider>(context);
+    UserProfileProvider userProvider =
+        Provider.of<UserProfileProvider>(context);
     List<Widget> screens = [
       const GoogleMap(),
       const Payments(),

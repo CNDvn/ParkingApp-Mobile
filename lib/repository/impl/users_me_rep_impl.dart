@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/response/sign_in_res.dart';
@@ -21,8 +22,14 @@ class UsersMeRepImpl implements UsersMeRepo {
       dataUsersMe = UsersMeRes.usersMeResFromJson(jsonEncode(response.data));
       final SecureStorage secureStorage = SecureStorage();
       secureStorage.writeSecureData("fullname", dataUsersMe.result!.fullName);
+      secureStorage.writeSecureData("firstName", dataUsersMe.result!.firstName);
+      secureStorage.writeSecureData("lastName", dataUsersMe.result!.lastName);
       secureStorage.writeSecureData("emailAddress", dataUsersMe.result!.email);
-      secureStorage.writeSecureData("phoneNumber", dataUsersMe.result!.phoneNumber);
+      secureStorage.writeSecureData(
+          "phoneNumber", dataUsersMe.result!.phoneNumber);
+      DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+      String dob = dateFormat.format(dataUsersMe.result!.dob);
+      secureStorage.writeSecureData("DOB", dob);
     } on DioError catch (e) {
       showToastFail(e.response?.data["message"]);
     }
