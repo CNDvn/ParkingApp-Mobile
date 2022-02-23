@@ -12,6 +12,9 @@ import 'package:latlong2/latlong.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/model/entity/parking.dart';
+import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
   final String? value;
@@ -34,14 +37,6 @@ class LineString {
   LineString(this.lineString);
   List<dynamic> lineString;
 }
-
-List<DataPoint> dataPoint = [
-  const DataPoint(
-      name: 'Ho Chi Minh', latitude: 10.794606, longitude: 106.721677),
-  const DataPoint(name: 'Ha Noi', latitude: 21.0031177, longitude: 105.8201408),
-  const DataPoint(name: 'Quan 9', latitude: 10.8428791, longitude: 106.8297824),
-  const DataPoint(name: 'Quan 1', latitude: 10.7756587, longitude: 106.7004238)
-];
 
 class NetworkHelper {
   NetworkHelper(
@@ -92,8 +87,7 @@ class MapProvider with ChangeNotifier {
   double zoomMap = 16.0;
   //-------------------------
   final List<LatLng> polyPoints = [];
-  dynamic data;
-  Marker? marker;
+  var data;
 
   double startLat = 10.841088;
   double startLng = 106.809172;
