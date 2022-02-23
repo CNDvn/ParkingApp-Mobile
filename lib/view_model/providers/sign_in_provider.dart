@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/request/sign_in_req.dart';
 import 'package:parkingappmobile/repository/impl/auth_rep_impl.dart';
+import 'package:parkingappmobile/repository/impl/users_me_rep_impl.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
@@ -120,6 +121,17 @@ class SignInProvider with ChangeNotifier {
         final SecureStorage secureStorage = SecureStorage();
         secureStorage.writeSecureData("token", value.result!.accessToken);
         secureStorage.writeSecureData("customer", value.result!.refreshToken);
+                UsersMeRepImpl()
+            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken).then((value) async {
+              final fullname = await secureStorage.readSecureData('fullname');
+              final emailAddress = await secureStorage.readSecureData('emailAddress');
+              final phoneNumber = await secureStorage.readSecureData('phoneNumber');
+              log(fullname);
+              log(emailAddress);
+              log(phoneNumber);
+            }).onError((error, stackTrace) {
+              log(error.toString());
+            });
         showToastSuccess(value.result!.message);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const BottomTabBar();
