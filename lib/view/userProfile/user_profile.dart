@@ -61,6 +61,7 @@ class UserProfile extends StatelessWidget {
                           ? provider.fullName.error
                           : null),
                   autofocus: true,
+                  controller: provider.fullNameController,
                   onEditingComplete: () {
                     provider.nodeEmail.requestFocus();
                   },

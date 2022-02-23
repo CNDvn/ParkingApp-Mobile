@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/constants/regex.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
 
 class ValidationItem {
   String value;
@@ -19,6 +20,23 @@ class UserProfileProvider with ChangeNotifier {
   FocusNode nodeEmail = FocusNode();
   FocusNode nodePhone = FocusNode();
   FocusNode nodePassword = FocusNode();
+
+  var fullNameTextEditingController = TextEditingController();
+  var emailTextEditingController= TextEditingController();
+  var phoneTextEditingController = TextEditingController();
+  var passwordTextEditingController = TextEditingController();
+
+  void getProfile() async {
+    final SecureStorage secureStorage = SecureStorage();
+    String fullname = await secureStorage.readSecureData('fullname');
+    String emailAddress = await secureStorage.readSecureData('emailAddress');
+    String phoneNumber = await secureStorage.readSecureData('phoneNumber');
+    fullNameTextEditingController.text =fullname;
+    emailTextEditingController.text = emailAddress;
+    phoneTextEditingController.text =phoneNumber;
+  }
+
+  TextEditingController get fullNameController => fullNameTextEditingController;
 
   bool checkFullName(String value) {
     fullName.value = value;
