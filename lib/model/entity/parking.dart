@@ -34,7 +34,7 @@ class Parking {
   String phoneNumber;
   Business business;
   List<Image> images;
-  Coordinates coordinates;
+  Coordinatess coordinates;
 
   factory Parking.fromJson(Map<String, dynamic> json) => Parking(
         id: json["id"],
@@ -46,7 +46,7 @@ class Parking {
         phoneNumber: json["phoneNumber"],
         business: Business.fromJson(json["business"]),
         images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
-        coordinates: Coordinates.fromJson(json["coordinates"]),
+        coordinates: Coordinatess.fromJson(json["coordinates"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,8 +63,8 @@ class Parking {
       };
 }
 
-class Coordinates {
-  Coordinates({
+class Coordinatess {
+  Coordinatess({
     required this.latitude,
     required this.longitude,
   });
@@ -72,7 +72,7 @@ class Coordinates {
   double latitude;
   double longitude;
 
-  factory Coordinates.fromJson(Map<String, dynamic> json) => Coordinates(
+  factory Coordinatess.fromJson(Map<String, dynamic> json) => Coordinatess(
         latitude: json["latitude"].toDouble(),
         longitude: json["longitude"].toDouble(),
       );
