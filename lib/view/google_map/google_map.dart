@@ -27,7 +27,6 @@ class _GoogleMapState extends State<GoogleMap> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -62,7 +61,6 @@ class _GoogleMapState extends State<GoogleMap> {
               .move(mapProvider.point, mapProvider.zoomMap);
         });
       }
-
       updatePosition();
     }
 

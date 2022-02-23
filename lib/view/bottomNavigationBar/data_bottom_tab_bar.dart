@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
-import 'package:parkingappmobile/view/google_map/google_map.dart';
-import 'package:parkingappmobile/view/history/history.dart';
-import 'package:parkingappmobile/view/payments/payments.dart';
-import 'package:parkingappmobile/view/setting/setting.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:provider/provider.dart';
-
-int currentTab = 0;
-
-Widget currentScreen = const GoogleMap();
-
-List<Widget> screens = [const GoogleMap(),const Payments(),const History(),const Setting()];
-
-final PageStorageBucket bucket = PageStorageBucket();
 
 class IconButtonStyle extends StatelessWidget {
   const IconButtonStyle(
