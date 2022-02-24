@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 
 class InputDate extends StatefulWidget {
-  final TextEditingController provider;
+  final provider;
 
   const InputDate({
     Key? key,
@@ -26,7 +28,9 @@ class _InputDateState extends State<InputDate> {
     if (_datePicker != null && _datePicker != _date) {
       setState(() {
         _date = _datePicker;
-        print(_date.toString());
+        DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+        String dob = dateFormat.format(_date);
+        widget.provider.dobController.text = dob;
       });
     }
   }
@@ -50,7 +54,7 @@ class _InputDateState extends State<InputDate> {
               width: size.width * 0.75,
               child: TextField(
                 enabled: false,
-                controller: widget.provider,
+                controller: widget.provider.dobController,
               ),
             ),
             IconButton(

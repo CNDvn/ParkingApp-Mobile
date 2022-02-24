@@ -128,7 +128,7 @@ class UserProfile extends StatelessWidget {
                 },
               ),
             ),
-            InputDate(provider: provider.dobController),
+            InputDate(provider: provider),
             Container(
               margin: EdgeInsets.fromLTRB(0, size.height * 0.07, 0, 0),
               child: ButtonDefault(
