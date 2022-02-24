@@ -57,6 +57,8 @@ dependencies:
   searchfield: ^0.5.6
   location: ^4.1.1
   http: ^0.13.4
+  intl: ^0.17.0
+  syncfusion_flutter_datepicker: ^19.4.53
   # call api
   dio: ^4.0.4
   #show notifi

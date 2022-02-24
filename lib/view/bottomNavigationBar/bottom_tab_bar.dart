@@ -7,7 +7,9 @@ import 'package:parkingappmobile/view/history/history.dart';
 import 'package:parkingappmobile/view/payments/payments.dart';
 import 'package:parkingappmobile/view/setting/setting.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
+import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
+import 'package:provider/provider.dart';
 
 class BottomTabBar extends StatefulWidget {
   const BottomTabBar({Key? key}) : super(key: key);
@@ -20,7 +22,6 @@ class _BottomTabBarState extends State<BottomTabBar> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   int currentTab = 0;
   late TabController _tabController;
-
   @override
   void dispose() {
     _tabController.dispose();
@@ -37,6 +38,8 @@ class _BottomTabBarState extends State<BottomTabBar> {
   Widget build(BuildContext context) {
     double windowHeight = MediaQuery.of(context).size.height;
     double windowWidth = MediaQuery.of(context).size.width;
+    UserProfileProvider userProvider =
+        Provider.of<UserProfileProvider>(context);
     List<Widget> screens = [
       const GoogleMap(),
       const Payments(),
@@ -72,6 +75,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
                   child: InkWell(
                     splashColor: AppColor.whiteBackground,
                     onTap: () {
+                      userProvider.getProfile();
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return const UserProfile();

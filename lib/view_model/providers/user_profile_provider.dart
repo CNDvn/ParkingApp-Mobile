@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/constants/regex.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
 
 class ValidationItem {
   String value;
@@ -8,26 +9,72 @@ class ValidationItem {
 }
 
 class UserProfileProvider with ChangeNotifier {
-  ValidationItem fullName = ValidationItem("", null);
+  ValidationItem firstName = ValidationItem("", null);
+  ValidationItem lastName = ValidationItem("", null);
   ValidationItem email = ValidationItem("", null);
   ValidationItem phone = ValidationItem("", null);
-  ValidationItem password = ValidationItem("", null);
 
   bool clickButtonFlag = false;
 
-  FocusNode nodeFullName = FocusNode();
+  FocusNode nodeFirstName = FocusNode();
+  FocusNode nodeLastName = FocusNode();
   FocusNode nodeEmail = FocusNode();
   FocusNode nodePhone = FocusNode();
-  FocusNode nodePassword = FocusNode();
 
-  bool checkFullName(String value) {
-    fullName.value = value;
+  var firstNameTextEditingController = TextEditingController();
+  var lastNameTextEditingController = TextEditingController();
+  var emailTextEditingController = TextEditingController();
+  var phoneTextEditingController = TextEditingController();
+  var dobTextEditingController = TextEditingController();
+
+  void getProfile() async {
+    final SecureStorage secureStorage = SecureStorage();
+    String firstNameSto = await secureStorage.readSecureData('firstName');
+    String lastNameSto = await secureStorage.readSecureData('lastName');
+    String emailSto = await secureStorage.readSecureData('emailAddress');
+    String phoneSto = await secureStorage.readSecureData('phoneNumber');
+    String dobSto = await secureStorage.readSecureData('DOB');
+
+    firstName.value = firstNameSto;
+    lastName.value = lastNameSto;
+    email.value = emailSto;
+    phone.value = phoneSto;
+
+    firstNameTextEditingController.text = firstNameSto;
+    lastNameTextEditingController.text = lastNameSto;
+    emailTextEditingController.text = emailSto;
+    phoneTextEditingController.text = phoneSto;
+    dobTextEditingController.text = dobSto;
+  }
+
+  TextEditingController get firstNameController =>
+      firstNameTextEditingController;
+  TextEditingController get lastNameController => lastNameTextEditingController;
+  TextEditingController get emailController => emailTextEditingController;
+  TextEditingController get phoneController => phoneTextEditingController;
+  TextEditingController get dobController => dobTextEditingController;
+
+  bool checkFirstName(String value) {
+    firstName.value = value;
     bool flag = true;
     if (value.isEmpty) {
-      fullName.error = "Full name not empty";
+      firstName.error = "First name not empty";
       flag = false;
     } else {
-      fullName.error = null;
+      firstName.error = null;
+    }
+    notifyListeners();
+    return flag;
+  }
+
+  bool checkLastName(String value) {
+    lastName.value = value;
+    bool flag = true;
+    if (value.isEmpty) {
+      lastName.error = "Last name not empty";
+      flag = false;
+    } else {
+      lastName.error = null;
     }
     notifyListeners();
     return flag;
@@ -50,8 +97,8 @@ class UserProfileProvider with ChangeNotifier {
   bool checkPhone(String value) {
     bool flag = true;
     phone.value = value;
-    if (value.length != 10) {
-      phone.error = "Phone number must have 10 character";
+    if (value.length != 12) {
+      phone.error = "Phone number must have 9 characters excluding +84";
       flag = false;
     } else {
       phone.error = null;
@@ -60,26 +107,13 @@ class UserProfileProvider with ChangeNotifier {
     return flag;
   }
 
-  bool checkPassword(String value) {
-    password.value = value;
-    bool flag = true;
-    if (value.isEmpty) {
-      password.error = "Password not empty";
-      flag = false;
-    } else {
-      password.error = null;
-    }
-    notifyListeners();
-    return flag;
-  }
-
   void submit() {
     clickButtonFlag = true;
-    bool isFullName = checkFullName(fullName.value);
+    bool isFirstName = checkFirstName(firstName.value);
+    bool isLastName = checkLastName(lastName.value);
     bool isEmail = checkEmail(email.value);
     bool isPhone = checkPhone(phone.value);
-    bool isPassword = checkPassword(password.value);
-    if (isFullName && isEmail && isPhone && isPassword) {
+    if (isFirstName && isLastName && isEmail && isPhone) {
       print("qua ai");
     }
     notifyListeners();
