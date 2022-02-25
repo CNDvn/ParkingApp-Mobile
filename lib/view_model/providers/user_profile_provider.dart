@@ -1,6 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/constants/regex.dart';
+import 'package:parkingappmobile/model/request/profile_req.dart';
+import 'package:parkingappmobile/repository/impl/profile_rep_impl.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
   String value;
@@ -97,7 +103,7 @@ class UserProfileProvider with ChangeNotifier {
   bool checkPhone(String value) {
     bool flag = true;
     phone.value = value;
-    if (value.length != 12) {
+    if (value.length != 9) {
       phone.error = "Phone number must have 9 characters excluding +84";
       flag = false;
     } else {
@@ -114,7 +120,24 @@ class UserProfileProvider with ChangeNotifier {
     bool isEmail = checkEmail(email.value);
     bool isPhone = checkPhone(phone.value);
     if (isFirstName && isLastName && isEmail && isPhone) {
-      print("qua ai");
+      ProfileRepImpl()
+          .putProfile(
+        UrlApi.profilePath,
+        ProfileReq(
+          firstName: firstNameController.text,
+          lastName: lastNameController.text,
+          dob: dobController.text,
+          phoneNumber: '+84' + phoneController.text,
+          email: emailController.text,
+          address: firstNameController.text,
+          avatar: firstNameController.text,
+        ),
+      )
+          .then((value) async {
+        showToastSuccess(value.result!);
+      }).onError((error, stackTrace) {
+        log(error.toString());
+      });
     }
     notifyListeners();
   }

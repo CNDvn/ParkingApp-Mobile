@@ -113,20 +113,43 @@ class UserProfile extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(
-              height: sizeHeightInput,
-              child: TextField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    labelText: 'Phone number',
-                    errorText:
-                        provider.clickButtonFlag ? provider.phone.error : null),
-                focusNode: provider.nodePhone,
-                controller: provider.phoneController,
-                onChanged: (value) {
-                  provider.checkPhone(value);
-                },
-              ),
+            Column(
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Phone number',
+                    style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                  ),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                        height: size.height * 0.072,
+                        child: const Text(
+                          '+84 ',
+                          style: TextStyle(fontSize: 15),
+                        )),
+                    SizedBox(
+                      height: size.height * 0.105,
+                      width: size.width * 0.82,
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          errorText: provider.clickButtonFlag
+                              ? provider.phone.error
+                              : null,
+                        ),
+                        focusNode: provider.nodePhone,
+                        controller: provider.phoneController,
+                        onChanged: (value) {
+                          provider.checkPhone(value);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             InputDate(provider: provider),
             Container(

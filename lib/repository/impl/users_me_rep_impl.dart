@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
@@ -26,7 +25,7 @@ class UsersMeRepImpl implements UsersMeRepo {
       secureStorage.writeSecureData("lastName", dataUsersMe.result!.lastName);
       secureStorage.writeSecureData("emailAddress", dataUsersMe.result!.email);
       secureStorage.writeSecureData(
-          "phoneNumber", dataUsersMe.result!.phoneNumber);
+          "phoneNumber", dataUsersMe.result!.phoneNumber.substring(3));
       DateFormat dateFormat = DateFormat("yyyy-MM-dd");
       String dob = dateFormat.format(dataUsersMe.result!.dob);
       secureStorage.writeSecureData("DOB", dob);
