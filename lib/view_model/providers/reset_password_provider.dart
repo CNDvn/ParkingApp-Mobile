@@ -121,8 +121,6 @@ class ResetPasswordProvider with ChangeNotifier {
   }
 
   void submitOtp(BuildContext context, String username, int otp) {
-    // submitValidOtp = _otp.error != null || _otp.value == null;
-    // log(otpController.text);
     if (otp == 0) {
       log("ko co ra");
       checkOtp(otp.toString());
