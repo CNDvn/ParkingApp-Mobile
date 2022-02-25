@@ -15,7 +15,6 @@ class ValidationItem {
 }
 
 class UserProfileProvider with ChangeNotifier {
-  
   final SecureStorage secureStorage = SecureStorage();
 
   ValidationItem firstName = ValidationItem("", null);
@@ -137,6 +136,11 @@ class UserProfileProvider with ChangeNotifier {
               ),
               token)
           .then((value) async {
+        secureStorage.writeSecureData("firstName", firstNameController.text);
+        secureStorage.writeSecureData("lastName", lastNameController.text);
+        secureStorage.writeSecureData("emailAddress", emailController.text);
+        secureStorage.writeSecureData("phoneNumber", phoneController.text);
+        secureStorage.writeSecureData("DOB", dobController.text);
         showToastSuccess(value.result!);
       }).onError((error, stackTrace) {
         log(error.toString());
