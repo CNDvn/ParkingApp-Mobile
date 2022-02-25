@@ -5,6 +5,7 @@ import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
+import 'package:parkingappmobile/view/resetPassword/enter_username.dart';
 import 'package:parkingappmobile/view/sign_up/enter_phone_number.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
@@ -108,7 +109,17 @@ class SignInPage extends StatelessWidget {
                   width: size.width * 0.9,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const <Widget>[Text("Forgot Password?")],
+                    children: <Widget>[GestureDetector(
+                          child: Text(
+                            "Forgot password",
+                            style: AppTextStyles.h4black,
+                          ),
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const EnterUserName();
+                            }));
+                          })],
                   ),
                 ),
                 SizedBox(
