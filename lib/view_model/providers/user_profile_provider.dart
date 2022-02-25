@@ -15,6 +15,9 @@ class ValidationItem {
 }
 
 class UserProfileProvider with ChangeNotifier {
+  
+  final SecureStorage secureStorage = SecureStorage();
+
   ValidationItem firstName = ValidationItem("", null);
   ValidationItem lastName = ValidationItem("", null);
   ValidationItem email = ValidationItem("", null);
@@ -34,7 +37,6 @@ class UserProfileProvider with ChangeNotifier {
   var dobTextEditingController = TextEditingController();
 
   void getProfile() async {
-    final SecureStorage secureStorage = SecureStorage();
     String firstNameSto = await secureStorage.readSecureData('firstName');
     String lastNameSto = await secureStorage.readSecureData('lastName');
     String emailSto = await secureStorage.readSecureData('emailAddress');
@@ -113,26 +115,27 @@ class UserProfileProvider with ChangeNotifier {
     return flag;
   }
 
-  void submit() {
+  void submit() async {
     clickButtonFlag = true;
     bool isFirstName = checkFirstName(firstName.value);
     bool isLastName = checkLastName(lastName.value);
     bool isEmail = checkEmail(email.value);
     bool isPhone = checkPhone(phone.value);
     if (isFirstName && isLastName && isEmail && isPhone) {
+      String token = await secureStorage.readSecureData('token');
       ProfileRepImpl()
           .putProfile(
-        UrlApi.profilePath,
-        ProfileReq(
-          firstName: firstNameController.text,
-          lastName: lastNameController.text,
-          dob: dobController.text,
-          phoneNumber: '+84' + phoneController.text,
-          email: emailController.text,
-          address: firstNameController.text,
-          avatar: firstNameController.text,
-        ),
-      )
+              UrlApi.profilePath,
+              ProfileReq(
+                firstName: firstNameController.text,
+                lastName: lastNameController.text,
+                dob: dobController.text,
+                phoneNumber: '+84' + phoneController.text,
+                email: emailController.text,
+                address: firstNameController.text,
+                avatar: firstNameController.text,
+              ),
+              token)
           .then((value) async {
         showToastSuccess(value.result!);
       }).onError((error, stackTrace) {
