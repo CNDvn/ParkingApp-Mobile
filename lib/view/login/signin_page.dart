@@ -5,7 +5,8 @@ import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
-import 'package:parkingappmobile/view/sign_up/enter_phone_number.dart';
+import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
+import 'package:parkingappmobile/view/sign_up/sign_up_page.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
@@ -30,8 +31,8 @@ class SignInPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: size.height *0.2,
-                  width: size.width *0.9,
+                  height: size.height * 0.2,
+                  width: size.width * 0.9,
                 ),
                 SizedBox(
                   height: size.height * 0.12,
@@ -123,13 +124,17 @@ class SignInPage extends StatelessWidget {
                 ),
                 SizedBox(
                   height: size.height * 0.02,
-                  width: size.width *0.9,
+                  width: size.width * 0.9,
                 ),
                 SizedBox(
                   height: size.height * 0.07,
                   width: size.width * 0.9,
-                  child: ButtonSocial(content: "Login With Google", voidCallBack:() => signInProvider.signInWithGoogle(context), assetName: AssetPath.logoGoogle),
-                ),                
+                  child: ButtonSocial(
+                      content: "Login With Google",
+                      voidCallBack: () =>
+                          signInProvider.signInWithGoogle(context),
+                      assetName: AssetPath.logoGoogle),
+                ),
                 SizedBox(
                   height: size.height * 0.12,
                   width: size.width * 0.9,
@@ -145,7 +150,7 @@ class SignInPage extends StatelessWidget {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return const EnterPhoneNumber();
+                              return const SignUpPage();
                             }));
                           }),
                     ],
