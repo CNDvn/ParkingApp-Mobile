@@ -136,11 +136,11 @@ class UserProfileProvider with ChangeNotifier {
               ),
               token)
           .then((value) async {
-        secureStorage.writeSecureData("firstName", firstNameController.text);
-        secureStorage.writeSecureData("lastName", lastNameController.text);
-        secureStorage.writeSecureData("emailAddress", emailController.text);
-        secureStorage.writeSecureData("phoneNumber", phoneController.text);
-        secureStorage.writeSecureData("DOB", dobController.text);
+        await secureStorage.writeSecureData("firstName", firstNameController.text);
+        await secureStorage.writeSecureData("lastName", lastNameController.text);
+        await secureStorage.writeSecureData("emailAddress", emailController.text);
+        await secureStorage.writeSecureData("phoneNumber", phoneController.text);
+        await secureStorage.writeSecureData("DOB", dobController.text);
         showToastSuccess(value.result!);
       }).onError((error, stackTrace) {
         log(error.toString());
