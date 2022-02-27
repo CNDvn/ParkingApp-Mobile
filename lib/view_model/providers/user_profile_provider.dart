@@ -5,6 +5,7 @@ import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/constants/regex.dart';
 import 'package:parkingappmobile/model/request/profile_req.dart';
 import 'package:parkingappmobile/repository/impl/profile_rep_impl.dart';
+import 'package:parkingappmobile/repository/impl/users_me_rep_impl.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
@@ -136,11 +137,7 @@ class UserProfileProvider with ChangeNotifier {
               ),
               token)
           .then((value) async {
-        await secureStorage.writeSecureData("firstName", firstNameController.text);
-        await secureStorage.writeSecureData("lastName", lastNameController.text);
-        await secureStorage.writeSecureData("emailAddress", emailController.text);
-        await secureStorage.writeSecureData("phoneNumber", phoneController.text);
-        await secureStorage.writeSecureData("DOB", dobController.text);
+        UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, token);
         showToastSuccess(value.result!);
       }).onError((error, stackTrace) {
         log(error.toString());

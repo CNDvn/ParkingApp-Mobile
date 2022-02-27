@@ -59,9 +59,7 @@ class _InputDateState extends State<InputDate> {
             ),
             IconButton(
               onPressed: () async {
-                setState(() {
                   _selectDate(context);
-                });
               },
               icon: const Icon(
                 Icons.calendar_today,
