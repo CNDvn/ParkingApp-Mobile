@@ -39,6 +39,7 @@ dependencies:
   intro_slider: ^3.0.2
   slide_to_confirm: ^1.1.0
   flutter_map: ^0.14.0
+  flutter_map_marker_cluster: any
   geocoding: ^2.0.2
   geocoder: ^0.2.1
   tuple: ^2.0.0
@@ -59,6 +60,7 @@ dependencies:
   http: ^0.13.4
   intl: ^0.17.0
   syncfusion_flutter_datepicker: ^19.4.53
+  carousel_slider: ^4.0.0
   # call api
   dio: ^4.0.4
   #show notifi

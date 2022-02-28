@@ -1,14 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/model/entity/image.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/carousel_slider/carousel_slider.dart';
 
 class ParkingDetail extends StatelessWidget {
-  const ParkingDetail({Key? key}) : super(key: key);
+  const ParkingDetail({
+    Key? key,
+    required this.name,
+    required this.images,
+    required this.parkingSlots,
+    required this.address,
+    required this.openTime,
+    required this.closeTime,
+    required this.username,
+    required this.phoneNumber,
+  }) : super(key: key);
+
+  final String name;
+  final List<Images> images;
+  final List<dynamic> parkingSlots;
+  final String address;
+  final String? openTime;
+  final String? closeTime;
+  final String username;
+  final String phoneNumber;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    DateTime date = DateTime.now();
+
+    bool status() {
+      final op = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        int.parse(openTime!.split(":")[0]),
+        int.parse(openTime!.split(":")[1]),
+        int.parse(openTime!.split(":")[2]),
+      );
+      final cl = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        int.parse(closeTime!.split(":")[0]),
+        int.parse(closeTime!.split(":")[1]),
+        int.parse(closeTime!.split(":")[2]),
+      );
+      if (date.isAfter(op) && date.isBefore(cl)) {
+        return true;
+      }
+      return false;
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
           child: Container(
@@ -22,12 +69,12 @@ class ParkingDetail extends StatelessWidget {
             Row(
               children: [
                 Expanded(flex: 2, child: Container()),
-                const Expanded(
+                Expanded(
                   flex: 6,
                   child: Text(
-                    "Parking 1",
+                    name,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.w700, fontSize: 18, height: 1.6),
                   ),
                 ),
@@ -37,7 +84,9 @@ class ParkingDetail extends StatelessWidget {
                 ),
               ],
             ),
-            const CarouselSliderImage(),
+            CarouselSliderImage(
+              urlImages: images,
+            ),
             SizedBox(
               height: size.height * 0.01,
             ),
@@ -69,7 +118,7 @@ class ParkingDetail extends StatelessWidget {
                               TextStyle(fontSize: 16, color: AppColor.greyText),
                         ),
                         Text(
-                          "10 empty",
+                          parkingSlots.length.toString(),
                           style: TextStyle(
                               fontSize: 16,
                               color: AppColor.greenToast,
@@ -86,7 +135,9 @@ class ParkingDetail extends StatelessWidget {
                               TextStyle(fontSize: 16, color: AppColor.greyText),
                         ),
                         Text(
-                          "Quan 1, Ho Chi minh city",
+                          address.length < 25
+                              ? address
+                              : address.substring(0, 25) + '...',
                           style: TextStyle(
                               fontSize: 16,
                               color: AppColor.blackText,
@@ -104,7 +155,7 @@ class ParkingDetail extends StatelessWidget {
                                   fontSize: 16, color: AppColor.greyText),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: "6:00",
+                                  text: openTime!.substring(0, 5),
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: AppColor.blackText,
@@ -119,7 +170,7 @@ class ParkingDetail extends StatelessWidget {
                                   fontSize: 16, color: AppColor.greyText),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: "2:00",
+                                  text: closeTime!.substring(0, 5),
                                   style: TextStyle(
                                       fontSize: 16,
                                       color: AppColor.blackText,
@@ -138,10 +189,12 @@ class ParkingDetail extends StatelessWidget {
                               TextStyle(fontSize: 16, color: AppColor.greyText),
                         ),
                         Text(
-                          "Open",
+                          status() ? "Open" : "Close",
                           style: TextStyle(
                               fontSize: 16,
-                              color: AppColor.greenToast,
+                              color: status()
+                                  ? AppColor.greenToast
+                                  : AppColor.redToast,
                               fontWeight: FontWeight.bold),
                         )
                       ],
@@ -156,7 +209,7 @@ class ParkingDetail extends StatelessWidget {
                               TextStyle(fontSize: 16, color: AppColor.greyText),
                         ),
                         Text(
-                          "Dao Ba Loc",
+                          username,
                           style: TextStyle(
                               fontSize: 16,
                               color: AppColor.blackText,
@@ -173,7 +226,7 @@ class ParkingDetail extends StatelessWidget {
                               TextStyle(fontSize: 16, color: AppColor.greyText),
                         ),
                         Text(
-                          "0949382394",
+                          phoneNumber,
                           style: TextStyle(
                               fontSize: 16,
                               color: AppColor.redToast,
