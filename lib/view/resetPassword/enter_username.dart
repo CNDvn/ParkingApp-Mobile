@@ -43,7 +43,7 @@ class EnterUserName extends StatelessWidget {
                                     resetPasswordProvider.clearPhoneController(),
                               )
                             : null,
-                        labelText: "Username", fillColor: Colors.grey,
+                        labelText: "Phone", fillColor: Colors.grey,
                         errorText: resetPasswordProvider.submitValid
                             ? resetPasswordProvider.phone.error
                             : null),
