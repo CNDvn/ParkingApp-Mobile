@@ -1,20 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-
-import 'package:parkingappmobile/configs/exception/exception.dart';
-import 'package:parkingappmobile/view_model/auth.dart';
-import 'package:parkingappmobile/view_model/service/service_storage.dart';
-import 'package:parkingappmobile/model/entity/parking.dart';
-import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
-import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
   final String? value;
@@ -59,7 +51,6 @@ class NetworkHelper {
     http.Response response = await http.get(Uri.parse(
         '$url$journeyMode?api_key=$apiKey&start=$startLng,$startLat&end=$endLng,$endLat'));
 
-    log("$url$journeyMode?$apiKey&start=$startLng,$startLat&end=$endLng,$endLat");
     if (response.statusCode == 200) {
       String data = response.body;
       return jsonDecode(data);
@@ -84,26 +75,13 @@ class MapProvider with ChangeNotifier {
   var point = LatLng(0, 0);
   var destination = LatLng(0, 0);
   List<Address> location = [];
-  double zoomMap = 16.0;
+  double zoomMap = 16.5;
   //-------------------------
   final List<LatLng> polyPoints = [];
   var data;
 
-  double startLat = 10.841088;
-  double startLng = 106.809172;
-  double endLat = 10.837543;
-  double endLng = 106.730032;
-
-  List<String> cities = [];
-  
-  // for (DataPoint value in dataPoint) {
-  //     cities.add(value.name);
-  //   }
-
   void getJsonData() async {
     polyPoints.clear();
-
-    log("**********" + point.toString());
 
     NetworkHelper network = NetworkHelper(
       startLat: point.latitude,

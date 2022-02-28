@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "animated_stack_widget",
+      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/animated_stack_widget-0.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "archive",
       "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.9",
       "packageUri": "lib/",
@@ -130,6 +136,18 @@
     {
       "name": "flutter_map",
       "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map-0.14.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_map_marker_cluster",
+      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map_marker_cluster-0.4.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_map_marker_popup",
+      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map_marker_popup-2.1.1+1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -506,7 +524,7 @@
       "languageVersion": "2.15"
     }
   ],
-  "generated": "2022-02-20T06:56:01.747720Z",
+  "generated": "2022-02-27T03:04:32.447799Z",
   "generator": "pub",
   "generatorVersion": "2.15.1"
 }

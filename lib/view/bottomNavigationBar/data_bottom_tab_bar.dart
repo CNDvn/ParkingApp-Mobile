@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
+import 'package:parkingappmobile/view/google_map/google_map.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +62,6 @@ class ActionButtonMid extends StatelessWidget {
         onPressed: () {
           if (currentTab == 0) {
             mapProvider.updatePosition();
-            return;
           }
         });
   }
