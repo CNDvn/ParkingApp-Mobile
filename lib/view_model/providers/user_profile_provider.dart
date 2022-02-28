@@ -62,6 +62,30 @@ class UserProfileProvider with ChangeNotifier {
   TextEditingController get phoneController => phoneTextEditingController;
   TextEditingController get dobController => dobTextEditingController;
 
+  void clearFirstNameController() {
+    firstNameController.clear();
+    firstName = ValidationItem("", null);
+    notifyListeners();
+  }
+
+  void clearLastNameController() {
+    lastNameController.clear();
+    lastName = ValidationItem("", null);
+    notifyListeners();
+  }
+
+  void clearEmailController() {
+    emailController.clear();
+    email = ValidationItem("", null);
+    notifyListeners();
+  }
+
+  void clearPhoneController() {
+    phoneController.clear();
+    phone = ValidationItem("", null);
+    notifyListeners();
+  }
+
   bool checkFirstName(String value) {
     firstName.value = value;
     bool flag = true;

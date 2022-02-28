@@ -60,6 +60,14 @@ class UserProfile extends StatelessWidget {
                   width: size.width * 0.5,
                   child: TextField(
                       decoration: InputDecoration(
+                          suffixIcon:
+                              provider.firstNameController.text.isNotEmpty
+                                  ? IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () =>
+                                          provider.clearFirstNameController(),
+                                    )
+                                  : null,
                           labelText: 'First name',
                           errorText: provider.clickButtonFlag
                               ? provider.firstName.error
@@ -81,6 +89,14 @@ class UserProfile extends StatelessWidget {
                   width: size.width - (40 + size.width * 0.55),
                   child: TextField(
                       decoration: InputDecoration(
+                          suffixIcon:
+                              provider.lastNameController.text.isNotEmpty
+                                  ? IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () =>
+                                          provider.clearLastNameController(),
+                                    )
+                                  : null,
                           labelText: 'Last name',
                           errorText: provider.clickButtonFlag
                               ? provider.lastName.error
@@ -100,6 +116,12 @@ class UserProfile extends StatelessWidget {
               height: sizeHeightInput,
               child: TextField(
                 decoration: InputDecoration(
+                    suffixIcon: provider.emailController.text.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => provider.clearEmailController(),
+                          )
+                        : null,
                     labelText: 'Email address',
                     errorText:
                         provider.clickButtonFlag ? provider.email.error : null),
@@ -144,6 +166,14 @@ class UserProfile extends StatelessWidget {
                       child: TextField(
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
+                          suffixIcon:
+                              provider.phoneController.text.isNotEmpty
+                                  ? IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () =>
+                                          provider.phoneController,
+                                    )
+                                  : null,
                           errorText: provider.clickButtonFlag
                               ? provider.phone.error
                               : null,
