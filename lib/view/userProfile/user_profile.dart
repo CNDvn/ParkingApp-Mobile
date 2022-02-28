@@ -78,7 +78,7 @@ class UserProfile extends StatelessWidget {
                 ),
                 SizedBox(
                   height: size.height * 0.12,
-                  width: size.width * 0.345,
+                  width: size.width - (40 + size.width * 0.55),
                   child: TextField(
                       decoration: InputDecoration(
                           labelText: 'Last name',
@@ -125,14 +125,22 @@ class UserProfile extends StatelessWidget {
                 Row(
                   children: [
                     SizedBox(
-                        height: size.height * 0.072,
-                        child: const Text(
-                          '+84 ',
-                          style: TextStyle(fontSize: 15),
+                        height: size.height * 0.105,
+                        width: size.width * 0.1,
+                        child: Column(
+                          children: const [
+                            SizedBox(
+                              height: 13.5,
+                            ),
+                            Text(
+                              '+84 ',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
                         )),
                     SizedBox(
                       height: size.height * 0.105,
-                      width: size.width * 0.82,
+                      width: size.width - (40 + size.width * 0.1),
                       child: TextField(
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
