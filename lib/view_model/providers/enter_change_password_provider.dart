@@ -13,12 +13,44 @@ class ValidationPassword {
 }
 
 class EnterChangePasswordProvider with ChangeNotifier {
+
+  bool isPasswordVariable = true;
+  bool isNewPasswordVariable = true;
+
   ValidationPassword password = ValidationPassword("", null);
   ValidationPassword newPassword = ValidationPassword("", null);
 
   bool clickButtonFlag = false;
   FocusNode nodePassword = FocusNode();
   FocusNode nodeNewPassword = FocusNode();
+
+  final _passwordTextEditController = TextEditingController();
+  TextEditingController get passwordController => _passwordTextEditController;
+  String get textPassword => passwordController.text;
+
+  final _newPasswordTextEditController = TextEditingController();
+  TextEditingController get newPasswordController => _newPasswordTextEditController;
+  String get textNewPassword => newPasswordController.text;
+
+  void clearPasswordController() {
+    passwordController.clear();
+    notifyListeners();
+  }
+
+  void clearNewPasswordController() {
+    newPasswordController.clear();
+    notifyListeners();
+  }
+
+  void changePasswordVariable() {
+    isPasswordVariable = !isPasswordVariable;
+    notifyListeners();
+  }
+
+  void changeNewPasswordVariable() {
+    isNewPasswordVariable = !isNewPasswordVariable;
+    notifyListeners();
+  }
 
   bool checkPassword(String value) {
     password.value = value;

@@ -33,39 +33,88 @@ class EnterChangePassword extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.1,
+                  height: size.height * 0.12,
                   width: size.width * 0.9,
                   child: TextField(
-                      decoration: InputDecoration(
-                          labelText: 'Password',
-                          errorText: provider.clickButtonFlag
-                              ? provider.password.error
-                              : null),
-                      autofocus: true,
-                      obscureText: true,
-                      onEditingComplete: () {
-                        provider.nodeNewPassword.requestFocus();
-                      },
-                      onChanged: (String value) {
-                        provider.checkPassword(value);
-                      }),
+                    decoration: InputDecoration(
+                        suffixIcon: provider.textPassword.isNotEmpty
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () => provider
+                                        .clearPasswordController(),
+                                  ),
+                                  IconButton(
+                                      icon: provider.isPasswordVariable
+                                          ? const Icon(Icons.visibility)
+                                          : const Icon(Icons.visibility_off),
+                                      onPressed: () => provider
+                                          .changePasswordVariable()),
+                                ],
+                              )
+                            : null,
+                        labelText: "Password",
+                        errorText: provider.clickButtonFlag
+                            ? provider.password.error
+                            : null),
+                    obscureText: provider.isPasswordVariable,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.done,
+                    controller: provider.passwordController,
+                    onChanged: (String value) {
+                      provider.checkPassword(value);
+                    },
+                    // focusNode: provider.passwordFocus,
+                    // onEditingComplete: () {
+                    //   signInProvider.changeFocus(context, 'password');
+                    // },
+                  ),
                 ),
                 SizedBox(
-                  height: size.height * 0.18,
+                  height: size.height * 0.12,
                   width: size.width * 0.9,
                   child: TextField(
-                      decoration: const InputDecoration(
-                          labelText: 'New Password',
-                          ),
-                      focusNode: provider.nodeNewPassword,
-                      obscureText: true,
-                      onEditingComplete: () {
-                        provider.nodeNewPassword.unfocus();
-                        provider.submit(context);
-                      },
-                      onChanged: (String value) {
-                        provider.checkNewPassword(value);
-                      }),
+                    decoration: InputDecoration(
+                        suffixIcon: provider.textNewPassword.isNotEmpty
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () => provider
+                                        .clearNewPasswordController(),
+                                  ),
+                                  IconButton(
+                                      icon: provider.isPasswordVariable
+                                          ? const Icon(Icons.visibility)
+                                          : const Icon(Icons.visibility_off),
+                                      onPressed: () => provider
+                                          .changeNewPasswordVariable()),
+                                ],
+                              )
+                            : null,
+                        labelText: "New Password",
+                        errorText: provider.clickButtonFlag
+                            ? provider.password.error
+                            : null),
+                    obscureText: provider.isNewPasswordVariable,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.done,
+                    controller: provider.newPasswordController,
+                    onChanged: (String value) {
+                      provider.checkNewPassword(value);
+                    },
+                    // focusNode: provider.passwordFocus,
+                    // onEditingComplete: () {
+                    //   signInProvider.changeFocus(context, 'password');
+                    // },
+                  ),
                 ),
                 SizedBox(
                     width: size.width * 0.9,
