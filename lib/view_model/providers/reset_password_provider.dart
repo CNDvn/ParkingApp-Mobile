@@ -114,7 +114,7 @@ class ResetPasswordProvider with ChangeNotifier {
                     builder: (context) =>
                     EnterVerificationCode(username: phone.value!)),
                           );
-      }).onError((error, stackTrace) {
+      }).catchError((error, stackTrace) {
         log(error.toString());
       });
     }
@@ -122,7 +122,6 @@ class ResetPasswordProvider with ChangeNotifier {
 
   void submitOtp(BuildContext context, String username, int otp) {
     if (otp == 0) {
-      log("ko co ra");
       checkOtp(otp.toString());
       notifyListeners();
     } else {

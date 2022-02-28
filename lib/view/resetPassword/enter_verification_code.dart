@@ -6,7 +6,7 @@ import 'package:parkingappmobile/view_model/providers/reset_password_provider.da
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
 
-class EnterVerificationCode extends StatelessWidget {
+class EnterVerificationCode extends StatefulWidget {
   const EnterVerificationCode({Key? key, 
   required this.username
   }) : super(key: key);
@@ -14,8 +14,15 @@ class EnterVerificationCode extends StatelessWidget {
 final String username;
 
   @override
+  State<EnterVerificationCode> createState() => _EnterVerificationCodeState();
+}
+
+class _EnterVerificationCodeState extends State<EnterVerificationCode> {
+  bool _onEditing = true;
+  int otp = 0;
+  @override
   Widget build(BuildContext context) {
-    int otp = 0;
+    
     Size size = MediaQuery.of(context).size;
     ResetPasswordProvider resetPasswordProvider = Provider.of<ResetPasswordProvider>(context);
     return Scaffold(
@@ -41,7 +48,7 @@ final String username;
                   onCompleted: (value) {
                     otp = int.parse(value);
                   },
-                  textStyle: TextStyle(fontSize: 20.0, color: Colors.grey[300]),
+                  textStyle: const TextStyle(fontSize: 20.0, color: Colors.black),
                   underlineColor: Colors.amber,
                   keyboardType: TextInputType.number,
                   length: 4,
@@ -65,17 +72,32 @@ final String username;
                                   decoration: TextDecoration.underline,
                                   color: Colors.blue[300]),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Clear All',
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.blue[300]),
+                              ),
+                            )
                           ],
                         )),
                   ),
-                  onEditing: (bool value) {},
+                  onEditing: (bool value) {
+                    setState(() {
+                      _onEditing = value;
+                    });
+                    if (!_onEditing) FocusScope.of(context).unfocus();
+                  },
                 ),
                 SizedBox(
                     width: size.width * 0.9,
                     child: ButtonDefault(
                         content: "Next",
                         voidCallBack: () {
-                          resetPasswordProvider.submitOtp(context, username, otp);
+                          resetPasswordProvider.submitOtp(context, widget.username, otp);
                         }))
               ],
             ),
