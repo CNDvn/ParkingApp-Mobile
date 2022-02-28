@@ -1,13 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
-import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
+import 'package:parkingappmobile/view/resetPassword/enter_username.dart';
 import 'package:parkingappmobile/view/sign_up/sign_up_page.dart';
-import 'package:parkingappmobile/view_model/auth.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/button/button_social.dart';
@@ -109,7 +105,17 @@ class SignInPage extends StatelessWidget {
                   width: size.width * 0.9,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const <Widget>[Text("Forgot Password?")],
+                    children: <Widget>[GestureDetector(
+                          child: Text(
+                            "Forgot password",
+                            style: AppTextStyles.h4black,
+                          ),
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const EnterUserName();
+                            }));
+                          })],
                   ),
                 ),
                 SizedBox(
