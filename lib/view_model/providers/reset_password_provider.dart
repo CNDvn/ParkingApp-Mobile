@@ -132,7 +132,7 @@ class ResetPasswordProvider with ChangeNotifier {
                             MaterialPageRoute(
                                 builder: (context) => const SignInPage()),
                           );
-      }).onError((error, stackTrace) {
+      }).catchError((error, stackTrace) {
         log(error.toString());
       });
     }

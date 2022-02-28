@@ -15,6 +15,7 @@ class ResetPasswordRepImpl implements ResetPasswordRepo {
       result = ResetPasswordRes.resetPasswordResFromJson(jsonEncode(response.data));
     } on DioError catch (e) {
       showToastFail(e.response?.data["message"]);
+      return Future.error("Not found username.!");
     }
     return result;
   }

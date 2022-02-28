@@ -23,7 +23,7 @@ class EnterUserName extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 5, 0, 40),
                   child: Text(
-                    "Enter your user name",
+                    "Enter your phone",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: AppColor.greyText,
@@ -43,7 +43,7 @@ class EnterUserName extends StatelessWidget {
                                     resetPasswordProvider.clearPhoneController(),
                               )
                             : null,
-                        labelText: "Phone", fillColor: Colors.grey,
+                        labelText: "Your Phone", fillColor: Colors.grey,
                         errorText: resetPasswordProvider.submitValid
                             ? resetPasswordProvider.phone.error
                             : null),
