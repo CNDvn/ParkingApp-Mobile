@@ -111,6 +111,8 @@ class MapProvider with ChangeNotifier {
     LatLng pos = await determinePosition();
     point = pos;
     mapController.move(point, zoomMap);
+    getJsonData();
+    notifyListeners();
   }
 
   Future<LatLng> determinePosition() async {

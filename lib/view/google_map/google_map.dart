@@ -79,16 +79,8 @@ class _GoogleMapState extends State<GoogleMap> {
       mapProvider.getJsonData();
     }
 
-    Future<void> updatePosition() async {
-      LatLng pos = await mapProvider.determinePosition();
-      setState(() {
-        mapProvider.point = pos;
-        mapProvider.mapController.move(mapProvider.point, mapProvider.zoomMap);
-      });
-    }
-
     if (mapProvider.point.latitude == 0) {
-      updatePosition();
+      mapProvider.updatePosition();
     }
 
     return Scaffold(
@@ -138,7 +130,7 @@ class _GoogleMapState extends State<GoogleMap> {
                           color: Colors.red,
                         ),
                       ),
-                    ),                    
+                    ),
                   ],
                   builder: (context, markers) {
                     return CircleAvatar(
