@@ -16,7 +16,7 @@ class InputDate extends StatefulWidget {
 
 class _InputDateState extends State<InputDate> {
   DateTime _date = DateTime.now();
-
+  DateFormat dateFormat = DateFormat("yyyy-MM-dd");
   Future<void> _selectDate(BuildContext context) async {
     DateTime? _datePicker = await showDatePicker(
       context: context,
@@ -28,7 +28,6 @@ class _InputDateState extends State<InputDate> {
     if (_datePicker != null && _datePicker != _date) {
       setState(() {
         _date = _datePicker;
-        DateFormat dateFormat = DateFormat("yyyy-MM-dd");
         String dob = dateFormat.format(_date);
         widget.provider.dobController.text = dob;
       });
@@ -55,13 +54,12 @@ class _InputDateState extends State<InputDate> {
               child: TextField(
                 enabled: false,
                 controller: widget.provider.dobController,
+                decoration: InputDecoration(hintText: dateFormat.format(_date)),
               ),
             ),
             IconButton(
               onPressed: () async {
-                setState(() {
-                  _selectDate(context);
-                });
+                await _selectDate(context);
               },
               icon: const Icon(
                 Icons.calendar_today,

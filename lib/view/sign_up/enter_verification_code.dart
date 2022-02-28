@@ -1,12 +1,44 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/configs/toast/toast.dart';
+import 'package:parkingappmobile/model/request/verify_otp_req.dart';
+import 'package:parkingappmobile/model/response/verify_otp_res.dart';
+import 'package:parkingappmobile/repository/impl/verify_otp_sign_up_impl.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
+import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view/sign_up/enter_password.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
-class EnterVerificationCode extends StatelessWidget {
-  const EnterVerificationCode({Key? key}) : super(key: key);
+class EnterVerificationCode extends StatefulWidget {
+  EnterVerificationCode({Key? key}) : super(key: key);
+
+  @override
+  State<EnterVerificationCode> createState() => _EnterVerificationCodeState();
+}
+
+class _EnterVerificationCodeState extends State<EnterVerificationCode> {
+  var _codeNumber = 0;
+  bool _onEditing = true;
+
+  // ignore: prefer_function_declarations_over_variables
+  final handleSubmit = (int tmp, BuildContext context) {
+    log("hello");
+    final data = VerifyOtpSignUpReq(otp: tmp);
+    VerifyOTPRepImpl()
+        .postVerifyOTPSignUp(UrlApi.verifyOTPPath, data)
+        .then((value) => {
+              showToastSuccess(value.result!),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SignInPage()),
+              )
+            })
+        .catchError((onError) => {log(onError.toString())});
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +63,8 @@ class EnterVerificationCode extends StatelessWidget {
                   ),
                 ),
                 VerificationCode(
-                  textStyle: TextStyle(fontSize: 20.0, color: Colors.grey[300]),
+                  textStyle:
+                      const TextStyle(fontSize: 20.0, color: Colors.black),
                   underlineColor: Colors.amber,
                   keyboardType: TextInputType.number,
                   length: 4,
@@ -41,13 +74,6 @@ class EnterVerificationCode extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            const Text(
-                              "Didn’t receive code? ",
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.grey),
-                            ),
                             Text(
                               "Resend",
                               style: TextStyle(
@@ -55,22 +81,35 @@ class EnterVerificationCode extends StatelessWidget {
                                   decoration: TextDecoration.underline,
                                   color: Colors.blue[300]),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Clear All',
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.blue[300]),
+                              ),
+                            )
                           ],
                         )),
                   ),
-                  onCompleted: (String value) {},
-                  onEditing: (bool value) {},
+                  onCompleted: (String value) {
+                    _codeNumber = int.parse(value);
+                  },
+                  onEditing: (bool value) {
+                    setState(() {
+                      _onEditing = value;
+                    });
+                    if (!_onEditing) FocusScope.of(context).unfocus();
+                  },
                 ),
                 SizedBox(
                     width: size.width * 0.9,
                     child: ButtonDefault(
-                        content: "Next",
+                        content: "Submit",
                         voidCallBack: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const EnterPassword()),
-                          );
+                          handleSubmit(_codeNumber, context);
                         }))
               ],
             ),
