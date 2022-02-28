@@ -46,6 +46,7 @@ class SignUpProvider with ChangeNotifier {
   FocusNode get addressFocus => _addressFocus;
 
   bool submitValid = false;
+  bool isPasswordVariable = true;
 
   //phone
   ValidationItem get phone => _phone;
@@ -54,6 +55,48 @@ class SignUpProvider with ChangeNotifier {
   ValidationItem get lastName => _lastName;
   ValidationItem get email => _email;
   ValidationItem get address => _address;
+
+  String get textPhone => phoneController.text;
+  String get textPassword => passwordController.text;
+  String get textFirstName => firstNameController.text;
+  String get textLastName => lastNameController.text;
+  String get textEmail => emailController.text;
+  String get textAddress => addressController.text;
+
+  void clearPhoneController() {
+    phoneController.clear();
+    notifyListeners();
+  }
+
+  void clearPasswordController() {
+    passwordController.clear();
+    notifyListeners();
+  }
+
+  void clearFirstNameController() {
+    firstNameController.clear();
+    notifyListeners();
+  }
+
+  void clearLastNameController() {
+    lastNameController.clear();
+    notifyListeners();
+  }
+
+  void clearEmailController() {
+    emailController.clear();
+    notifyListeners();
+  }
+
+  void clearAddressController() {
+    addressController.clear();
+    notifyListeners();
+  }
+
+  void changePasswordVariable() {
+    isPasswordVariable = !isPasswordVariable;
+    notifyListeners();
+  }
 
   // validation check phone
 

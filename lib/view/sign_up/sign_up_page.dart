@@ -42,6 +42,13 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
+                      suffixIcon: signUpProvider.textPhone.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () =>
+                                    signUpProvider.clearPhoneController(),
+                              )
+                            : null,
                         labelText: "Phone number",
                         fillColor: Colors.grey,
                         errorText: signUpProvider.submitValid
@@ -61,16 +68,36 @@ class SignUpPage extends StatelessWidget {
                   height: size.height * 0.10,
                   width: size.width * 0.9,
                   child: TextField(
-                    obscureText: true,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
+                      suffixIcon: signUpProvider.textPassword.isNotEmpty
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () =>
+                                    signUpProvider.clearPasswordController(),
+                                ),
+                                  IconButton(
+                                      icon: signUpProvider.isPasswordVariable
+                                          ? const Icon(Icons.visibility)
+                                          : const Icon(Icons.visibility_off),
+                                      onPressed: () => signUpProvider
+                                          .changePasswordVariable()),
+                                ],
+                              )
+                            : null,
                         errorText: signUpProvider.submitValid
                             ? signUpProvider.password.error
                             : null,
                         labelText: "Password",
                         fillColor: Colors.grey),
                     autofocus: false,
+                    obscureText: signUpProvider.isPasswordVariable,
                     controller: signUpProvider.passwordController,
                     focusNode: signUpProvider.passwordFocus,
                     onEditingComplete: () {
@@ -88,6 +115,13 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
+                      suffixIcon: signUpProvider.textFirstName.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () =>
+                                    signUpProvider.clearFirstNameController(),
+                              )
+                            : null,
                         errorText: signUpProvider.submitValid
                             ? signUpProvider.firstName.error
                             : null,
@@ -111,6 +145,13 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
+                      suffixIcon: signUpProvider.textLastName.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () =>
+                                    signUpProvider.clearLastNameController(),
+                              )
+                            : null,
                         errorText: signUpProvider.submitValid
                             ? signUpProvider.lastName.error
                             : null,
@@ -134,6 +175,13 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
+                      suffixIcon: signUpProvider.textEmail.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () =>
+                                    signUpProvider.clearEmailController(),
+                              )
+                            : null,
                         errorText: signUpProvider.submitValid
                             ? signUpProvider.email.error
                             : null,
@@ -161,6 +209,13 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
+                      suffixIcon: signUpProvider.textAddress.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () =>
+                                    signUpProvider.clearAddressController(),
+                              )
+                            : null,
                         errorText: signUpProvider.submitValid
                             ? signUpProvider.address.error
                             : null,
