@@ -5,9 +5,12 @@ import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/request/sign_up_req.dart';
 import 'package:parkingappmobile/repository/impl/signup_rep_impl.dart';
 import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class SignUpProvider with ChangeNotifier {
+  final SecureStorage secureStorage = SecureStorage();
+
   ValidationItem _phone = ValidationItem("", "");
   ValidationItem _password = ValidationItem("", "");
   ValidationItem _firstName = ValidationItem("", "");
@@ -15,7 +18,7 @@ class SignUpProvider with ChangeNotifier {
   ValidationItem _email = ValidationItem("", "");
   ValidationItem _address = ValidationItem("", "");
 
-  final _phoneTextEditController = TextEditingController();
+  var phoneTextEditController = TextEditingController();
   final _passwordTextEditController = TextEditingController();
   final _firstNameTextEditController = TextEditingController();
   final _lastNameTextEditController = TextEditingController();
@@ -23,7 +26,7 @@ class SignUpProvider with ChangeNotifier {
   final _addressTextEditController = TextEditingController();
   final _dobEditController = TextEditingController();
 
-  TextEditingController get phoneController => _phoneTextEditController;
+  TextEditingController get phoneController => phoneTextEditController;
   TextEditingController get passwordController => _passwordTextEditController;
   TextEditingController get firstNameController => _firstNameTextEditController;
   TextEditingController get lastNameController => _lastNameTextEditController;
@@ -62,6 +65,21 @@ class SignUpProvider with ChangeNotifier {
   String get textLastName => lastNameController.text;
   String get textEmail => emailController.text;
   String get textAddress => addressController.text;
+
+  void signUpGoogle() async {
+    String emailSto = await secureStorage.readSecureData('emailAddress');
+    String lastNameSto = await secureStorage.readSecureData('lastName');
+    String phoneSto = await secureStorage.readSecureData('phoneNumber');
+
+    email.value = emailSto;
+    lastName.value = lastNameSto;
+    phone.value = phoneSto;
+
+    lastNameController.text = lastNameSto;
+    emailController.text = emailSto;
+    phoneTextEditController.text = phoneSto;
+    notifyListeners();
+  }
 
   void clearPhoneController() {
     phoneController.clear();
