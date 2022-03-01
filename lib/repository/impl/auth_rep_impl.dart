@@ -35,9 +35,9 @@ class AuthRepImpl implements AuthRepo {
       result = SignInRes.signInResFromJson(jsonEncode(response.data));
     } on DioError catch (e) {
       if (e.response?.data["statusCode"] == 302) {
+        SignUpProvider signUpProvider = Provider.of<SignUpProvider>(context, listen: false);
+        signUpProvider.signUpGoogle();
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          SignUpProvider signUpProvider = Provider.of<SignUpProvider>(context);
-          signUpProvider.signUpGoogle();
           return const SignUpPage();
         }));
       }
