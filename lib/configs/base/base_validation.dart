@@ -1,6 +1,6 @@
 class ValidationItem {
-  final String? value;
-  final String? error;
+  String? value;
+  String? error;
   ValidationItem(this.value, this.error);
 
   @override

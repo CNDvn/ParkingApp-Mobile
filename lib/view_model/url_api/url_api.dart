@@ -6,5 +6,6 @@ class UrlApi {
   static const String signupPath = '$serverPath/auths/customer';
   static const String verifyOTPPath = '$serverPath/auths/verifyOTPSignUp';
   static const String usersMePath = 'https://parking-app-project.herokuapp.com/api/v1/users/me';
+  static const String changePasswordPath = '$serverPath/auths/password';
   static const String getAllParkings = '$serverPath/parkings?sizePage=100&currentPage=1&sort=ASC';
 }
