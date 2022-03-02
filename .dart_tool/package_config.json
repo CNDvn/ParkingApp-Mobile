@@ -26,6 +26,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "carousel_slider",
+      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/carousel_slider-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "characters",
       "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.2.0",
       "packageUri": "lib/",
@@ -483,13 +489,13 @@
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_core-19.4.53",
+      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_core-19.4.54",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "syncfusion_flutter_datepicker",
-      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_datepicker-19.4.53",
+      "rootUri": "file:///C:/Users/test/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/syncfusion_flutter_datepicker-19.4.54",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -548,7 +554,7 @@
       "languageVersion": "2.15"
     }
   ],
-  "generated": "2022-03-01T08:06:34.357974Z",
+  "generated": "2022-03-02T04:51:13.331359Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

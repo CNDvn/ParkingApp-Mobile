@@ -14,14 +14,14 @@ import 'package:parkingappmobile/view/welcome/welcome.dart';
 class Routes {
   static final Map<String, Widget Function(BuildContext)> routes = {
     // "/": (context) => const Welcome(),
-    // "/": (context) => const SignInPage(),
+    "/": (context) => const SignInPage(),
     "/userProfile": (context) => const UserProfile(),
     "/EnterPassword": (context) => const EnterPassword(),
     "/SignUpPage": (context) => const SignUpPage(),
     "/EnterVerificationCode": (context) => EnterVerificationCode(),
-    // "/": (context) => const BottomTabBar(),
+    "/BottomTabBar": (context) => const BottomTabBar(),
     "/ViewPark": (context) => const ViewPark(),
     "/BookingDetails": (context) => const BookingDetails(),
-    "/": (context) => const QRCodePage()
+    "/QRCodePage": (context) => const QRCodePage()
   };
 }
