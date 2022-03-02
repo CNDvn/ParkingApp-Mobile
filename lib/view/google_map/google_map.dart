@@ -14,7 +14,6 @@ import 'package:parkingappmobile/view/parkingDetail/parking_detail.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
-import 'package:parkingappmobile/widgets/marker_custom/marker_custom.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -42,12 +41,9 @@ class _GoogleMapState extends State<GoogleMap> {
             width: 100,
             point:
                 LatLng(item.coordinates.latitude, item.coordinates.longitude),
-            builder: (ctx) => SizedBox(
+            builder: (ctx) =>const SizedBox(
                   width: 100,
-                  child: MarkerCustom(
-                    title: item.name,
-                    onPress: () {},
-                  ),
+                  child: Icon(Icons.location_on)
                 ));
         list.addAll(tmp);
       }

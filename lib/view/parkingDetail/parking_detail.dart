@@ -32,6 +32,9 @@ class ParkingDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     DateTime date = DateTime.now();
+    final List<Images> urlImagesDefault = [
+      Images(url: 'https://i.ibb.co/0ZYrz1k/6bf25a7075ec.jpg')
+    ];
 
     bool status() {
       final op = DateTime(
@@ -85,7 +88,7 @@ class ParkingDetail extends StatelessWidget {
               ],
             ),
             CarouselSliderImage(
-              urlImages: images,
+              urlImages: images.isNotEmpty ? images : urlImagesDefault,
             ),
             SizedBox(
               height: size.height * 0.01,
@@ -104,7 +107,7 @@ class ParkingDetail extends StatelessWidget {
                 ],
               ),
               child: Container(
-                height: size.height * 0.4,
+                height: size.height * 0.35,
                 margin: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

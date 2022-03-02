@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
-import 'package:parkingappmobile/view/resetPassword/enter_username.dart';
 import 'package:parkingappmobile/view/sign_up/sign_up_page.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
