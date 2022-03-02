@@ -1,4 +1,5 @@
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/providers/enter_change_password_provider.dart';
 import 'package:parkingappmobile/view_model/providers/enter_password_provider.dart';
 import 'package:parkingappmobile/view_model/providers/reset_password_provider.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
@@ -18,6 +19,9 @@ class MainProviders {
     ),
     ChangeNotifierProvider<EnterPasswordProvider>(
       create: (context) => EnterPasswordProvider(),
+    ),
+    ChangeNotifierProvider<EnterChangePasswordProvider>(
+      create: (context) => EnterChangePasswordProvider(),
     ),
     ChangeNotifierProvider<ResetPasswordProvider>(
       create: (context) => ResetPasswordProvider(),
