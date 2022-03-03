@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
+import 'package:parkingappmobile/model/request/login_gg_req.dart';
 import 'package:parkingappmobile/model/request/sign_in_req.dart';
 import 'package:parkingappmobile/repository/impl/auth_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/users_me_rep_impl.dart';
@@ -112,15 +113,15 @@ class SignInProvider with ChangeNotifier {
     } else if (!submitValid && isValid) {
       AuthRepImpl()
           .postSignIn(
-              UrlApi.signinPath,
+              UrlApi.signInPath,
               SignInReq(
                   username: phone.value!,
                   password: password.value!,
                   role: "customer"))
           .then((value) async {
         final SecureStorage secureStorage = SecureStorage();
-        secureStorage.writeSecureData("token", value.result!.accessToken);
-        secureStorage.writeSecureData("customer", value.result!.refreshToken);
+        await secureStorage.writeSecureData("token", value.result!.accessToken);
+        await secureStorage.writeSecureData("customer", value.result!.refreshToken);
         UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
         showToastSuccess(value.result!.message);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -144,9 +145,24 @@ class SignInProvider with ChangeNotifier {
     try {
       User? user = await auth.signInWithGoogle();
       if (user != null) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const BottomTabBar();
-        }));
+        final SecureStorage secureStorage = SecureStorage();
+        await secureStorage.writeSecureData("emailAddress", user.email ?? "");
+        await secureStorage.writeSecureData("lastName", user.displayName ?? "");
+        await secureStorage.writeSecureData("phoneNumber", user.phoneNumber?.substring(3) ?? "");
+        await secureStorage.writeSecureData("avatar", user.photoURL ?? "");
+        String token = await user.getIdToken();
+        AuthRepImpl()
+            .postLoginGoogle("", LoginGgReq(token: token), context)
+            .then((value) async {
+          secureStorage.writeSecureData("token", value.result!.accessToken);
+          secureStorage.writeSecureData("customer", value.result!.refreshToken);
+          UsersMeRepImpl()
+              .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
+          showToastSuccess(value.result!.message);
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const BottomTabBar();
+          }));
+        });
       }
     } on Exception catch (e) {
       _showSignInError(context, e);

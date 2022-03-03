@@ -1,6 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/constants/regex.dart';
+import 'package:parkingappmobile/model/request/profile_req.dart';
+import 'package:parkingappmobile/repository/impl/profile_rep_impl.dart';
+import 'package:parkingappmobile/repository/impl/users_me_rep_impl.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
   String value;
@@ -9,6 +16,8 @@ class ValidationItem {
 }
 
 class UserProfileProvider with ChangeNotifier {
+  final SecureStorage secureStorage = SecureStorage();
+
   ValidationItem firstName = ValidationItem("", null);
   ValidationItem lastName = ValidationItem("", null);
   ValidationItem email = ValidationItem("", null);
@@ -28,7 +37,6 @@ class UserProfileProvider with ChangeNotifier {
   var dobTextEditingController = TextEditingController();
 
   void getProfile() async {
-    final SecureStorage secureStorage = SecureStorage();
     String firstNameSto = await secureStorage.readSecureData('firstName');
     String lastNameSto = await secureStorage.readSecureData('lastName');
     String emailSto = await secureStorage.readSecureData('emailAddress');
@@ -53,6 +61,30 @@ class UserProfileProvider with ChangeNotifier {
   TextEditingController get emailController => emailTextEditingController;
   TextEditingController get phoneController => phoneTextEditingController;
   TextEditingController get dobController => dobTextEditingController;
+
+  void clearFirstNameController() {
+    firstNameController.clear();
+    firstName = ValidationItem("", null);
+    notifyListeners();
+  }
+
+  void clearLastNameController() {
+    lastNameController.clear();
+    lastName = ValidationItem("", null);
+    notifyListeners();
+  }
+
+  void clearEmailController() {
+    emailController.clear();
+    email = ValidationItem("", null);
+    notifyListeners();
+  }
+
+  void clearPhoneController() {
+    phoneController.clear();
+    phone = ValidationItem("", null);
+    notifyListeners();
+  }
 
   bool checkFirstName(String value) {
     firstName.value = value;
@@ -97,7 +129,7 @@ class UserProfileProvider with ChangeNotifier {
   bool checkPhone(String value) {
     bool flag = true;
     phone.value = value;
-    if (value.length != 12) {
+    if (value.length != 9) {
       phone.error = "Phone number must have 9 characters excluding +84";
       flag = false;
     } else {
@@ -107,14 +139,33 @@ class UserProfileProvider with ChangeNotifier {
     return flag;
   }
 
-  void submit() {
+  void submit() async {
     clickButtonFlag = true;
     bool isFirstName = checkFirstName(firstName.value);
     bool isLastName = checkLastName(lastName.value);
     bool isEmail = checkEmail(email.value);
     bool isPhone = checkPhone(phone.value);
     if (isFirstName && isLastName && isEmail && isPhone) {
-      print("qua ai");
+      String token = await secureStorage.readSecureData('token');
+      ProfileRepImpl()
+          .putProfile(
+              UrlApi.profilePath,
+              ProfileReq(
+                firstName: firstNameController.text,
+                lastName: lastNameController.text,
+                dob: dobController.text,
+                phoneNumber: '+84' + phoneController.text,
+                email: emailController.text,
+                address: firstNameController.text,
+                avatar: firstNameController.text,
+              ),
+              token)
+          .then((value) async {
+        UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, token);
+        showToastSuccess(value.result!);
+      }).onError((error, stackTrace) {
+        log(error.toString());
+      });
     }
     notifyListeners();
   }
