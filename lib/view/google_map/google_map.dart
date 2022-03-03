@@ -10,10 +10,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:parkingappmobile/model/entity/parking.dart';
 import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
+import 'package:parkingappmobile/view/parkingDetail/parking_detail.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
-import 'package:parkingappmobile/widgets/marker_custom/marker_custom.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -25,9 +25,10 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
+  String? id;
   List<String> cities = [];
   List<Marker> markers = [];
-  Map<String, Marker> list = Map<String, Marker>();
+  Map<ParkingDetailValue, Marker> list = Map<ParkingDetailValue, Marker>();
   @override
   void initState() {
     super.initState();
@@ -35,27 +36,23 @@ class _GoogleMapState extends State<GoogleMap> {
     ParkingImpl().getParkings(UrlApi.getAllParkings).then((value) async {
       listParking = value.result!.data;
       for (var item in listParking!) {
-        Map<String, Marker> tmp = Map<String, Marker>();
-        tmp[item.name] = Marker(
+        Map<ParkingDetailValue, Marker> tmp = Map<ParkingDetailValue, Marker>();
+        tmp[ParkingDetailValue(id: item.id, name: item.name)] = Marker(
             width: 100,
             point:
                 LatLng(item.coordinates.latitude, item.coordinates.longitude),
-            builder: (ctx) => SizedBox(
+            builder: (ctx) =>const SizedBox(
                   width: 100,
-                  child: MarkerCustom(
-                    title: item.name,
-                    onPress: () {},
-                  ),
+                  child: Icon(Icons.location_on)
                 ));
         list.addAll(tmp);
       }
       setState(() {
         list.forEach((key, value) {
-          cities.add(key);
+          cities.add(key.name);
           markers.add(value);
         });
       });
-      log(markers.length.toString());
     });
     const Duration(milliseconds: 375);
   }
@@ -67,12 +64,13 @@ class _GoogleMapState extends State<GoogleMap> {
 
     onTapDestination(p) {
       list.forEach((key, value) {
-        if (p == key) {
+        if (p == key.name) {
           setState(() {
+            id = key.id;
             LatLng tmp = LatLng(0, 0);
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
-            mapProvider.addressController.text = key;
+            mapProvider.addressController.text = key.name;
             mapProvider.mapController.move(tmp, mapProvider.zoomMap);
           });
         }
@@ -190,7 +188,30 @@ class _GoogleMapState extends State<GoogleMap> {
                       ? SizedBox(
                           child: ButtonDefault(
                           content: "View Parking Detail",
-                          voidCallBack: () {},
+                          voidCallBack: () {
+                            ParkingImpl()
+                                .getParkingDetail(
+                                    UrlApi.serverPath + "/parkings/$id")
+                                .then((value) async {
+                              await Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return ParkingDetail(
+                                  name: value.result!.name,
+                                  images: value.result!.images,
+                                  parkingSlots: value.result!.parkingSlots,
+                                  address: value.result!.address,
+                                  openTime: value.result!.openTime,
+                                  closeTime: value.result!.closeTime,
+                                  username:
+                                      value.result!.business.user!.fullName,
+                                  phoneNumber:
+                                      value.result!.business.user!.phoneNumber,
+                                );
+                              }));
+                            }).onError((error, stackTrace) {
+                              log(error.toString());
+                            });
+                          },
                         ))
                       : Text(
                           "${mapProvider.location.isNotEmpty ? mapProvider.location.first.countryName + "," : ""}"

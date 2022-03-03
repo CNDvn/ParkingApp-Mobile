@@ -33,7 +33,7 @@ class Parking {
   String status;
   String phoneNumber;
   Business business;
-  List<Image> images;
+  List<Images> images;
   Coordinatess coordinates;
 
   factory Parking.fromJson(Map<String, dynamic> json) => Parking(
@@ -45,7 +45,7 @@ class Parking {
         status: json["status"],
         phoneNumber: json["phoneNumber"],
         business: Business.fromJson(json["business"]),
-        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+        images: List<Images>.from(json["images"].map((x) => Images.fromJson(x))),
         coordinates: Coordinatess.fromJson(json["coordinates"]),
       );
 
