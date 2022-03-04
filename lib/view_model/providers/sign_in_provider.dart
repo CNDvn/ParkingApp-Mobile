@@ -120,10 +120,9 @@ class SignInProvider with ChangeNotifier {
                   role: "customer"))
           .then((value) async {
         final SecureStorage secureStorage = SecureStorage();
-        secureStorage.writeSecureData("token", value.result!.accessToken);
-        secureStorage.writeSecureData("customer", value.result!.refreshToken);
-        UsersMeRepImpl()
-            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
+        await secureStorage.writeSecureData("token", value.result!.accessToken);
+        await secureStorage.writeSecureData("customer", value.result!.refreshToken);
+        UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
         showToastSuccess(value.result!.message);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const BottomTabBar();
