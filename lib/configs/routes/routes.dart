@@ -16,7 +16,7 @@ class Routes {
     "/userProfile": (context) => const UserProfile(),
     "/EnterPassword": (context) => const EnterPassword(),
     "/SignUpPage": (context) => const SignUpPage(),
-    "/EnterVerificationCode": (context) => EnterVerificationCode(),
+    "/EnterVerificationCode": (context) =>const EnterVerificationCode(),
     "/BottomTabBar": (context) => const BottomTabBar(),
     "/ViewPark": (context) => const ViewPark(),
     "/BookingDetails": (context) => const BookingDetails()
