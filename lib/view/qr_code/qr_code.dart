@@ -106,45 +106,7 @@ class _QRCodePageState extends State<QRCodePage> {
               SizedBox(
                   height: size.height * 0.6,
                   width: size.width * 0.8,
-                  child: _buildQrView(context)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.all(8),
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          await controller?.toggleFlash();
-                          setState(() {});
-                        },
-                        child: FutureBuilder(
-                          future: controller?.getFlashStatus(),
-                          builder: (context, snapshot) {
-                            return const Icon(Icons.flashlight_on_outlined);
-                          },
-                        )),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(8),
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          await controller?.flipCamera();
-                          setState(() {});
-                        },
-                        child: FutureBuilder(
-                          future: controller?.getCameraInfo(),
-                          builder: (context, snapshot) {
-                            if (snapshot.data != null) {
-                              return const Icon(Icons.autorenew_rounded);
-                            } else {
-                              return const Text('loading');
-                            }
-                          },
-                        )),
-                  ),
-                ],
-              ),
+                  child: _buildQrView(context)),              
               FittedBox(
                 fit: BoxFit.contain,
                 child: Column(
