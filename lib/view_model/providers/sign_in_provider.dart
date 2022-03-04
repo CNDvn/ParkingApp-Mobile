@@ -113,7 +113,7 @@ class SignInProvider with ChangeNotifier {
     } else if (!submitValid && isValid) {
       AuthRepImpl()
           .postSignIn(
-              UrlApi.signInPath,
+              UrlApi.signinPath,
               SignInReq(
                   username: phone.value!,
                   password: password.value!,

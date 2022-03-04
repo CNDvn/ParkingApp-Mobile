@@ -1,46 +1,30 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
-import 'package:parkingappmobile/configs/toast/toast.dart';
-import 'package:parkingappmobile/model/request/verify_otp_req.dart';
-import 'package:parkingappmobile/repository/impl/verify_otp_sign_up_impl.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
-import 'package:parkingappmobile/view/login/signin_page.dart';
-import 'package:parkingappmobile/view_model/url_api/url_api.dart';
+import 'package:parkingappmobile/view_model/providers/reset_password_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:provider/provider.dart';
 
-class EnterVerificationCode extends StatefulWidget {
-  const EnterVerificationCode({Key? key}) : super(key: key);
+class EnterVerificationCodeReset extends StatefulWidget {
+  const EnterVerificationCodeReset({Key? key, 
+  required this.username
+  }) : super(key: key);
+
+final String username;
 
   @override
-  State<EnterVerificationCode> createState() => _EnterVerificationCodeState();
+  State<EnterVerificationCodeReset> createState() => _EnterVerificationCodeResetState();
 }
 
-class _EnterVerificationCodeState extends State<EnterVerificationCode> {
-  var _codeNumber = 0;
+class _EnterVerificationCodeResetState extends State<EnterVerificationCodeReset> {
   bool _onEditing = true;
-
-  // ignore: prefer_function_declarations_over_variables
-  final handleSubmit = (int tmp, BuildContext context) {
-    log("hello");
-    final data = VerifyOtpSignUpReq(otp: tmp);
-    VerifyOTPRepImpl()
-        .postVerifyOTPSignUp(UrlApi.verifyOTPPath, data)
-        .then((value) => {
-              showToastSuccess(value.result!),
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SignInPage()),
-              )
-            })
-        .catchError((onError) => {log(onError.toString())});
-  };
-
+  int otp = 0;
   @override
   Widget build(BuildContext context) {
+    
     Size size = MediaQuery.of(context).size;
+    ResetPasswordProvider resetPasswordProvider = Provider.of<ResetPasswordProvider>(context);
     return Scaffold(
       backgroundColor: AppColor.whiteBackground,
       body: BackGround(
@@ -61,8 +45,10 @@ class _EnterVerificationCodeState extends State<EnterVerificationCode> {
                   ),
                 ),
                 VerificationCode(
-                  textStyle:
-                      const TextStyle(fontSize: 20.0, color: Colors.black),
+                  onCompleted: (value) {
+                    otp = int.parse(value);
+                  },
+                  textStyle: const TextStyle(fontSize: 20.0, color: Colors.black),
                   underlineColor: Colors.amber,
                   keyboardType: TextInputType.number,
                   length: 4,
@@ -72,6 +58,13 @@ class _EnterVerificationCodeState extends State<EnterVerificationCode> {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
+                            const Text(
+                              "Didn’t receive code? ",
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.grey),
+                            ),
                             Text(
                               "Resend",
                               style: TextStyle(
@@ -92,9 +85,6 @@ class _EnterVerificationCodeState extends State<EnterVerificationCode> {
                           ],
                         )),
                   ),
-                  onCompleted: (String value) {
-                    _codeNumber = int.parse(value);
-                  },
                   onEditing: (bool value) {
                     setState(() {
                       _onEditing = value;
@@ -105,9 +95,9 @@ class _EnterVerificationCodeState extends State<EnterVerificationCode> {
                 SizedBox(
                     width: size.width * 0.9,
                     child: ButtonDefault(
-                        content: "Submit",
+                        content: "Next",
                         voidCallBack: () {
-                          handleSubmit(_codeNumber, context);
+                          resetPasswordProvider.submitOtp(context, widget.username, otp);
                         }))
               ],
             ),
