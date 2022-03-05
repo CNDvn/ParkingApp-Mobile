@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-class Setting extends StatefulWidget {
-  const Setting({Key? key}) : super(key: key);
+class MyCar extends StatefulWidget {
+  const MyCar({Key? key}) : super(key: key);
 
   @override
-  _SettingState createState() => _SettingState();
+  _MyCarState createState() => _MyCarState();
 }
 
-class _SettingState extends State<Setting> {
+class _MyCarState extends State<MyCar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Text(
-          'Setting',
+          'My car',
           style: TextStyle(fontSize: 40),
         ),
       ),

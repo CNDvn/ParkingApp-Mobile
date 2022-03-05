@@ -52,7 +52,8 @@ class UserProfile extends StatelessWidget {
                       AssetPath.profilePhoto,
                       height: 100.0,
                       width: 100.0,
-                    ))),
+                    ))
+            ),
             Row(
               children: [
                 SizedBox(
