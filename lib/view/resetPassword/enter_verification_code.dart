@@ -6,18 +6,18 @@ import 'package:parkingappmobile/view_model/providers/reset_password_provider.da
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
 
-class EnterVerificationCode extends StatefulWidget {
-  const EnterVerificationCode({Key? key, 
+class EnterVerificationCodeReset extends StatefulWidget {
+  const EnterVerificationCodeReset({Key? key, 
   required this.username
   }) : super(key: key);
 
 final String username;
 
   @override
-  State<EnterVerificationCode> createState() => _EnterVerificationCodeState();
+  State<EnterVerificationCodeReset> createState() => _EnterVerificationCodeResetState();
 }
 
-class _EnterVerificationCodeState extends State<EnterVerificationCode> {
+class _EnterVerificationCodeResetState extends State<EnterVerificationCodeReset> {
   bool _onEditing = true;
   int otp = 0;
   @override

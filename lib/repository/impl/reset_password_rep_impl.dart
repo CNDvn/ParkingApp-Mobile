@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
-import 'package:parkingappmobile/model/response/resetPassword/reset_password_res.dart';
-import 'package:parkingappmobile/model/request/resetPassword/reset_password_req.dart';
+import 'package:parkingappmobile/model/request/reset_password_req.dart';
+import 'package:parkingappmobile/model/response/reset_password_res.dart';
 import 'package:parkingappmobile/repository/reset_password_rep.dart';
 
 class ResetPasswordRepImpl implements ResetPasswordRepo {

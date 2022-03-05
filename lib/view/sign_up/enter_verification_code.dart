@@ -5,16 +5,14 @@ import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/request/verify_otp_req.dart';
-import 'package:parkingappmobile/model/response/verify_otp_res.dart';
 import 'package:parkingappmobile/repository/impl/verify_otp_sign_up_impl.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
-import 'package:parkingappmobile/view/sign_up/enter_password.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
 class EnterVerificationCode extends StatefulWidget {
-  EnterVerificationCode({Key? key}) : super(key: key);
+  const EnterVerificationCode({Key? key}) : super(key: key);
 
   @override
   State<EnterVerificationCode> createState() => _EnterVerificationCodeState();

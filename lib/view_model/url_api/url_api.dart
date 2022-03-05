@@ -11,4 +11,5 @@ class UrlApi {
   static const String imagesPath = '$serverPath/images';
   static const String typeCarsPath = '$serverPath/type-cars';
   static const String carsPath = '$serverPath/cars';
+  static const String profilePath = '$serverPath/users/profile';
 }

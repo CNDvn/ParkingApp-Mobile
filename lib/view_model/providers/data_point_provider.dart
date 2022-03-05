@@ -25,6 +25,16 @@ class DataPoint {
   });
 }
 
+class ParkingDetailValue {
+  final String name;
+  final String id;
+
+  const ParkingDetailValue({
+    required this.name,
+    required this.id,
+  });
+}
+
 class LineString {
   LineString(this.lineString);
   List<dynamic> lineString;

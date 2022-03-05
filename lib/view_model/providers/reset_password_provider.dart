@@ -1,11 +1,12 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/model/request/resetPassword/otp_req.dart';
-import 'package:parkingappmobile/model/request/resetPassword/reset_password_req.dart';
+import 'package:parkingappmobile/model/request/otp_req.dart';
+import 'package:parkingappmobile/model/request/reset_password_req.dart';
 import 'package:parkingappmobile/repository/impl/otp_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/reset_password_rep_impl.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view/resetPassword/enter_verification_code.dart';
+import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
@@ -112,7 +113,7 @@ class ResetPasswordProvider with ChangeNotifier {
                     context,
                     MaterialPageRoute(
                     builder: (context) =>
-                    EnterVerificationCode(username: phone.value!)),
+                    EnterVerificationCodeReset(username: phone.value!)),
                           );
       }).catchError((error, stackTrace) {
         log(error.toString());

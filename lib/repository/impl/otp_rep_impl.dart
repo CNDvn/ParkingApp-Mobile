@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
-import 'package:parkingappmobile/model/response/resetPassword/otp_res.dart';
-import 'package:parkingappmobile/model/request/resetPassword/otp_req.dart';
+import 'package:parkingappmobile/model/request/otp_req.dart';
+import 'package:parkingappmobile/model/response/otp_res.dart';
 import 'package:parkingappmobile/repository/otp_rep.dart';
 
 class OtpRepImpl implements OtpRepo {

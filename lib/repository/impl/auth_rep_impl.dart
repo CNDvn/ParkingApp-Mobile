@@ -24,7 +24,7 @@ class AuthRepImpl implements AuthRepo {
     }
     return result;
   }
-
+  
   @override
   Future<SignInRes> postLoginGoogle(
       String url, LoginGgReq req, BuildContext context) async {
