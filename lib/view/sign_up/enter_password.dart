@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
 import 'package:parkingappmobile/view_model/providers/enter_password_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
@@ -21,8 +22,12 @@ class EnterPassword extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Column(
               children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 30, 0, 30),
+                SizedBox(
+                  height: size.height * 0.2,
+                  width: size.width * 0.9,
+                  child: Image.asset(AssetPath.logoPath),
+                ),
+                SizedBox(
                   child: Text(
                     "Enter your password",
                     textAlign: TextAlign.center,
@@ -73,7 +78,10 @@ class EnterPassword extends StatelessWidget {
                         content: "Create Account",
                         voidCallBack: () {
                           provider.submit(context);
-                        }))
+                        })),
+                SizedBox(
+                  height: size.height *0.1,
+                )
               ],
             ),
           ),

@@ -4,13 +4,14 @@ import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
 class SuccessfulBooking extends StatelessWidget {
-  SuccessfulBooking({Key? key}) : super(key: key);
-  double value = 1;
-  bool val = false;
+  const SuccessfulBooking({Key? key}) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    double value = 1;
+    bool val = false;
     return Scaffold(
       drawer: const DrawerDefault(),
       appBar: AppBar(),

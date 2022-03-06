@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/constants/assets_path.dart';
 
 class BackGround extends StatelessWidget {
   final Widget widgetChild;
@@ -15,12 +14,12 @@ class BackGround extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          Positioned(
-            top: size.height*0.1,
-            child: Image.asset(AssetPath.logoPath)),
-          Positioned(child:
-           Image.asset(AssetPath.posterCity)
-          ),
+          // Positioned(
+          //   top: size.height*0.1,
+          //   child: Image.asset(AssetPath.logoPath)),
+          // Positioned(child:
+          //  Image.asset(AssetPath.posterCity)
+          // ),
           widgetChild
         ],
       ),

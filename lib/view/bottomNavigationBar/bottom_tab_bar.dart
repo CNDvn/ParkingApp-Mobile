@@ -4,8 +4,8 @@ import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/data_bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/google_map/google_map.dart';
 import 'package:parkingappmobile/view/history/history.dart';
+import 'package:parkingappmobile/view/my_car/my_car.dart';
 import 'package:parkingappmobile/view/payments/payments.dart';
-import 'package:parkingappmobile/view/setting/setting.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
@@ -21,10 +21,10 @@ class BottomTabBar extends StatefulWidget {
 class _BottomTabBarState extends State<BottomTabBar> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   int currentTab = 0;
-  late TabController _tabController;
+  TabController? _tabController;
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -44,7 +44,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
       const GoogleMap(),
       const Payments(),
       const History(),
-      const Setting()
+      const MyCar()
     ];
     return Scaffold(
       key: scaffoldKey,
@@ -137,7 +137,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
                       voidCallback: () {
                         onTapHandler(3);
                       },
-                      icon: Icons.settings,
+                      icon: Icons.directions_car,
                       currentTab: currentTab,
                       tab: 3),
                 ],

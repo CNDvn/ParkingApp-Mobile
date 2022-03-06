@@ -10,7 +10,7 @@ class Payments extends StatefulWidget {
 class _PaymentsState extends State<Payments> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text(
           'Payments',

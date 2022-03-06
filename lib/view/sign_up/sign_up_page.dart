@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
-import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
 import 'package:parkingappmobile/view_model/providers/sign_up_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/input_date/input_date.dart';
@@ -14,26 +14,31 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     SignUpProvider signUpProvider = Provider.of<SignUpProvider>(context);
-
     return Scaffold(
       backgroundColor: AppColor.whiteBackground,
       body: BackGround(
         widgetChild: SingleChildScrollView(
           child: Container(
-            margin: const EdgeInsets.only(top: 20.0),
+            margin: const EdgeInsets.only(top: 40.0),
             alignment: Alignment.bottomCenter,
             child: Column(
               children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 5, 0, 40),
-                  child: Text(
-                    "",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: AppColor.greyText,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w400),
-                  ),
+                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  SizedBox(
+                      child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black87,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )),
+                ]),
+                SizedBox(
+                  height: size.height * 0.2,
+                  width: size.width * 0.9,
+                  child: Image.asset(AssetPath.logoPath),
                 ),
                 SizedBox(
                   height: size.height * 0.10,
@@ -42,7 +47,7 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      suffixIcon: signUpProvider.textPhone.isNotEmpty
+                        suffixIcon: signUpProvider.textPhone.isNotEmpty
                             ? IconButton(
                                 icon: const Icon(Icons.close),
                                 onPressed: () =>
@@ -71,17 +76,17 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      suffixIcon: signUpProvider.textPassword.isNotEmpty
+                        suffixIcon: signUpProvider.textPassword.isNotEmpty
                             ? Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () =>
-                                    signUpProvider.clearPasswordController(),
-                                ),
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () => signUpProvider
+                                        .clearPasswordController(),
+                                  ),
                                   IconButton(
                                       icon: signUpProvider.isPasswordVariable
                                           ? const Icon(Icons.visibility)
@@ -115,7 +120,7 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      suffixIcon: signUpProvider.textFirstName.isNotEmpty
+                        suffixIcon: signUpProvider.textFirstName.isNotEmpty
                             ? IconButton(
                                 icon: const Icon(Icons.close),
                                 onPressed: () =>
@@ -145,7 +150,7 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      suffixIcon: signUpProvider.textLastName.isNotEmpty
+                        suffixIcon: signUpProvider.textLastName.isNotEmpty
                             ? IconButton(
                                 icon: const Icon(Icons.close),
                                 onPressed: () =>
@@ -175,7 +180,7 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      suffixIcon: signUpProvider.textEmail.isNotEmpty
+                        suffixIcon: signUpProvider.textEmail.isNotEmpty
                             ? IconButton(
                                 icon: const Icon(Icons.close),
                                 onPressed: () =>
@@ -209,7 +214,7 @@ class SignUpPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      suffixIcon: signUpProvider.textAddress.isNotEmpty
+                        suffixIcon: signUpProvider.textAddress.isNotEmpty
                             ? IconButton(
                                 icon: const Icon(Icons.close),
                                 onPressed: () =>
@@ -238,7 +243,10 @@ class SignUpPage extends StatelessWidget {
                         content: "Submit",
                         voidCallBack: () {
                           signUpProvider.submitData(context);
-                        }))
+                        })),
+                SizedBox(
+                  height: size.height * 0.1,
+                )
               ],
             ),
           ),
