@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/bookParking/booking_details.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
+import 'package:parkingappmobile/view/qr_code/qr_code.dart';
 import 'package:parkingappmobile/view/sign_up/enter_password.dart';
 import 'package:parkingappmobile/view/sign_up/sign_up_page.dart';
 import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
@@ -20,5 +22,6 @@ class Routes {
     "/BottomTabBar": (context) => const BottomTabBar(),
     "/ViewPark": (context) => const ViewPark(),
     "/BookingDetails": (context) => const BookingDetails(),
+    "/QRCodePage": (context) => const QRCodePage()
   };
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/view/qr_code/qr_code.dart';
 import 'package:parkingappmobile/model/response/type_cars_res.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/view/my_car/create_car.dart';
@@ -91,6 +92,11 @@ class ActionButtonMid extends StatelessWidget {
               break;
             default:
               break;
+          }
+          if (currentTab == 1) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return const QRCodePage();
+        }));
           }
         });
   }
