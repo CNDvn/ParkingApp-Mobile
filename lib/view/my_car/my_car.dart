@@ -10,7 +10,7 @@ class MyCar extends StatefulWidget {
 class _MyCarState extends State<MyCar> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text(
           'My car',

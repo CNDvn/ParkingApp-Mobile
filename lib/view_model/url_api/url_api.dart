@@ -12,4 +12,5 @@ class UrlApi {
   static const String typeCarsPath = '$serverPath/type-cars';
   static const String carsPath = '$serverPath/cars';
   static const String profilePath = '$serverPath/users/profile';
+  static const String loginGooglePath = '$serverPath/auths/loginGoogle';
 }
