@@ -8,7 +8,8 @@ import 'package:parkingappmobile/repository/change_password_rep.dart';
 
 class ChangePasswordRepImpl implements ChangePasswordRepo {
   @override
-  Future<ChangePasswordRes> putChangePassword(String url, ChangePasswordReq req, String token) async {
+  Future<ChangePasswordRes> putChangePassword(
+      String url, ChangePasswordReq req, String token) async {
     var result = ChangePasswordRes();
     try {
       Dio dio = new Dio();
@@ -16,11 +17,11 @@ class ChangePasswordRepImpl implements ChangePasswordRepo {
       dio.options.headers["authorization"] = "Bearer ${token}";
       Response response = await dio.put(url, data: req.toJson());
 
-      result = ChangePasswordRes.changePasswordResFromJson(jsonEncode(response.data));
-    }on DioError catch (e) {
+      result = ChangePasswordRes.changePasswordResFromJson(
+          jsonEncode(response.data));
+    } on DioError catch (e) {
       showToastFail(e.response?.data["message"]);
     }
     return result;
   }
-
 }

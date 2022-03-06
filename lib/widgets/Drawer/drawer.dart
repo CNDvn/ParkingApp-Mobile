@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
@@ -33,14 +35,13 @@ class DrawerDefault extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: size.width * 0.1,
-                  //backgroundImage: 
+                  //backgroundImage:
                   //const NetworkImage(AssetPath.profilePhoto)
                   child: Image.asset(AssetPath.profilePhoto),
                   backgroundColor: AppColor.whiteBackground,
                 ),
                 TextButton(
-                  child: Text("Meo` 4`",
-                      style: AppTextStyles.h2Black),
+                  child: Text("Meo` 4`", style: AppTextStyles.h2Black),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -67,7 +68,7 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("choose payment");
+              log("choose payment");
             },
           ),
           ListTile(
@@ -81,7 +82,7 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("Get history");
+              log("Get history");
             },
           ),
           ListTile(
@@ -95,7 +96,7 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("get promotion code");
+              log("get promotion code");
             },
           ),
           const Divider(
@@ -113,7 +114,7 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("View support");
+              log("View support");
             },
           ),
           ListTile(
@@ -127,7 +128,7 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("View Setting");
+              log("View Setting");
             },
           ),
           const Divider(
@@ -145,7 +146,7 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("logout");
+              log("logout");
             },
           )
         ],

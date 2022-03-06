@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
-import 'package:parkingappmobile/model/response/login_gg_res.dart';
 import 'package:parkingappmobile/model/request/login_gg_req.dart';
 import 'package:parkingappmobile/model/response/sign_in_res.dart';
 import 'package:parkingappmobile/model/request/sign_in_req.dart';
@@ -24,7 +23,7 @@ class AuthRepImpl implements AuthRepo {
     }
     return result;
   }
-  
+
   @override
   Future<SignInRes> postLoginGoogle(
       String url, LoginGgReq req, BuildContext context) async {
@@ -35,7 +34,8 @@ class AuthRepImpl implements AuthRepo {
       result = SignInRes.signInResFromJson(jsonEncode(response.data));
     } on DioError catch (e) {
       if (e.response?.data["statusCode"] == 302) {
-        SignUpProvider signUpProvider = Provider.of<SignUpProvider>(context, listen: false);
+        SignUpProvider signUpProvider =
+            Provider.of<SignUpProvider>(context, listen: false);
         signUpProvider.signUpGoogle();
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const SignUpPage();

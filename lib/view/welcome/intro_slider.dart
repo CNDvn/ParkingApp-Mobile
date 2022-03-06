@@ -22,7 +22,7 @@ class _IntroSliderPageState extends State<IntroSliderPage> {
 
     dataSlides.forEach((slide) => {
           slides.add(
-             Slide(
+            Slide(
               title: slide.title,
               styleTitle: AppTextStyles.h2Black,
               description: slide.description,
@@ -38,13 +38,13 @@ class _IntroSliderPageState extends State<IntroSliderPage> {
   void onDonePress() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) =>const SignInPage()),
+      MaterialPageRoute(builder: (context) => const SignInPage()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return  IntroSlider(
+    return IntroSlider(
       // List slides
       slides: slides,
 

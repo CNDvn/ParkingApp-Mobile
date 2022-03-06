@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/base/base_validation.dart';
@@ -224,7 +226,7 @@ class SignUpProvider with ChangeNotifier {
       checkValidation(_email.value ?? "", "email");
       checkValidation(_address.value ?? "", "address");
     } else {
-      print("submit data");
+      log("submit data");
       final data = SignUpReq(
           firstName: _firstName.value!,
           lastName: _lastName.value!,
@@ -241,7 +243,8 @@ class SignUpProvider with ChangeNotifier {
             showToastSuccess(value.result!),
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EnterVerificationCode()),
+              MaterialPageRoute(
+                  builder: (context) => const EnterVerificationCode()),
             )
           });
     }

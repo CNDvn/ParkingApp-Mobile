@@ -141,7 +141,7 @@ class MapProvider with ChangeNotifier {
     }
     if (permission == LocationPermission.deniedForever) {
       return Future.error(
-          'Location permissons are permanently denied, we cannot request permissions');
+          'Location permissions are permanently denied, we cannot request permissions');
     }
     Position pos = await Geolocator.getCurrentPosition();
     return LatLng(pos.latitude, pos.longitude);

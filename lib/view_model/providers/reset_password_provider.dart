@@ -6,7 +6,6 @@ import 'package:parkingappmobile/repository/impl/otp_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/reset_password_rep_impl.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view/resetPassword/enter_verification_code.dart';
-import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
@@ -54,7 +53,7 @@ class ResetPasswordProvider with ChangeNotifier {
     if (value.isEmpty) {
       _phone = ValidationItem(value, "Phone is empty");
     } else if (value.length < 10) {
-      _phone = ValidationItem(value, "Phone must 10 charactor");
+      _phone = ValidationItem(value, "Phone must 10 character");
     } else {
       _phone = ValidationItem(value, null);
     }
@@ -65,7 +64,7 @@ class ResetPasswordProvider with ChangeNotifier {
     if (value.isEmpty) {
       _otp = ValidationItem(value, "Otp is empty");
     } else if (value.length < 4) {
-      _phone = ValidationItem(value, "Phone must 4 charactor");
+      _phone = ValidationItem(value, "Phone must 4 character");
     } else {
       _phone = ValidationItem(value, null);
     }
@@ -107,14 +106,15 @@ class ResetPasswordProvider with ChangeNotifier {
       checkPhone(_phone.value ?? "");
       notifyListeners();
     } else if (!submitValid && isValid) {
-      OtpRepImpl().postOtp(UrlApi.otpPath, OtpReq(username: phone.value!))
-      .then((value) async {
+      OtpRepImpl()
+          .postOtp(UrlApi.otpPath, OtpReq(username: phone.value!))
+          .then((value) async {
         Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                    builder: (context) =>
-                    EnterVerificationCodeReset(username: phone.value!)),
-                          );
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  EnterVerificationCodeReset(username: phone.value!)),
+        );
       }).catchError((error, stackTrace) {
         log(error.toString());
       });
@@ -126,13 +126,14 @@ class ResetPasswordProvider with ChangeNotifier {
       checkOtp(otp.toString());
       notifyListeners();
     } else {
-      ResetPasswordRepImpl().putResetPassword(UrlApi.resetpasswordPath, ResetPasswordReq(otp: otp, username: username))
-      .then((value) async {
-                            Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignInPage()),
-                          );
+      ResetPasswordRepImpl()
+          .putResetPassword(UrlApi.resetpasswordPath,
+              ResetPasswordReq(otp: otp, username: username))
+          .then((value) async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SignInPage()),
+        );
       }).catchError((error, stackTrace) {
         log(error.toString());
       });

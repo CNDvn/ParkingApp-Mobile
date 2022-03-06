@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
@@ -26,7 +25,8 @@ class ParkingImpl implements ParkingRepo {
     var result = ParkingDetailRes();
     try {
       Response response = await Dio().get(url);
-      result = ParkingDetailRes.parkingDetailResFromJson(jsonEncode(response.data));
+      result =
+          ParkingDetailRes.parkingDetailResFromJson(jsonEncode(response.data));
     } on DioError catch (e) {
       showToastFail(e.response?.data["message"]);
     }
