@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
@@ -39,8 +41,7 @@ class DrawerDefault extends StatelessWidget {
                   backgroundColor: AppColor.whiteBackground,
                 ),
                 TextButton(
-                  child: Text("Meo` 4`",
-                      style: AppTextStyles.h2Black),
+                  child: Text("Meo` 4`", style: AppTextStyles.h2Black),
                   onPressed: () {
                     Navigator.push(
                       context,

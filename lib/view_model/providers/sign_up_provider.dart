@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/base/base_validation.dart';
@@ -9,7 +11,7 @@ import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 
-class SignUpProvider with ChangeNotifier {
+class SignUpProvider with ChangeNotifier {  
   final SecureStorage secureStorage = SecureStorage();
 
   ValidationItem _phone = ValidationItem("", "");

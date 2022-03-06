@@ -25,7 +25,8 @@ class ParkingImpl implements ParkingRepo {
     var result = ParkingDetailRes();
     try {
       Response response = await Dio().get(url);
-      result = ParkingDetailRes.parkingDetailResFromJson(jsonEncode(response.data));
+      result =
+          ParkingDetailRes.parkingDetailResFromJson(jsonEncode(response.data));
     } on DioError catch (e) {
       showToastFail(e.response?.data["message"]);
     }
