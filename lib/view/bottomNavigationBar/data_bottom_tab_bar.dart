@@ -1,6 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/view/qr_code/qr_code.dart';
+import 'package:parkingappmobile/model/response/type_cars_res.dart';
+import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
+import 'package:parkingappmobile/view/my_car/create_car.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:provider/provider.dart';
 
 class IconButtonStyle extends StatelessWidget {
@@ -41,7 +50,7 @@ final List<IconData> iconMid = [
   Icons.near_me_sharp,
   Icons.qr_code_2,
   Icons.query_builder,
-  Icons.build_rounded
+  Icons.add
 ];
 
 class ActionButtonMid extends StatelessWidget {
@@ -51,16 +60,43 @@ class ActionButtonMid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
+    final SecureStorage secureStorage = SecureStorage();
     return FloatingActionButton(
         backgroundColor: AppColor.lightButton,
         child: Icon(
           iconMid[currentTab],
           size: 36,
         ),
-        onPressed: () {
-          if (currentTab == 0) {
-            mapProvider.updatePosition();
-            return;
+        onPressed: () async {
+          switch (currentTab) {
+            case 0:
+              mapProvider.updatePosition();
+              break;
+            case 3:
+              final token = await secureStorage.readSecureData("token");
+              CarRepImpl()
+                  .getTypeCars(UrlApi.typeCarsPath, token)
+                  .then((value) async {
+                final List<Result>? typeCars = value.result;
+                myCarProvider.dropdownValue = typeCars![0].id;
+                await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                  return CreateCar(
+                    typeCars: typeCars,
+                  );
+                }));
+              }).onError((error, stackTrace) {
+                log(error.toString());
+              });
+              break;
+            default:
+              break;
+          }
+          if (currentTab == 1) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return const QRCodePage();
+        }));
           }
         });
   }

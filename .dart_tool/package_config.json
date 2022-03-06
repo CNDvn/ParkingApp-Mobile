@@ -56,6 +56,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "cross_file",
+      "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/cross_file-0.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "crypto",
       "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1",
       "packageUri": "lib/",
@@ -154,6 +160,12 @@
     {
       "name": "flutter_map_marker_popup",
       "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map_marker_popup-2.1.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_plugin_android_lifecycle",
+      "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -302,6 +314,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "image_picker",
+      "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.8.4+10",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "image_picker_for_web",
+      "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_for_web-2.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "image_picker_platform_interface",
+      "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.4.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "intl",
       "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0",
       "packageUri": "lib/",
@@ -424,6 +454,12 @@
     {
       "name": "qr",
       "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/qr-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "qr_code_scanner",
+      "rootUri": "file:///D:/flutter/.pub-cache/hosted/pub.dartlang.org/qr_code_scanner-0.7.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -584,7 +620,7 @@
       "languageVersion": "2.15"
     }
   ],
-  "generated": "2022-03-06T07:02:28.488501Z",
+  "generated": "2022-03-06T14:37:22.287730Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }
