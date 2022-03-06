@@ -9,4 +9,5 @@ class UrlApi {
   static const String changePasswordPath = '$serverPath/auths/password';
   static const String getAllParkings = '$serverPath/parkings?sizePage=100&currentPage=1&sort=ASC';
   static const String profilePath = '$serverPath/users/profile';
+  static const String signoutPath = '$serverPath/auths/logout';
 }

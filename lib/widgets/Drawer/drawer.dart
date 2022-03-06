@@ -3,7 +3,9 @@ import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
+import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:provider/provider.dart';
 
 class DrawerDefault extends StatelessWidget {
   const DrawerDefault({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class DrawerDefault extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double sizeImage = size.width * 0.08;
+    SignInProvider signInProvider = Provider.of<SignInProvider>(context);
     return Drawer(
       backgroundColor: AppColor.whiteBackground,
       child: ListView(
@@ -33,8 +36,6 @@ class DrawerDefault extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: size.width * 0.1,
-                  //backgroundImage: 
-                  //const NetworkImage(AssetPath.profilePhoto)
                   child: Image.asset(AssetPath.profilePhoto),
                   backgroundColor: AppColor.whiteBackground,
                 ),
@@ -145,7 +146,7 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("logout");
+              signInProvider.confirmSignOut(context);
             },
           )
         ],

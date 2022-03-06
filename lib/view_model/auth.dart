@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 abstract class AuthBase {
   User? get currentUser;
   Future<User?> signInWithGoogle();
+  Future<void> signOut();
 }
 
 class Auth implements AuthBase {
@@ -34,4 +35,10 @@ class Auth implements AuthBase {
 
   @override
   User? get currentUser => _firebaseAuth.currentUser;
+
+  @override
+  Future<void> signOut() async {
+    await GoogleSignIn().signOut();
+    await _firebaseAuth.signOut();
+  }
 }
