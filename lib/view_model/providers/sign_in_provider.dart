@@ -13,6 +13,7 @@ import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
+import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 
 class ValidationItem {
   final String? value;
@@ -108,12 +109,12 @@ class SignInProvider with ChangeNotifier {
         _password.error != null ||
         _phone.value == null ||
         password.value == null;
-
     if (submitValid) {
       checkPhone(_phone.value ?? "");
       checkPassword(_password.value ?? "");
       notifyListeners();
     } else if (!submitValid && isValid) {
+      showDialogCustom(context);
       AuthRepImpl()
           .postSignIn(
               UrlApi.signinPath,
@@ -134,6 +135,8 @@ class SignInProvider with ChangeNotifier {
         }));
       }).onError((error, stackTrace) {
         log(error.toString());
+        Navigator.pushReplacementNamed(context, "/");
+        notifyListeners();
       });
     }
   }
@@ -148,15 +151,17 @@ class SignInProvider with ChangeNotifier {
   final AuthBase auth = Auth();
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
+      showDialogCustom(context);
       User? user = await auth.signInWithGoogle();
       if (user != null) {
         await secureStorage.writeSecureData("emailAddress", user.email ?? "");
         await secureStorage.writeSecureData("lastName", user.displayName ?? "");
-        await secureStorage.writeSecureData("phoneNumber", user.phoneNumber?.substring(3) ?? "");
+        await secureStorage.writeSecureData(
+            "phoneNumber", user.phoneNumber?.substring(3) ?? "");
         await secureStorage.writeSecureData("avatar", user.photoURL ?? "");
         String token = await user.getIdToken();
         AuthRepImpl()
-            .postLoginGoogle("", LoginGgReq(token: token), context)
+            .postLoginGoogle(UrlApi.loginGooglePath, LoginGgReq(token: token), context)
             .then((value) async {
         await  secureStorage.writeSecureData("token", value.result!.accessToken);
         await  secureStorage.writeSecureData("customer", value.result!.refreshToken);

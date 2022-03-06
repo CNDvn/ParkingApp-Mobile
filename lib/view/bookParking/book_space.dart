@@ -4,13 +4,13 @@ import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
 class BookSpace extends StatelessWidget {
-  BookSpace({Key? key}) : super(key: key);
-  double value = 1;
-  bool val = false;
+  const BookSpace({Key? key}) : super(key: key);  
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     Size size = MediaQuery.of(context).size;
+    double value = 1;
+   bool val = false;
     return Scaffold(
       drawer: const DrawerDefault(),
       appBar: AppBar(),

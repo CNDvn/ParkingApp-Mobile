@@ -11,9 +11,9 @@ class ChangePasswordRepImpl implements ChangePasswordRepo {
   Future<ChangePasswordRes> putChangePassword(String url, ChangePasswordReq req, String token) async {
     var result = ChangePasswordRes();
     try {
-      Dio dio = new Dio();
+      Dio dio = Dio();
       dio.options.headers['content-Type'] = 'application/json';
-      dio.options.headers["authorization"] = "Bearer ${token}";
+      dio.options.headers["authorization"] = "Bearer $token";
       Response response = await dio.put(url, data: req.toJson());
 
       result = ChangePasswordRes.changePasswordResFromJson(jsonEncode(response.data));

@@ -6,7 +6,6 @@ import 'package:parkingappmobile/repository/impl/otp_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/reset_password_rep_impl.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view/resetPassword/enter_verification_code.dart';
-import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {

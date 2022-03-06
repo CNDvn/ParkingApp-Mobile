@@ -4,7 +4,6 @@ import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
-import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
 
 class DrawerDefault extends StatelessWidget {
@@ -68,7 +67,6 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("choose payment");
             },
           ),
           ListTile(
@@ -82,7 +80,6 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("Get history");
             },
           ),
           ListTile(
@@ -96,7 +93,6 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("get promotion code");
             },
           ),
           const Divider(
@@ -114,7 +110,6 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("View support");
             },
           ),
           ListTile(
@@ -128,7 +123,6 @@ class DrawerDefault extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              print("View Setting");
             },
           ),
           const Divider(

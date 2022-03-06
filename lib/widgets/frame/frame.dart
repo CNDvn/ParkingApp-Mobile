@@ -16,7 +16,7 @@ class _FrameState extends State<Frame> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {      
-  Size size = MediaQuery.of(context).size;
+  // Size size = MediaQuery.of(context).size;
     return  Scaffold(
       key: scaffoldKey,
       drawer: const DrawerDefault(),
