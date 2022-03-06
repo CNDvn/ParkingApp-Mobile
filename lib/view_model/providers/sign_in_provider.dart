@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:parkingappmobile/configs/exception/show_alert_dialog.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/request/login_gg_req.dart';
 import 'package:parkingappmobile/model/request/sign_in_req.dart';
@@ -8,6 +9,7 @@ import 'package:parkingappmobile/repository/impl/users_me_rep_impl.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
+import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
@@ -21,7 +23,6 @@ class ValidationItem {
 
 class SignInProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
-
   ValidationItem _phone = ValidationItem(null, null);
   ValidationItem _password = ValidationItem(null, null);
 
@@ -123,8 +124,9 @@ class SignInProvider with ChangeNotifier {
                   role: "customer"))
           .then((value) async {
         await secureStorage.writeSecureData("token", value.result!.accessToken);
-        await secureStorage.writeSecureData(
-            "customer", value.result!.refreshToken);
+        await secureStorage.writeSecureData("customer", value.result!.refreshToken);
+        clearPhoneController();
+        clearPasswordController();
         UsersMeRepImpl()
             .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
         showToastSuccess(value.result!.message);
@@ -161,8 +163,8 @@ class SignInProvider with ChangeNotifier {
         AuthRepImpl()
             .postLoginGoogle(UrlApi.loginGooglePath, LoginGgReq(token: token), context)
             .then((value) async {
-          secureStorage.writeSecureData("token", value.result!.accessToken);
-          secureStorage.writeSecureData("customer", value.result!.refreshToken);
+        await  secureStorage.writeSecureData("token", value.result!.accessToken);
+        await  secureStorage.writeSecureData("customer", value.result!.refreshToken);
           UsersMeRepImpl()
               .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
           showToastSuccess(value.result!.message);
@@ -173,6 +175,33 @@ class SignInProvider with ChangeNotifier {
       }
     } on Exception catch (e) {
       _showSignInError(context, e);
+    }
+  }
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await auth.signOut();
+      String accessToken = await secureStorage.readSecureData("token");
+      AuthRepImpl().postSignOut("", accessToken);
+      secureStorage.deleteAll();
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> confirmSignOut(BuildContext context) async {
+    final didRequestSignOut = await showAlertDialog(context,
+        title: 'Logout',
+        content: 'Are you sure that you want to logout?',
+        defaultActionText: 'Logout',
+        cancelActionText: 'Cancel');
+    if (didRequestSignOut == true) {
+      _signOut(context);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => const SignInPage()),
+          ModalRoute.withName('/'));
     }
   }
 }
