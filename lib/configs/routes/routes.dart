@@ -13,12 +13,12 @@ class Routes {
   static final Map<String, Widget Function(BuildContext)> routes = {
     // "/": (context) => const Welcome(),
     "/": (context) => const SignInPage(),
-    "/userProfile": (context) => const UserProfile(),
+    "/UserProfile": (context) => const UserProfile(),
     "/EnterPassword": (context) => const EnterPassword(),
     "/SignUpPage": (context) => const SignUpPage(),
     "/EnterVerificationCode": (context) =>const EnterVerificationCode(),
     "/BottomTabBar": (context) => const BottomTabBar(),
     "/ViewPark": (context) => const ViewPark(),
-    "/BookingDetails": (context) => const BookingDetails()
+    "/BookingDetails": (context) => const BookingDetails(),
   };
 }

@@ -7,6 +7,7 @@ import 'package:parkingappmobile/repository/impl/signup_rep_impl.dart';
 import 'package:parkingappmobile/view/sign_up/enter_verification_code.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
+import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 
 class SignUpProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
@@ -224,7 +225,6 @@ class SignUpProvider with ChangeNotifier {
       checkValidation(_email.value ?? "", "email");
       checkValidation(_address.value ?? "", "address");
     } else {
-      print("submit data");
       final data = SignUpReq(
           firstName: _firstName.value!,
           lastName: _lastName.value!,
@@ -237,12 +237,16 @@ class SignUpProvider with ChangeNotifier {
           email: _email.value!,
           address: _address.value!,
           avatar: "abc");
+      showDialogCustom(context);
       SignUpImpl().postSignUp(UrlApi.signupPath, data).then((value) => {
             showToastSuccess(value.result!),
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EnterVerificationCode()),
+              MaterialPageRoute(
+                  builder: (context) => const EnterVerificationCode()),
             )
+          }).onError((error, stackTrace) => {
+            Navigator.pushReplacementNamed(context, "/SignUpPage")
           });
     }
   }

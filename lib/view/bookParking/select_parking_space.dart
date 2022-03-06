@@ -4,11 +4,12 @@ import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 
 class SelectParkingSpace extends StatelessWidget {
-  SelectParkingSpace({Key? key}) : super(key: key);
-  bool value = false;
+  const SelectParkingSpace({Key? key}) : super(key: key);  
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    bool value = false;
     return Scaffold(
       drawer: const DrawerDefault(),
       appBar: AppBar(),

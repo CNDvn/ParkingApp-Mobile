@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:geocoder/geocoder.dart';
+// ignore: unused_import
 import 'package:geocoding/geocoding.dart';
+// ignore: unused_import
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:parkingappmobile/model/entity/parking.dart';
@@ -14,6 +17,7 @@ import 'package:parkingappmobile/view/parkingDetail/parking_detail.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -28,6 +32,7 @@ class _GoogleMapState extends State<GoogleMap> {
   String? id;
   List<String> cities = [];
   List<Marker> markers = [];
+  // ignore: prefer_collection_literals
   Map<ParkingDetailValue, Marker> list = Map<ParkingDetailValue, Marker>();
   @override
   void initState() {
@@ -36,14 +41,15 @@ class _GoogleMapState extends State<GoogleMap> {
     ParkingImpl().getParkings(UrlApi.getAllParkings).then((value) async {
       listParking = value.result!.data;
       for (var item in listParking!) {
+        // ignore: prefer_collection_literals
         Map<ParkingDetailValue, Marker> tmp = Map<ParkingDetailValue, Marker>();
         tmp[ParkingDetailValue(id: item.id, name: item.name)] = Marker(
             width: 100,
             point:
                 LatLng(item.coordinates.latitude, item.coordinates.longitude),
-            builder: (ctx) =>const SizedBox(
+            builder: (ctx) => SizedBox(
                   width: 100,
-                  child: Icon(Icons.location_on)
+                  child: Icon(Icons.local_parking_sharp, color: Colors.blue[800])
                 ));
         list.addAll(tmp);
       }
@@ -83,7 +89,8 @@ class _GoogleMapState extends State<GoogleMap> {
     }
 
     return Scaffold(
-      body: Stack(
+      body: markers.isEmpty ? const ProcessCircle() :
+      Stack(
         children: [
           Column(children: [
             Flexible(
@@ -168,7 +175,7 @@ class _GoogleMapState extends State<GoogleMap> {
                       left: 16.0, top: size.height * 0.2, right: 16.0),
                   child: SearchField(
                     controller: mapProvider.addressController,
-                    hint: "Where are you going to?",
+                    hint: "What parking lot are you finding ?",
                     searchInputDecoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(16.0),
                       suffixIcon: mapProvider.addressController.text.isNotEmpty

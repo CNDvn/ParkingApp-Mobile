@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/entity/image.dart';
-import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/carousel_slider/carousel_slider.dart';
 
@@ -69,6 +67,18 @@ class ParkingDetail extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              SizedBox(
+                  child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black87,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )),
+            ]),
             Row(
               children: [
                 Expanded(flex: 2, child: Container()),

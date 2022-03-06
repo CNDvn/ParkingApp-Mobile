@@ -29,6 +29,7 @@ class SignInPage extends StatelessWidget {
                 SizedBox(
                   height: size.height * 0.2,
                   width: size.width * 0.9,
+                  child: Image.asset(AssetPath.logoPath),
                 ),
                 SizedBox(
                   height: size.height * 0.12,

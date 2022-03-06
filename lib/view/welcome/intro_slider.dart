@@ -20,8 +20,8 @@ class _IntroSliderPageState extends State<IntroSliderPage> {
   void initState() {
     super.initState();
 
-    dataSlides.forEach((slide) => {
-          slides.add(
+    for (var slide in dataSlides) {
+      slides.add(
              Slide(
               title: slide.title,
               styleTitle: AppTextStyles.h2Black,
@@ -31,8 +31,8 @@ class _IntroSliderPageState extends State<IntroSliderPage> {
               pathImage: slide.pathImage,
               backgroundColor: AppColor.whiteBackground,
             ),
-          )
-        });
+          );
+    }
   }
 
   void onDonePress() {

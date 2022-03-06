@@ -5,6 +5,7 @@ import 'package:parkingappmobile/repository/impl/change_password_rep_impl.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
+import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 
 class ValidationPassword {
   String value;
@@ -89,12 +90,15 @@ class EnterChangePasswordProvider with ChangeNotifier {
     final token = await secureStorage.readSecureData("token");
 
     if (isPassword && isNewPassword) {
+      showDialogCustom(context);
       ChangePasswordRepImpl().putChangePassword(UrlApi.changePasswordPath, ChangePasswordReq(password: password.value, newPassword: newPassword.value), token)
       .then((value) async {
         showToastSuccess(value.result!);
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const SignInPage()),
           (route) => false);
+      }).then((value) => {
+
       });
     }
   }
