@@ -89,8 +89,7 @@ class _GoogleMapState extends State<GoogleMap> {
     }
 
     return Scaffold(
-      body: markers.isEmpty ? const ProcessCircle() :
-      Stack(
+      body: Stack(
         children: [
           Column(children: [
             Flexible(

@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/constants/regex.dart';
 import 'package:parkingappmobile/model/request/profile_req.dart';
+import 'package:parkingappmobile/repository/impl/image_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/profile_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/users_me_rep_impl.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
@@ -18,6 +20,9 @@ class ValidationItem {
 class UserProfileProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
 
+  File? image;
+  String? avatarSto;
+  String? fullNameSto;
   ValidationItem firstName = ValidationItem("", null);
   ValidationItem lastName = ValidationItem("", null);
   ValidationItem email = ValidationItem("", null);
@@ -37,6 +42,10 @@ class UserProfileProvider with ChangeNotifier {
   var dobTextEditingController = TextEditingController();
 
   void getProfile() async {
+    avatarSto = await secureStorage.readSecureData('avatar') == "null"
+        ? null
+        : await secureStorage.readSecureData('avatar');
+    fullNameSto = await secureStorage.readSecureData('fullname');
     String firstNameSto = await secureStorage.readSecureData('firstName');
     String lastNameSto = await secureStorage.readSecureData('lastName');
     String emailSto = await secureStorage.readSecureData('emailAddress');
@@ -139,7 +148,7 @@ class UserProfileProvider with ChangeNotifier {
     return flag;
   }
 
-  void submit() async {
+  void submit(BuildContext context) async {
     clickButtonFlag = true;
     bool isFirstName = checkFirstName(firstName.value);
     bool isLastName = checkLastName(lastName.value);
@@ -147,25 +156,76 @@ class UserProfileProvider with ChangeNotifier {
     bool isPhone = checkPhone(phone.value);
     if (isFirstName && isLastName && isEmail && isPhone) {
       String token = await secureStorage.readSecureData('token');
-      ProfileRepImpl()
-          .putProfile(
-              UrlApi.profilePath,
-              ProfileReq(
-                firstName: firstNameController.text,
-                lastName: lastNameController.text,
-                dob: dobController.text,
-                phoneNumber: '+84' + phoneController.text,
-                email: emailController.text,
-                address: firstNameController.text,
-                avatar: firstNameController.text,
-              ),
-              token)
-          .then((value) async {
-        UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, token);
-        showToastSuccess(value.result!);
-      }).onError((error, stackTrace) {
-        log(error.toString());
-      });
+      if (image != null) {
+        await ImageRepImpl()
+            .postImage(UrlApi.imagesPath, image!, token)
+            .then((value) async {
+          final displayUrl = await secureStorage.readSecureData("displayUrl");
+          await ProfileRepImpl()
+              .putProfile(
+                  UrlApi.profilePath,
+                  ProfileReq(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    dob: dobController.text,
+                    phoneNumber: '+84' + phoneController.text,
+                    email: emailController.text,
+                    address: firstNameController.text,
+                    avatar: displayUrl,
+                  ),
+                  token)
+              .then((value) async {
+            await UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, token);
+            await secureStorage.deleteSecureData("displayUrl");
+            showToastSuccess(value.result!);
+          }).onError((error, stackTrace) {
+            log(error.toString());
+          });
+        }).onError((error, stackTrace) {
+          log(error.toString());
+        });
+      } else if (avatarSto != null) {
+        await ProfileRepImpl()
+            .putProfile(
+                UrlApi.profilePath,
+                ProfileReq(
+                  firstName: firstNameController.text,
+                  lastName: lastNameController.text,
+                  dob: dobController.text,
+                  phoneNumber: '+84' + phoneController.text,
+                  email: emailController.text,
+                  address: firstNameController.text,
+                  avatar: avatarSto!,
+                ),
+                token)
+            .then((value) async {
+          await UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, token);
+          showToastSuccess(value.result!);
+        }).onError((error, stackTrace) {
+          log(error.toString());
+        });
+      } else {
+        String avatar = "null";
+        await ProfileRepImpl()
+            .putProfile(
+                UrlApi.profilePath,
+                ProfileReq(
+                  firstName: firstNameController.text,
+                  lastName: lastNameController.text,
+                  dob: dobController.text,
+                  phoneNumber: '+84' + phoneController.text,
+                  email: emailController.text,
+                  address: firstNameController.text,
+                  avatar: avatar,
+                ),
+                token)
+            .then((value) async {
+          await UsersMeRepImpl().getUsersMe(UrlApi.usersMePath, token);
+          showToastSuccess(value.result!);
+        }).onError((error, stackTrace) {
+          log(error.toString());
+        });
+      }
     }
     notifyListeners();
   }
