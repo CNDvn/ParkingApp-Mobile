@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
@@ -54,9 +53,8 @@ class _CountTimeState extends State<CountTime> {
           children: [
             buildTime(),
             Container(
-                padding: const EdgeInsets.only(top: 20),
+                padding: EdgeInsets.only(top: size.height * 0.1),
                 child: SizedBox(
-                  width: size.width * 0.8,
                   child: ConfirmationSlider(onConfirmation: stopTimer),
                 ))
           ],

@@ -1,12 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/bookParking/count_time.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
-import 'package:slide_to_confirm/slide_to_confirm.dart';
 
 class TrackingCar extends StatelessWidget {
   const TrackingCar({Key? key}) : super(key: key);
@@ -14,7 +11,7 @@ class TrackingCar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    DateTime now = new DateTime.now();
+    DateTime now = DateTime.now();
     String formattedTime = DateFormat('KK:mm:a').format(now);
     return Scaffold(
         backgroundColor: AppColor.whiteBackground,
@@ -40,14 +37,15 @@ class TrackingCar extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 40),
                   child: Row(children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 40, right: 60),
+                      margin: EdgeInsets.only(
+                          left: size.width * 0.1, right: size.width * 0.06),
                       child: Text("Check-in Time: ",
                           style: TextStyle(
                               color: AppColor.greyText, fontSize: 17)),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(left: 60),
-                      child: Text('${formattedTime}',
+                      margin: EdgeInsets.only(left: size.width * 0.3),
+                      child: Text(formattedTime,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 17)),
                     ),
@@ -75,14 +73,6 @@ class TrackingCar extends StatelessWidget {
                       }),
                 ),
               ),
-              // Container(
-              //   padding: EdgeInsets.only(top: 30),
-              //   child: ConfirmationSlider(
-              //     onConfirmation: () {
-
-              //     },
-              //   ),
-              // )
             ],
           ),
         ));
