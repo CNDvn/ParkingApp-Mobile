@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/entity/image.dart';
+import 'package:parkingappmobile/view_model/providers/parking_detail_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 
 class ParkingDetail extends StatelessWidget {
   const ParkingDetail({
@@ -33,6 +37,8 @@ class ParkingDetail extends StatelessWidget {
     final List<Images> urlImagesDefault = [
       Images(url: 'https://i.ibb.co/0ZYrz1k/6bf25a7075ec.jpg')
     ];
+    ParkingDetailsProvider provider =
+        Provider.of<ParkingDetailsProvider>(context);
 
     bool status() {
       final op = DateTime(
@@ -256,8 +262,11 @@ class ParkingDetail extends StatelessWidget {
             ),
             ButtonDefault(
               width: size.width,
-              content: 'Continue',
-              voidCallBack: () => {},
+              content: 'Booking',
+              voidCallBack: () {
+                provider.addInformation(name, phoneNumber, address);
+                Navigator.pushReplacementNamed(context, "/TrackingCar");
+              },
             )
           ],
         ),

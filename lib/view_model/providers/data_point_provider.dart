@@ -3,10 +3,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
+import 'package:parkingappmobile/view/parkingDetail/parking_detail.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
   final String? value;
@@ -88,6 +92,7 @@ class MapProvider with ChangeNotifier {
   double zoomMap = 16.5;
   //-------------------------
   final List<LatLng> polyPoints = [];
+  // ignore: prefer_typing_uninitialized_variables
   var data;
 
   void getJsonData() async {
@@ -145,5 +150,26 @@ class MapProvider with ChangeNotifier {
     }
     Position pos = await Geolocator.getCurrentPosition();
     return LatLng(pos.latitude, pos.longitude);
+  }
+
+  void detailParking(BuildContext context, String? id) {
+    ParkingImpl()
+        .getParkingDetail(UrlApi.serverPath + "/parkings/$id")
+        .then((value) async {
+      await Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ParkingDetail(
+          name: value.result!.name,
+          images: value.result!.images,
+          parkingSlots: value.result!.parkingSlots,
+          address: value.result!.address,
+          openTime: value.result!.openTime,
+          closeTime: value.result!.closeTime,
+          username: value.result!.business.user!.fullName,
+          phoneNumber: value.result!.business.user!.phoneNumber,
+        );
+      }));
+    }).onError((error, stackTrace) {
+      log(error.toString());
+    });
   }
 }
