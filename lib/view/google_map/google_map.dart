@@ -44,9 +44,9 @@ class _GoogleMapState extends State<GoogleMap> {
             point:
                 LatLng(item.coordinates.latitude, item.coordinates.longitude),
             builder: (ctx) => SizedBox(
-                  width: 100,
-                  child: Icon(Icons.local_parking_sharp, color: Colors.blue[800])
-                ));
+                width: 100,
+                child:
+                    Icon(Icons.local_parking_sharp, color: Colors.blue[800])));
         list.addAll(tmp);
       }
       setState(() {
@@ -191,7 +191,7 @@ class _GoogleMapState extends State<GoogleMap> {
                           child: ButtonDefault(
                           content: "View Parking Detail",
                           voidCallBack: () {
-                            mapProvider.detailParking(context,id);
+                            mapProvider.detailParking(context, id);
                           },
                         ))
                       : Text(

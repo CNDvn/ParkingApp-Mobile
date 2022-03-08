@@ -164,6 +164,9 @@ class MapProvider with ChangeNotifier {
           address: value.result!.address,
           openTime: value.result!.openTime,
           closeTime: value.result!.closeTime,
+          slotFull: value.result!.slotFull,
+          slotEmpty: value.result!.slotEmpty,
+          priceLists: value.result!.priceLists,
           username: value.result!.business.user!.fullName,
           phoneNumber: value.result!.business.user!.phoneNumber,
         );
