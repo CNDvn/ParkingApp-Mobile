@@ -48,9 +48,9 @@ class _GoogleMapState extends State<GoogleMap> {
             point:
                 LatLng(item.coordinates.latitude, item.coordinates.longitude),
             builder: (ctx) => SizedBox(
-                  width: 100,
-                  child: Icon(Icons.local_parking_sharp, color: Colors.blue[800])
-                ));
+                width: 100,
+                child:
+                    Icon(Icons.local_parking_sharp, color: Colors.blue[800])));
         list.addAll(tmp);
       }
       setState(() {
@@ -89,8 +89,7 @@ class _GoogleMapState extends State<GoogleMap> {
     }
 
     return Scaffold(
-      body: markers.isEmpty ? const ProcessCircle() :
-      Stack(
+      body: Stack(
         children: [
           Column(children: [
             Flexible(
@@ -209,6 +208,9 @@ class _GoogleMapState extends State<GoogleMap> {
                                   address: value.result!.address,
                                   openTime: value.result!.openTime,
                                   closeTime: value.result!.closeTime,
+                                  slotFull: value.result!.slotFull,
+                                  slotEmpty: value.result!.slotEmpty,
+                                  priceLists: value.result!.priceLists,
                                   username:
                                       value.result!.business.user!.fullName,
                                   phoneNumber:
