@@ -25,6 +25,7 @@ class ImageRepImpl implements ImageRepo {
       result = ImageRes.imageResFromJson(jsonEncode(response.data));
       final SecureStorage secureStorage = SecureStorage();
       await secureStorage.writeSecureData("imageID", result.result!.id);
+      await secureStorage.writeSecureData("displayUrl", result.result!.displayUrl);
     } on DioError catch (e) {
       showToastFail(e.response?.data["message"]);
     }

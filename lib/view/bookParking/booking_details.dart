@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/configs/themes/app_text_style.dart';
+import 'package:parkingappmobile/constants/assets_path.dart';
+import 'package:parkingappmobile/view/userProfile/user_profile.dart';
+import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
+import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -10,14 +18,56 @@ class BookingDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    BookingDetailProvider providerBooking =
+        Provider.of<BookingDetailProvider>(context);
+    UserProfileProvider userProvider =
+        Provider.of<UserProfileProvider>(context);
     return Scaffold(
+        key: scaffoldKey,
         drawer: const DrawerDefault(),
-        appBar: AppBar(),
         body: SingleChildScrollView(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                          child: IconButton(
+                        icon: const Icon(
+                          Icons.menu,
+                          color: Colors.black87,
+                        ),
+                        onPressed: () {
+                          scaffoldKey.currentState!.openDrawer();
+                        },
+                      )),
+                      SizedBox(
+                        child: ClipOval(
+                          child: Material(
+                            color: AppColor.blueBackground,
+                            child: InkWell(
+                              splashColor: AppColor.whiteBackground,
+                              onTap: () {
+                                userProvider.getProfile();
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return const UserProfile();
+                                }));
+                              },
+                              child: SizedBox(
+                                  width: 32,
+                                  height: 32,
+                                  child: Image.asset(AssetPath.profilePhoto)),
+                            ),
+                          ),
+                        ),
+                      )
+                    ]),
+              ),
               Container(
                 margin: const EdgeInsets.only(
                     top: 30, left: 30, right: 30, bottom: 20),
@@ -42,20 +92,9 @@ class BookingDetails extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        const Text(
-                          "Lekki Gardens Car Park A   ",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          " Space 4c",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.blueText),
-                        ),
+                        Text(providerBooking.parkingName,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.h2Black),
                       ],
                     ),
                   ],
@@ -89,8 +128,8 @@ class BookingDetails extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(
                     top: 20, left: 30, right: 30, bottom: 20),
-                height: 200,
-                width: 342,
+                height: size.height * 0.4,
+                width: size.width * 0.8,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: const BorderRadius.all(Radius.circular(6)),
@@ -104,91 +143,136 @@ class BookingDetails extends StatelessWidget {
                   ],
                 ),
                 child: Container(
-                  margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                  margin: EdgeInsets.only(top: size.width * 0.05),
                   child: Column(
                     children: <Widget>[
-                      const Text(
-                        "Booking Details",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                      Container(
+                        margin: EdgeInsets.zero,
+                        child: Text(
+                          "Booking Details",
+                          textAlign: TextAlign.start,
+                          style: AppTextStyles.h3black,
+                        ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 15),
+                        margin: EdgeInsets.only(top: size.height * 0.01),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(right: 50),
+                            SizedBox(
                               child: Text(
-                                "Check-in Time:",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    fontSize: 16, color: AppColor.greyText),
+                                "Booking Time:",
+                                textAlign: TextAlign.left,
+                                style: AppTextStyles.h4black,
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 50),
-                              child: Text(
-                                "11:00 am",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppColor.blackText,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
+                            SizedBox(
+                              child: Text(providerBooking.bookingTime,
+                                  textAlign: TextAlign.end,
+                                  style: AppTextStyles.h4black),
+                            ),
                           ],
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 15),
+                        margin: EdgeInsets.only(top: size.height * 0.01),
                         child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                child: Text(
+                                  "Check-in Time:",
+                                  textAlign: TextAlign.left,
+                                  style: AppTextStyles.h4black,
+                                ),
+                              ),
+                              SizedBox(
+                                child: Text(providerBooking.timeCheckIn,
+                                    textAlign: TextAlign.end,
+                                    style: AppTextStyles.h4black),
+                              )
+                            ]),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: size.height * 0.01),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(right: 48),
+                            SizedBox(
                               child: Text(
                                 "Check-out Time (Est):",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    fontSize: 16, color: AppColor.greyText),
+                                textAlign: TextAlign.left,
+                                style: AppTextStyles.h4black,
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 5),
+                            SizedBox(
                               child: Text(
-                                "05:00 pm",
+                                providerBooking.timeCheckOut,
                                 textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppColor.blackText,
-                                    fontWeight: FontWeight.bold),
+                                style: AppTextStyles.h4black,
                               ),
                             )
                           ],
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 15),
+                        margin: EdgeInsets.only(top: size.height * 0.01),
                         child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                child: Text(
+                                  "Parking Time:",
+                                  textAlign: TextAlign.left,
+                                  style: AppTextStyles.h4black,
+                                ),
+                              ),
+                              SizedBox(
+                                child: Text(providerBooking.parkingTime,
+                                    textAlign: TextAlign.end,
+                                    style: AppTextStyles.h4black),
+                              )
+                            ]),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: size.height * 0.01),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(right: 50),
+                            SizedBox(
                               child: Text(
-                                "Specifications",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    fontSize: 16, color: AppColor.greyText),
+                                "Promotion:",
+                                textAlign: TextAlign.left,
+                                style: AppTextStyles.h4black,
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 60),
+                            SizedBox(
                               child: Text(
-                                "None",
+                                providerBooking.promotion,
                                 textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppColor.blackText,
-                                    fontWeight: FontWeight.bold),
+                                style: AppTextStyles.h4black,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: size.height * 0.01),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              child: Text(
+                                "Total:",
+                                textAlign: TextAlign.left,
+                                style: AppTextStyles.h4black,
+                              ),
+                            ),
+                            SizedBox(
+                              child: Text(
+                                providerBooking.total,
+                                textAlign: TextAlign.end,
+                                style: AppTextStyles.h4black,
                               ),
                             )
                           ],
@@ -199,7 +283,7 @@ class BookingDetails extends StatelessWidget {
                 ),
               ),
               Container(
-                margin:const EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -1,16 +1,40 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/input_date/input_date.dart';
+import 'package:parkingappmobile/widgets/upload_image/upload_image.dart';
 import 'package:provider/provider.dart';
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
 
   @override
+  State<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
+  @override
   Widget build(BuildContext context) {
     UserProfileProvider provider = Provider.of<UserProfileProvider>(context);
+
+    Future pickImage(ImageSource source) async {
+      try {
+        final image = await ImagePicker().pickImage(source: source);
+        if (image == null) return;
+        final imageTemporary = File(image.path);
+        setState(() {
+          provider.image = imageTemporary;
+        });
+      } catch (e) {
+        log("Failed to pick image: $e");
+      }
+    }
+
     Size size = MediaQuery.of(context).size;
     double sizeHeightInput = size.height * 0.12;
     return Scaffold(
@@ -57,15 +81,38 @@ class UserProfile extends StatelessWidget {
                 ],
               ),
             ),
-            Center(
-                child: ClipRRect(
+            UploadImage(
+                widget: ClipRRect(
                     borderRadius: BorderRadius.circular(100 / 2),
-                    child: Image.asset(
-                      AssetPath.profilePhoto,
-                      height: 100.0,
-                      width: 100.0,
-                    ))),
+                    child: provider.image != null
+                        ? Image.file(
+                            provider.image!,
+                            fit: BoxFit.cover,
+                            width: 100,
+                            height: 100,
+                          )
+                        : (provider.avatarSto != null
+                            ? Image.network(
+                                provider.avatarSto!,
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
+                              )
+                            : const Image(
+                                image: AssetImage(AssetPath.defaultAvatar),
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
+                              ))),
+                pickImage: pickImage,
+                removeImage: () {
+                  setState(() {
+                    provider.image = null;
+                    provider.avatarSto = null;
+                  });
+                }),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
                   height: size.height * 0.12,
@@ -94,11 +141,8 @@ class UserProfile extends StatelessWidget {
                       }),
                 ),
                 SizedBox(
-                  width: size.width * 0.05,
-                ),
-                SizedBox(
                   height: size.height * 0.12,
-                  width: size.width - (40 + size.width * 0.55),
+                  width: size.width - (40 + size.width * 0.555),
                   child: TextField(
                       decoration: InputDecoration(
                           suffixIcon:
@@ -205,7 +249,7 @@ class UserProfile extends StatelessWidget {
               child: ButtonDefault(
                 width: size.width,
                 content: 'Save',
-                voidCallBack: () => {provider.submit()},
+                voidCallBack: () => {provider.submit(context)},
               ),
             )
           ],

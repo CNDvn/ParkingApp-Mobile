@@ -6,6 +6,7 @@ import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
+import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:provider/provider.dart';
 
 class DrawerDefault extends StatelessWidget {
@@ -16,6 +17,8 @@ class DrawerDefault extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     double sizeImage = size.width * 0.08;
     SignInProvider signInProvider = Provider.of<SignInProvider>(context);
+    UserProfileProvider userProvider =
+        Provider.of<UserProfileProvider>(context);
     return Drawer(
       backgroundColor: AppColor.whiteBackground,
       child: ListView(
@@ -37,11 +40,17 @@ class DrawerDefault extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: size.width * 0.1,
-                  child: Image.asset(AssetPath.profilePhoto),
+                  child: userProvider.avatarSto != null
+                      ? Image.network(userProvider.avatarSto!)
+                      : Image.asset(AssetPath.defaultAvatar),
                   backgroundColor: AppColor.whiteBackground,
                 ),
                 TextButton(
-                  child: Text("Meo` 4`", style: AppTextStyles.h2Black),
+                  child: Text(
+                      userProvider.fullNameSto != null
+                          ? userProvider.fullNameSto!
+                          : "Meo` 4`",
+                      style: AppTextStyles.h2Black),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -67,8 +76,7 @@ class DrawerDefault extends StatelessWidget {
               'Payment methods',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: Image.asset(
@@ -80,8 +88,7 @@ class DrawerDefault extends StatelessWidget {
               'Parking History',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: Image.asset(
@@ -93,8 +100,7 @@ class DrawerDefault extends StatelessWidget {
               "Promotion code",
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {
-            },
+            onTap: () {},
           ),
           const Divider(
             indent: 20,
@@ -110,8 +116,7 @@ class DrawerDefault extends StatelessWidget {
               'Support',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: Image.asset(
@@ -123,8 +128,7 @@ class DrawerDefault extends StatelessWidget {
               'Setting',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {
-            },
+            onTap: () {},
           ),
           const Divider(
             indent: 20,
