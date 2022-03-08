@@ -1,3 +1,5 @@
+import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
+import 'package:parkingappmobile/view_model/providers/parking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/providers/enter_change_password_provider.dart';
 import 'package:parkingappmobile/view_model/providers/enter_password_provider.dart';
@@ -5,6 +7,7 @@ import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/reset_password_provider.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/view_model/providers/sign_up_provider.dart';
+import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -35,6 +38,15 @@ class MainProviders {
     ),
     ChangeNotifierProvider<MyCarProvider>(
       create: (context) => MyCarProvider(),
-    )
+    ),
+    ChangeNotifierProvider<ParkingDetailsProvider>(
+      create: (context) => ParkingDetailsProvider(),
+    ),
+    ChangeNotifierProvider<TrackingCarProvider>(
+      create: (context) => TrackingCarProvider(),
+    ),
+    ChangeNotifierProvider<BookingDetailProvider>(
+      create: (context) => BookingDetailProvider(),
+    ),
   ];
 }
