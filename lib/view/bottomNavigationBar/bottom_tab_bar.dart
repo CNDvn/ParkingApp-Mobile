@@ -71,7 +71,6 @@ class _BottomTabBarState extends State<BottomTabBar> {
             SizedBox(
               child: ClipOval(
                 child: Material(
-                  color: AppColor.blueBackground,
                   child: InkWell(
                     splashColor: AppColor.whiteBackground,
                     onTap: () {
@@ -84,7 +83,9 @@ class _BottomTabBarState extends State<BottomTabBar> {
                     child: SizedBox(
                         width: 32,
                         height: 32,
-                        child: Image.asset(AssetPath.profilePhoto)),
+                        child: userProvider.avatarSto != null
+                            ? Image.network(userProvider.avatarSto!)
+                            : Image.asset(AssetPath.defaultAvatar)),
                   ),
                 ),
               ),

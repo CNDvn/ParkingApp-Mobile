@@ -11,9 +11,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
+import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
+import 'package:provider/provider.dart';
 
 class ValidationItem {
   final String? value;
@@ -105,6 +107,8 @@ class SignInProvider with ChangeNotifier {
   }
 
   void submitData(BuildContext context) {
+    UserProfileProvider userProvider =
+        Provider.of<UserProfileProvider>(context, listen: false);
     submitValid = _phone.error != null ||
         _password.error != null ||
         _phone.value == null ||
@@ -124,15 +128,19 @@ class SignInProvider with ChangeNotifier {
                   role: "customer"))
           .then((value) async {
         await secureStorage.writeSecureData("token", value.result!.accessToken);
-        await secureStorage.writeSecureData("customer", value.result!.refreshToken);
+        await secureStorage.writeSecureData(
+            "customer", value.result!.refreshToken);
+        await UsersMeRepImpl()
+            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken)
+            .then((value) async {
+          userProvider.getProfile();
+          await Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const BottomTabBar();
+          }));
+        });
+        showToastSuccess(value.result!.message);
         clearPhoneController();
         clearPasswordController();
-        UsersMeRepImpl()
-            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
-        showToastSuccess(value.result!.message);
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const BottomTabBar();
-        }));
       }).onError((error, stackTrace) {
         log(error.toString());
         Navigator.pushReplacementNamed(context, "/");
@@ -161,10 +169,13 @@ class SignInProvider with ChangeNotifier {
         await secureStorage.writeSecureData("avatar", user.photoURL ?? "");
         String token = await user.getIdToken();
         AuthRepImpl()
-            .postLoginGoogle(UrlApi.loginGooglePath, LoginGgReq(token: token), context)
+            .postLoginGoogle(
+                UrlApi.loginGooglePath, LoginGgReq(token: token), context)
             .then((value) async {
-        await  secureStorage.writeSecureData("token", value.result!.accessToken);
-        await  secureStorage.writeSecureData("customer", value.result!.refreshToken);
+          await secureStorage.writeSecureData(
+              "token", value.result!.accessToken);
+          await secureStorage.writeSecureData(
+              "customer", value.result!.refreshToken);
           UsersMeRepImpl()
               .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
           showToastSuccess(value.result!.message);

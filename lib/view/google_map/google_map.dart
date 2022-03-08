@@ -85,8 +85,7 @@ class _GoogleMapState extends State<GoogleMap> {
     }
 
     return Scaffold(
-      body:
-      Stack(
+      body: Stack(
         children: [
           Column(children: [
             Flexible(

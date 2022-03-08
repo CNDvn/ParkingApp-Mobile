@@ -18,6 +18,7 @@ class UsersMeRepImpl implements UsersMeRepo {
           }));
       dataUsersMe = UsersMeRes.usersMeResFromJson(jsonEncode(response.data));
       final SecureStorage secureStorage = SecureStorage();
+      await secureStorage.writeSecureData("avatar", dataUsersMe.result!.avatar);
       await secureStorage.writeSecureData("fullname", dataUsersMe.result!.fullName);
       await secureStorage.writeSecureData("firstName", dataUsersMe.result!.firstName);
       await secureStorage.writeSecureData("lastName", dataUsersMe.result!.lastName);
