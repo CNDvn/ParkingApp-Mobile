@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -13,11 +11,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:parkingappmobile/model/entity/parking.dart';
 import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
-import 'package:parkingappmobile/view/parkingDetail/parking_detail.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
-import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -89,7 +85,7 @@ class _GoogleMapState extends State<GoogleMap> {
     }
 
     return Scaffold(
-      body: markers.isEmpty ? const ProcessCircle() :
+      body:
       Stack(
         children: [
           Column(children: [
@@ -196,28 +192,7 @@ class _GoogleMapState extends State<GoogleMap> {
                           child: ButtonDefault(
                           content: "View Parking Detail",
                           voidCallBack: () {
-                            ParkingImpl()
-                                .getParkingDetail(
-                                    UrlApi.serverPath + "/parkings/$id")
-                                .then((value) async {
-                              await Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return ParkingDetail(
-                                  name: value.result!.name,
-                                  images: value.result!.images,
-                                  parkingSlots: value.result!.parkingSlots,
-                                  address: value.result!.address,
-                                  openTime: value.result!.openTime,
-                                  closeTime: value.result!.closeTime,
-                                  username:
-                                      value.result!.business.user!.fullName,
-                                  phoneNumber:
-                                      value.result!.business.user!.phoneNumber,
-                                );
-                              }));
-                            }).onError((error, stackTrace) {
-                              log(error.toString());
-                            });
+                            mapProvider.detailParking(context,id);
                           },
                         ))
                       : Text(
