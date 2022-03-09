@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/model/entity/image.dart';
 import 'package:parkingappmobile/model/response/parking_detail_res.dart';
+import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view_model/providers/parking_detail_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/carousel_slider/carousel_slider.dart';
@@ -91,7 +93,9 @@ class ParkingDetail extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start, 
+            children: [
               SizedBox(
                   child: IconButton(
                 icon: const Icon(
@@ -143,252 +147,254 @@ class ParkingDetail extends StatelessWidget {
               child: Container(
                 height: size.height * 0.35,
                 margin: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Address:",
-                          style:
-                              TextStyle(fontSize: 16, color: AppColor.greyText),
-                        ),
-                        SizedBox(
-                          width: size.width * 0.58,
-                          child: Text(
-                            address,
-                            maxLines: 5,
-                            overflow: TextOverflow.ellipsis,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Address:",
+                            style:
+                                TextStyle(fontSize: 16, color: AppColor.greyText),
+                          ),
+                          SizedBox(
+                            width: size.width * 0.58,
+                            child: Text(
+                              address,
+                              maxLines: 5,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColor.blackText,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Status:",
+                            style:
+                                TextStyle(fontSize: 16, color: AppColor.greyText),
+                          ),
+                          Text(
+                            status() ? "Open" : "Close",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: status()
+                                    ? AppColor.greenToast
+                                    : AppColor.redToast,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                                text: "Open Time: ",
+                                style: TextStyle(
+                                    fontSize: 16, color: AppColor.greyText),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: openTime!.substring(0, 5),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: AppColor.blackText,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                text: "Close Time: ",
+                                style: TextStyle(
+                                    fontSize: 16, color: AppColor.greyText),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: closeTime!.substring(0, 5),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: AppColor.blackText,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Slots:",
+                            style:
+                                TextStyle(fontSize: 16, color: AppColor.greyText),
+                          ),
+                          Text(
+                            parkingSlots.length.toString(),
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: AppColor.greenToast,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                                text: "Slot Full: ",
+                                style: TextStyle(
+                                    fontSize: 16, color: AppColor.greyText),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: slotFull.toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: AppColor.redToast,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                text: "Slot Empty: ",
+                                style: TextStyle(
+                                    fontSize: 16, color: AppColor.greyText),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: slotEmpty.toString(),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: AppColor.greenToast,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ]),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    content: SingleChildScrollView(
+                                      child: SizedBox(
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              priceLists[checkStatusPriceList()].name,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: AppColor.blackText,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            for (var detail
+                                                in priceLists[checkStatusPriceList()]
+                                                    .priceListDetails)
+                                              Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        detail.typeCar.name,
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: AppColor.redToast),
+                                                      ),
+                                                      Text(
+                                                        format
+                                                                .format(double.parse(
+                                                                    detail.price.substring(
+                                                                        0,
+                                                                        detail.price
+                                                                                .length -
+                                                                            4)))
+                                                                .toString() +
+                                                            " VND",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color:
+                                                                AppColor.greenToast,
+                                                            fontWeight:
+                                                                FontWeight.bold),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Close'),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: const Text("Show Price List")),
+                        ],
+                      ),
+                      Divider(color: AppColor.greyText),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Owner:",
+                            style:
+                                TextStyle(fontSize: 16, color: AppColor.greyText),
+                          ),
+                          Text(
+                            username,
                             style: TextStyle(
                                 fontSize: 16,
                                 color: AppColor.blackText,
                                 fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Hotline:",
+                            style:
+                                TextStyle(fontSize: 16, color: AppColor.greyText),
                           ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Status:",
-                          style:
-                              TextStyle(fontSize: 16, color: AppColor.greyText),
-                        ),
-                        Text(
-                          status() ? "Open" : "Close",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: status()
-                                  ? AppColor.greenToast
-                                  : AppColor.redToast,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                              text: "Open Time: ",
-                              style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: openTime!.substring(0, 5),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColor.blackText,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ]),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              text: "Close Time: ",
-                              style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: closeTime!.substring(0, 5),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColor.blackText,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ]),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Slots:",
-                          style:
-                              TextStyle(fontSize: 16, color: AppColor.greyText),
-                        ),
-                        Text(
-                          parkingSlots.length.toString(),
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: AppColor.greenToast,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                              text: "Slot Full: ",
-                              style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: slotFull.toString(),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColor.redToast,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ]),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              text: "Slot Empty: ",
-                              style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: slotEmpty.toString(),
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColor.greenToast,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ]),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  content: SingleChildScrollView(
-                                    child: SizedBox(
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            priceLists[checkStatusPriceList()].name,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: AppColor.blackText,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          for (var detail
-                                              in priceLists[checkStatusPriceList()]
-                                                  .priceListDetails)
-                                            Column(
-                                              children: [
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      detail.typeCar.name,
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color: AppColor.redToast),
-                                                    ),
-                                                    Text(
-                                                      format
-                                                              .format(double.parse(
-                                                                  detail.price.substring(
-                                                                      0,
-                                                                      detail.price
-                                                                              .length -
-                                                                          4)))
-                                                              .toString() +
-                                                          " VND",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          color:
-                                                              AppColor.greenToast,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Close'),
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
-                            child: const Text("Show Price List")),
-                      ],
-                    ),
-                    Divider(color: AppColor.greyText),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Owner:",
-                          style:
-                              TextStyle(fontSize: 16, color: AppColor.greyText),
-                        ),
-                        Text(
-                          username,
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: AppColor.blackText,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Hotline:",
-                          style:
-                              TextStyle(fontSize: 16, color: AppColor.greyText),
-                        ),
-                        Text(
-                          phoneNumber,
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: AppColor.redToast,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ],
+                          Text(
+                            phoneNumber,
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: AppColor.redToast,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -402,7 +408,10 @@ class ParkingDetail extends StatelessWidget {
                 provider.addInformation(name, phoneNumber, address);
                 Navigator.pushReplacementNamed(context, "/TrackingCar");
               },
-            )
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),             
           ],
         ),
       )),

@@ -265,7 +265,7 @@ class PriceList {
         "name": name,
         "status": status,
         "priceListDetails":
-            List<dynamic>.from(priceListDetails!.map((x) => x.toJson())),
+            List<dynamic>.from(priceListDetails.map((x) => x.toJson())),
       };
 }
 
@@ -290,6 +290,6 @@ class PriceListDetail {
   Map<String, dynamic> toJson() => {
         "id": id,
         "price": price,
-        "typeCar": typeCar?.toJson(),
+        "typeCar": typeCar.toJson(),
       };
 }
