@@ -12,7 +12,9 @@ import 'package:provider/provider.dart';
 
 class CreateCar extends StatefulWidget {
   final List<Result>? typeCars;
-  const CreateCar({Key? key, required this.typeCars}) : super(key: key);
+  final bool isUpdate;
+  const CreateCar({Key? key, required this.typeCars, required this.isUpdate})
+      : super(key: key);
 
   @override
   State<CreateCar> createState() => _CreateCarState();
@@ -53,12 +55,12 @@ class _CreateCarState extends State<CreateCar> {
                 child: Row(
                   children: [
                     Expanded(flex: 2, child: Container()),
-                    const Expanded(
+                    Expanded(
                       flex: 6,
                       child: Text(
-                        "Create New Car",
+                        widget.isUpdate ? "Detail Car" : "Create New Car",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 18,
                             height: 1.6),
