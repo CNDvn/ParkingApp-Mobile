@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
+import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/parking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
@@ -74,7 +75,8 @@ class _TrackingCarState extends State<TrackingCar> {
       var toalTime = timer?.tick;
       log(toalTime.toString());
       pauseTime = toalTime.toString();
-      providerTracking.addInformation(formattedTime, '$hours:$minutes:$seconds');
+      providerTracking.addInformation(
+          formattedTime, '$hours:$minutes:$seconds');
       providerTracking.insertStorage();
       log(providerTracking.bookingTime);
       providerBooking.getInformation();
@@ -148,7 +150,18 @@ class _TrackingCarState extends State<TrackingCar> {
                                       width: size.width * 0.8,
                                       child: ConfirmationSlider(
                                           onConfirmation: stopTimer),
-                                    ))
+                                    )),
+                                GestureDetector(
+                                    child: Text(
+                                      "Go back Home",
+                                      style: AppTextStyles.h4black,
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return const BottomTabBar();
+                                      }));
+                                    }),
                               ],
                             )));
                       }),
