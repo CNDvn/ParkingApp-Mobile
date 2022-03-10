@@ -4,13 +4,14 @@ import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -22,52 +23,14 @@ class BookingDetails extends StatelessWidget {
         Provider.of<BookingDetailProvider>(context);
     UserProfileProvider userProvider =
         Provider.of<UserProfileProvider>(context);
+    MyCarProvider providerCar =
+        Provider.of<MyCarProvider>(context);
     return Scaffold(
-        key: scaffoldKey,
-        drawer: const DrawerDefault(),
         body: SingleChildScrollView(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          child: IconButton(
-                        icon: const Icon(
-                          Icons.menu,
-                          color: Colors.black87,
-                        ),
-                        onPressed: () {
-                          scaffoldKey.currentState!.openDrawer();
-                        },
-                      )),
-                      SizedBox(
-                        child: ClipOval(
-                          child: Material(
-                            color: AppColor.blueBackground,
-                            child: InkWell(
-                              splashColor: AppColor.whiteBackground,
-                              onTap: () {
-                                userProvider.getProfile();
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return const UserProfile();
-                                }));
-                              },
-                              child: SizedBox(
-                                  width: 32,
-                                  height: 32,
-                                  child: Image.asset(AssetPath.profilePhoto)),
-                            ),
-                          ),
-                        ),
-                      )
-                    ]),
-              ),
+                children: [              
               Container(
                 margin: const EdgeInsets.only(
                     top: 30, left: 30, right: 30, bottom: 20),
@@ -110,13 +73,13 @@ class BookingDetails extends StatelessWidget {
                 children: [
                   SizedBox(
                     child: Text(
-                      "Unique ID: ",
+                      "N°Plate:  ",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: AppColor.blackText, fontSize: 17),
                     ),
                   ),
                   SizedBox(
-                    child: Text("CPA-0129",
+                    child: Text(providerCar.firstCar,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: AppColor.blackText,
@@ -282,35 +245,37 @@ class BookingDetails extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      child: Text(
-                        "Don’t know the route? ",
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: AppColor.greyText, fontSize: 16),
-                      ),
-                    ),
-                    SizedBox(
-                      child: Text(
-                        "Get Directions ",
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: AppColor.blueText, fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   margin: const EdgeInsets.only(bottom: 10),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       SizedBox(
+              //         child: Text(
+              //           "Don’t know the route? ",
+              //           textAlign: TextAlign.center,
+              //           style:
+              //               TextStyle(color: AppColor.greyText, fontSize: 16),
+              //         ),
+              //       ),
+              //       SizedBox(
+              //         child: Text(
+              //           "Get Directions ",
+              //           textAlign: TextAlign.center,
+              //           style:
+              //               TextStyle(color: AppColor.blueText, fontSize: 16),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                   height: size.height * 0.08,
                   width: size.width * 0.85,
                   child: ButtonDefault(
-                      content: "Go Back to Home Screen", voidCallBack: () {}))
+                      content: "Go Back to Home Screen", voidCallBack: () {
+                        Navigator.pushReplacementNamed(context, "/");
+                      }))
             ])));
   }
 }

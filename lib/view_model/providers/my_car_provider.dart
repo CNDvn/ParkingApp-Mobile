@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/base/base_validation.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
+import 'package:parkingappmobile/model/entity/car.dart';
 import 'package:parkingappmobile/model/request/create_car_req.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/image_rep_impl.dart';
@@ -175,5 +176,33 @@ class MyCarProvider with ChangeNotifier {
         log(error.toString());
       });
     }
+  }
+
+  Map<String, Car> listMyCar = Map<String, Car>();
+  List<String> cars = [];
+  String firstCar = "";
+  String key = "";
+  getMyCar() async {
+    String accessToken = await secureStorage.readSecureData("token");
+    List<Car>? myCars = [];
+    CarRepImpl().getMyCar(UrlApi.userCar, accessToken).then((value) {
+      myCars= value.result;
+      for (var item in myCars!) {
+        Map<String, Car> tmp = Map<String, Car>();
+        tmp[item.id!] = item;
+        listMyCar.addAll(tmp);
+        cars.add(item.nPlates!);
+      }
+      firstCar = cars[0];
+    });
+  }
+
+  getIdCar () {
+    listMyCar.forEach((key, value) { 
+      if (firstCar.contains(value.nPlates!)) {
+        this.key = key;
+        secureStorage.writeSecureData("idCar", this.key);
+      }
+    });
   }
 }

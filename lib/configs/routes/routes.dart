@@ -6,6 +6,7 @@ import 'package:parkingappmobile/view/bookParking/tracking_car.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/bookParking/booking_details.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
+import 'package:parkingappmobile/view/password/enter_newpassword.dart';
 import 'package:parkingappmobile/view/qr_code/qr_code.dart';
 import 'package:parkingappmobile/view/sign_up/enter_password.dart';
 import 'package:parkingappmobile/view/sign_up/sign_up_page.dart';
@@ -16,13 +17,13 @@ import 'package:parkingappmobile/view/viewPark/view_park.dart';
 class Routes {
   static final Map<String, Widget Function(BuildContext)> routes = {
     // "/": (context) => const Welcome(),
-    // "/": (context) => const SignInPage(),    
+    "/": (context) => const SignInPage(),    
     //SignUp
     "/SignUpPage": (context) => const SignUpPage(),
     "/EnterPassword": (context) => const EnterPassword(),
     "/EnterVerificationCode": (context) => const EnterVerificationCode(),
     //Map
-    "/": (context) => const BottomTabBar(),
+    "/BottomTabBar": (context) => const BottomTabBar(),
     "/UserProfile": (context) => const UserProfile(),
     "/ViewPark": (context) => const ViewPark(),
     "/TrackingCar": (context) => const TrackingCar(),
@@ -32,6 +33,8 @@ class Routes {
     "/BookSpace": (context) => const BookSpace(),
     "/BookingDetails": (context) => const BookingDetails(),
     "/SelectParkingSpace": (context) => const SelectParkingSpace(),
-    "/SuccessfulBooking": (context) => const SuccessfulBooking()
+    "/SuccessfulBooking": (context) => const SuccessfulBooking(),
+    //Auth
+    "/EnterChangePassword": (context) => const EnterChangePassword(),
   };
 }

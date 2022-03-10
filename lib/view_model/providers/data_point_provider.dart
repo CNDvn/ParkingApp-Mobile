@@ -91,9 +91,10 @@ class MapProvider with ChangeNotifier {
   List<Address> location = [];
   double zoomMap = 16.5;
   //-------------------------
-  final List<LatLng> polyPoints = [];
+  List<LatLng> polyPoints = [];
   // ignore: prefer_typing_uninitialized_variables
   var data;
+  String? id;
 
   void getJsonData() async {
     polyPoints.clear();
@@ -122,9 +123,17 @@ class MapProvider with ChangeNotifier {
     }
   }
 
+  reset() async {
+    mapController = MapController();
+    // LatLng pos = await determinePosition();
+    // point = pos;
+    getJsonData();
+    notifyListeners();
+  }
+
   Future<void> updatePosition() async {
     LatLng pos = await determinePosition();
-    point = pos;
+    point = pos;    
     mapController.move(point, zoomMap);
     getJsonData();
     notifyListeners();

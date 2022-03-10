@@ -22,7 +22,6 @@ class QRCodePage extends StatefulWidget {
 }
 
 class _QRCodePageState extends State<QRCodePage> {
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -41,54 +40,10 @@ class _QRCodePageState extends State<QRCodePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    UserProfileProvider userProvider =
-        Provider.of<UserProfileProvider>(context);
     return Scaffold(
-      key: scaffoldKey,
-      drawer: const DrawerDefault(),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
-            Column(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          child: IconButton(
-                        icon: const Icon(
-                          Icons.menu,
-                          color: Colors.black87,
-                        ),
-                        onPressed: () {
-                          scaffoldKey.currentState!.openDrawer();
-                        },
-                      )),
-                      SizedBox(
-                        child: ClipOval(
-                          child: Material(
-                            color: AppColor.blueBackground,
-                            child: InkWell(
-                              splashColor: AppColor.whiteBackground,
-                              onTap: () {
-                                userProvider.getProfile();
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return const UserProfile();
-                                }));
-                              },
-                              child: SizedBox(
-                                  width: 32,
-                                  height: 32,
-                                  child: Image.asset(AssetPath.profilePhoto)),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ]),
-              ),
-            ]),
+          children: <Widget>[            
             Column(children: [
               SizedBox(
                 child: Text(

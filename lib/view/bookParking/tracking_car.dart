@@ -8,6 +8,8 @@ import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/parking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
@@ -43,6 +45,12 @@ class _TrackingCarState extends State<TrackingCar> {
     });
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   void startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
@@ -67,6 +75,8 @@ class _TrackingCarState extends State<TrackingCar> {
         Provider.of<TrackingCarProvider>(context);
     BookingDetailProvider providerBooking =
         Provider.of<BookingDetailProvider>(context);
+    MyCarProvider providerCar = Provider.of<MyCarProvider>(context);
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
 
     stopTimer() {
       setState(() {
@@ -121,6 +131,9 @@ class _TrackingCarState extends State<TrackingCar> {
                   ]),
                 ),
               ),
+              SizedBox(
+                child: Text(providerCar.firstCar),
+              ),
               SizedBox(child: Image.asset(AssetPath.car)),
               SizedBox(
                 child: Container(
@@ -151,17 +164,19 @@ class _TrackingCarState extends State<TrackingCar> {
                                       child: ConfirmationSlider(
                                           onConfirmation: stopTimer),
                                     )),
-                                GestureDetector(
-                                    child: Text(
-                                      "Go back Home",
-                                      style: AppTextStyles.h4black,
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return const BottomTabBar();
-                                      }));
-                                    }),
+                                SizedBox(height: size.height*0.05,),
+                                SizedBox(
+                                  child: GestureDetector(
+                                      child: Text(
+                                        "Go back Home",
+                                        style: AppTextStyles.h3black,
+                                      ),
+                                      onTap: () {
+                                        mapProvider.reset();
+                                        Navigator.pushNamedAndRemoveUntil(context,
+                                            "/BottomTabBar", (route) => false);
+                                      }),
+                                ),
                               ],
                             )));
                       }),

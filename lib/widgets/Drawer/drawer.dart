@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
@@ -15,7 +13,7 @@ class DrawerDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double sizeImage = size.width * 0.08;
+    double sizeImage = size.width * 0.1;
     SignInProvider signInProvider = Provider.of<SignInProvider>(context);
     UserProfileProvider userProvider =
         Provider.of<UserProfileProvider>(context);
@@ -31,7 +29,7 @@ class DrawerDefault extends StatelessWidget {
                     Container(
                         margin: const EdgeInsets.fromLTRB(20, 30, 0, 0),
                         child: IconButton(
-                          icon: Image.asset(AssetPath.close),
+                          icon: const Icon(Icons.arrow_back),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -49,7 +47,7 @@ class DrawerDefault extends StatelessWidget {
                   child: Text(
                       userProvider.fullNameSto != null
                           ? userProvider.fullNameSto!
-                          : "Meo` 4`",
+                          : "Parking App",
                       style: AppTextStyles.h2Black),
                   onPressed: () {
                     Navigator.push(
@@ -67,32 +65,40 @@ class DrawerDefault extends StatelessWidget {
             endIndent: 20,
           ),
           ListTile(
-            leading: Image.asset(
-              AssetPath.creditCardPayment,
+            leading: 
+            Image.asset(
+              AssetPath.changePassword,
               width: sizeImage,
               height: sizeImage,
-            ),
+            )
+            ,
             title: const Text(
-              'Payment methods',
+              'Change Password',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, "/EnterChangePassword");
+            },
+          ),
+          ListTile(
+            leading: 
+            Image.asset(
+              AssetPath.carBookingTime,
+              width: sizeImage,
+              height: sizeImage,
+            )
+            ,
+            title: const Text(
+              'Car in Parking',
+              style: TextStyle(fontWeight: FontWeight.w900),
+            ),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, "/TrackingCar");
+            },
           ),
           ListTile(
             leading: Image.asset(
-              AssetPath.history,
-              width: sizeImage,
-              height: sizeImage,
-            ),
-            title: const Text(
-              'Parking History',
-              style: TextStyle(fontWeight: FontWeight.w900),
-            ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Image.asset(
-              AssetPath.promotions,
+              AssetPath.promotion,
               width: sizeImage,
               height: sizeImage,
             ),
@@ -108,19 +114,21 @@ class DrawerDefault extends StatelessWidget {
           ),
           ListTile(
             leading: Image.asset(
-              AssetPath.customerService,
+              AssetPath.qscanCode,
               width: sizeImage,
               height: sizeImage,
             ),
             title: const Text(
-              'Support',
+              'QScan Code',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, "/QRCodePage");
+            },
           ),
           ListTile(
             leading: Image.asset(
-              AssetPath.setting,
+              AssetPath.settings,
               width: sizeImage,
               height: sizeImage,
             ),
@@ -139,7 +147,8 @@ class DrawerDefault extends StatelessWidget {
               AssetPath.logout,
               width: sizeImage,
               height: sizeImage,
-            ),
+            )
+            ,
             title: const Text(
               "Logout",
               style: TextStyle(fontWeight: FontWeight.w900),
@@ -147,7 +156,12 @@ class DrawerDefault extends StatelessWidget {
             onTap: () {
               signInProvider.confirmSignOut(context);
             },
-          )
+          ),
+          SizedBox(
+            height: size.height * 0.2,
+            width: size.width * 0.9,
+            child: Image.asset(AssetPath.logoPath),
+          ),
         ],
       ),
     );
