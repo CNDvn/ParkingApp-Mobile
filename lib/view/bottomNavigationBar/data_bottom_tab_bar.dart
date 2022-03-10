@@ -83,6 +83,7 @@ class ActionButtonMid extends StatelessWidget {
                 await Navigator.push(context,
                     MaterialPageRoute(builder: (context) {
                   return CreateCar(
+                    isUpdate: false,
                     typeCars: typeCars,
                   );
                 }));
@@ -95,8 +96,8 @@ class ActionButtonMid extends StatelessWidget {
           }
           if (currentTab == 1) {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const QRCodePage();
-        }));
+              return const QRCodePage();
+            }));
           }
         });
   }
