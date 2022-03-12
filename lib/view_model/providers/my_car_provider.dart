@@ -178,31 +178,82 @@ class MyCarProvider with ChangeNotifier {
     }
   }
 
+  // ignore: prefer_collection_literals
   Map<String, Car> listMyCar = Map<String, Car>();
   List<String> cars = [];
-  String firstCar = "";
+  String? firstCar;
   String key = "";
+  String? keyFirst = "";
+  List<String> myCarsBooked = [];
+  String? firstCarBooked;
+  String carBooked = "";
+  // ignore: prefer_collection_literals
+  Map<String, String> carBook = Map();
   getMyCar() async {
     String accessToken = await secureStorage.readSecureData("token");
     List<Car>? myCars = [];
     CarRepImpl().getMyCar(UrlApi.userCar, accessToken).then((value) {
-      myCars= value.result;
+      myCars = value.result;
       for (var item in myCars!) {
+        // ignore: prefer_collection_literals
         Map<String, Car> tmp = Map<String, Car>();
         tmp[item.id!] = item;
         listMyCar.addAll(tmp);
         cars.add(item.nPlates!);
       }
       firstCar = cars[0];
+      key = listMyCar[0]!.id!;
     });
+    notifyListeners();
   }
 
-  getIdCar () {
-    listMyCar.forEach((key, value) { 
-      if (firstCar.contains(value.nPlates!)) {
+  getCarBooking() async {
+    myCarsBooked.clear();
+    carBooked = "";
+    String accessToken = await secureStorage.readSecureData("token");
+    List<Car>? myCars = [];
+    CarRepImpl().getMyCar(UrlApi.userCar, accessToken).then((value) {
+      myCars = value.result;
+      for (var item in myCars!) {
+        if (!item.status!.contains("active")) {
+          myCarsBooked.add(item.nPlates!);
+          // ignore: prefer_collection_literals
+          Map<String, String> carBooktmp = Map();
+          carBooktmp[item.id!] = item.nPlates!;
+          carBook.addAll(carBooktmp);
+        }
+      }
+      firstCarBooked = carBook[0];
+    });
+    notifyListeners();
+  }
+
+  getIdCar() {
+    secureStorage.deleteSecureData("idCar");
+    listMyCar.forEach((key, value) {
+      if (firstCar!.contains(value.nPlates!)) {
+        this.key = key;
+        secureStorage.writeSecureData("idCar", this.key);
+        carBooked = firstCar!;
+      }
+    });
+    notifyListeners();
+  }
+
+  getIdCarBooked() {
+    secureStorage.deleteSecureData("idCar");
+    listMyCar.forEach((key, value) {
+      if (firstCarBooked!.contains(value.nPlates!)) {
         this.key = key;
         secureStorage.writeSecureData("idCar", this.key);
       }
     });
+    notifyListeners();
+  }
+
+  getList() async {
+    getMyCar();
+    getCarBooking();
+    notifyListeners();
   }
 }

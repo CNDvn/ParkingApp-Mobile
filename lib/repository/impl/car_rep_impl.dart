@@ -8,7 +8,6 @@ import 'package:parkingappmobile/model/response/create_car_res.dart';
 import 'package:parkingappmobile/model/response/mycar_res.dart';
 import 'package:parkingappmobile/model/response/type_cars_res.dart';
 import 'package:parkingappmobile/repository/car_rep.dart';
-import 'package:parkingappmobile/view/my_car/my_car.dart';
 
 class CarRepImpl implements CarRepo {
   @override

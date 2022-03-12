@@ -3,15 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
-import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view/viewPark/view_park.dart';
-import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
-import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
-import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRCodePage extends StatefulWidget {

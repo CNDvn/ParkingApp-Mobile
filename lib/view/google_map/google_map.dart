@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -15,7 +13,6 @@ import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/entity/parking.dart';
 import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
-import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +26,6 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
-  
   List<String> cities = [];
   List<Marker> markers = [];
   // ignore: prefer_collection_literals
@@ -49,7 +45,6 @@ class _GoogleMapState extends State<GoogleMap> {
             point:
                 LatLng(item.coordinates.latitude, item.coordinates.longitude),
             builder: (ctx) => SizedBox(
-                    // width: 100,
                     child: SingleChildScrollView(
                   child: Column(children: [
                     Text(
@@ -73,19 +68,17 @@ class _GoogleMapState extends State<GoogleMap> {
         });
       });
     });
-    const Duration(milliseconds: 375);
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     MapProvider mapProvider = Provider.of<MapProvider>(context);
-    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);    
     onTapDestination(p) {
       list.forEach((key, value) {
         if (p == key.name) {
           mapProvider.id = key.id;
-          setState(() {            
+          setState(() {
             LatLng tmp = LatLng(0, 0);
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
@@ -97,8 +90,10 @@ class _GoogleMapState extends State<GoogleMap> {
       mapProvider.getJsonData();
     }
 
-    if (mapProvider.point.latitude == 0) {
-      mapProvider.updatePosition();
+    if (mounted) {
+      if (mapProvider.point.latitude == 0) {
+        mapProvider.updatePosition();
+      }
     }
 
     return Scaffold(
@@ -107,7 +102,6 @@ class _GoogleMapState extends State<GoogleMap> {
           Column(children: [
             Flexible(
                 child: FlutterMap(
-              key: ValueKey(MediaQuery.of(context).orientation),
               mapController: mapProvider.mapController,
               options: MapOptions(
                 onTap: (v, p) async {
@@ -194,7 +188,10 @@ class _GoogleMapState extends State<GoogleMap> {
                       suffixIcon: mapProvider.addressController.text.isNotEmpty
                           ? IconButton(
                               icon: const Icon(Icons.close),
-                              onPressed: () => mapProvider.clearGetAddress(),
+                              onPressed: () {
+                                mapProvider.clearGetAddress();
+                                mapProvider.resetAll();
+                              },
                             )
                           : null,
                     ),
@@ -204,13 +201,12 @@ class _GoogleMapState extends State<GoogleMap> {
                   ),
                 ),
                 Card(
-                  child: mapProvider.addressController.text.isNotEmpty && cities.contains(mapProvider.addressController.text)
+                  child: mapProvider.addressController.text.isNotEmpty &&
+                          cities.contains(mapProvider.addressController.text)
                       ? SizedBox(
                           child: ButtonDefault(
                           content: "View Parking Detail",
                           voidCallBack: () {
-                            // mapProvider.reset();
-                            myCarProvider.getMyCar();
                             mapProvider.detailParking(context, mapProvider.id);
                           },
                         ))

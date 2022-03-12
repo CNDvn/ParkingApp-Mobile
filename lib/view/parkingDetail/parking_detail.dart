@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart';
 import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/entity/image.dart';
@@ -11,7 +10,7 @@ import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 
-class ParkingDetail extends StatelessWidget {
+class ParkingDetail extends StatefulWidget {
   const ParkingDetail({
     Key? key,
     required this.name,
@@ -40,6 +39,11 @@ class ParkingDetail extends StatelessWidget {
   final String phoneNumber;
 
   @override
+  State<ParkingDetail> createState() => _ParkingDetailState();
+}
+
+class _ParkingDetailState extends State<ParkingDetail> {
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final format = NumberFormat("#,##0,000");
@@ -56,17 +60,17 @@ class ParkingDetail extends StatelessWidget {
         date.year,
         date.month,
         date.day,
-        int.parse(openTime!.split(":")[0]),
-        int.parse(openTime!.split(":")[1]),
-        int.parse(openTime!.split(":")[2]),
+        int.parse(widget.openTime!.split(":")[0]),
+        int.parse(widget.openTime!.split(":")[1]),
+        int.parse(widget.openTime!.split(":")[2]),
       );
       final cl = DateTime(
         date.year,
         date.month,
         date.day,
-        int.parse(closeTime!.split(":")[0]),
-        int.parse(closeTime!.split(":")[1]),
-        int.parse(closeTime!.split(":")[2]),
+        int.parse(widget.closeTime!.split(":")[0]),
+        int.parse(widget.closeTime!.split(":")[1]),
+        int.parse(widget.closeTime!.split(":")[2]),
       );
       if (date.isAfter(op) && date.isBefore(cl)) {
         return true;
@@ -76,8 +80,8 @@ class ParkingDetail extends StatelessWidget {
 
     int checkStatusPriceList() {
       int index = 0;
-      for (var i = 0; i < priceLists.length; i++) {
-        if (priceLists[i].status == "active") {
+      for (var i = 0; i < widget.priceLists.length; i++) {
+        if (widget.priceLists[i].status == "active") {
           index = i;
         }
       }
@@ -115,7 +119,7 @@ class ParkingDetail extends StatelessWidget {
                   Expanded(
                     flex: 6,
                     child: Text(
-                      name,
+                      widget.name,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontWeight: FontWeight.w700,
@@ -130,7 +134,8 @@ class ParkingDetail extends StatelessWidget {
                 ],
               ),
               CarouselSliderImage(
-                urlImages: images.isNotEmpty ? images : urlImagesDefault,
+                urlImages:
+                    widget.images.isNotEmpty ? widget.images : urlImagesDefault,
               ),
               SizedBox(
                 height: size.height * 0.01,
@@ -166,7 +171,7 @@ class ParkingDetail extends StatelessWidget {
                             SizedBox(
                               width: size.width * 0.58,
                               child: Text(
-                                address,
+                                widget.address,
                                 maxLines: 5,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -206,7 +211,7 @@ class ParkingDetail extends StatelessWidget {
                                       fontSize: 16, color: AppColor.greyText),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: openTime!.substring(0, 5),
+                                      text: widget.openTime!.substring(0, 5),
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: AppColor.blackText,
@@ -221,7 +226,7 @@ class ParkingDetail extends StatelessWidget {
                                       fontSize: 16, color: AppColor.greyText),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: closeTime!.substring(0, 5),
+                                      text: widget.closeTime!.substring(0, 5),
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: AppColor.blackText,
@@ -240,7 +245,7 @@ class ParkingDetail extends StatelessWidget {
                                   fontSize: 16, color: AppColor.greyText),
                             ),
                             Text(
-                              parkingSlots.length.toString(),
+                              widget.parkingSlots.length.toString(),
                               style: TextStyle(
                                   fontSize: 16,
                                   color: AppColor.greenToast,
@@ -258,7 +263,7 @@ class ParkingDetail extends StatelessWidget {
                                       fontSize: 16, color: AppColor.greyText),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: slotFull.toString(),
+                                      text: widget.slotFull.toString(),
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: AppColor.redToast,
@@ -273,7 +278,7 @@ class ParkingDetail extends StatelessWidget {
                                       fontSize: 16, color: AppColor.greyText),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: slotEmpty.toString(),
+                                      text: widget.slotEmpty.toString(),
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: AppColor.greenToast,
@@ -295,7 +300,8 @@ class ParkingDetail extends StatelessWidget {
                                           child: Column(
                                             children: [
                                               Text(
-                                                priceLists[
+                                                widget
+                                                    .priceLists[
                                                         checkStatusPriceList()]
                                                     .name,
                                                 style: TextStyle(
@@ -307,7 +313,8 @@ class ParkingDetail extends StatelessWidget {
                                               const SizedBox(
                                                 height: 10,
                                               ),
-                                              for (var detail in priceLists[
+                                              for (var detail in widget
+                                                  .priceLists[
                                                       checkStatusPriceList()]
                                                   .priceListDetails)
                                                 Column(
@@ -377,7 +384,7 @@ class ParkingDetail extends StatelessWidget {
                                   fontSize: 16, color: AppColor.greyText),
                             ),
                             Text(
-                              username,
+                              widget.username,
                               style: TextStyle(
                                   fontSize: 16,
                                   color: AppColor.blackText,
@@ -394,7 +401,7 @@ class ParkingDetail extends StatelessWidget {
                                   fontSize: 16, color: AppColor.greyText),
                             ),
                             Text(
-                              phoneNumber,
+                              widget.phoneNumber,
                               style: TextStyle(
                                   fontSize: 16,
                                   color: AppColor.redToast,
@@ -418,22 +425,21 @@ class ParkingDetail extends StatelessWidget {
                   width: size.width * 0.01,
                 ),
                 SizedBox(
-                  height: size.height * 0.09,
-                  child: myCarProvider.listMyCar.length == 1
-                      ? Text(myCarProvider.firstCar)
-                      : DropdownButton(
-                          value: myCarProvider.firstCar,
-                          onChanged: (String? newValue) {
-                            myCarProvider.firstCar = newValue!;
-                          },
-                          items: myCarProvider.cars.map((value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                ),
+                    height: size.height * 0.09,
+                    child: DropdownButton(
+                      value: myCarProvider.firstCar,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          myCarProvider.firstCar = newValue!;
+                        });
+                      },
+                      items: myCarProvider.cars.map((value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    )),
               ]),
               SizedBox(
                 height: size.height * 0.01,
@@ -442,9 +448,12 @@ class ParkingDetail extends StatelessWidget {
                 width: size.width,
                 content: 'Booking',
                 voidCallBack: () {
-                  provider.addInformation(name, phoneNumber, address);
-                  myCarProvider.getIdCar();
-                  Navigator.pushReplacementNamed(context, "/TrackingCar");
+                  setState(() {
+                    myCarProvider.getIdCar();
+                  });
+                  provider.addInformation(
+                      widget.name, widget.phoneNumber, widget.address);
+                  provider.booKingParking(context);
                 },
               ),
               SizedBox(

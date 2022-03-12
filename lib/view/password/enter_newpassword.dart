@@ -90,10 +90,6 @@ class EnterChangePassword extends StatelessWidget {
                     onChanged: (String value) {
                       provider.checkPassword(value);
                     },
-                    // focusNode: provider.passwordFocus,
-                    // onEditingComplete: () {
-                    //   signInProvider.changeFocus(context, 'password');
-                    // },
                   ),
                 ),
                 SizedBox(
@@ -132,10 +128,6 @@ class EnterChangePassword extends StatelessWidget {
                     onChanged: (String value) {
                       provider.checkNewPassword(value);
                     },
-                    // focusNode: provider.passwordFocus,
-                    // onEditingComplete: () {
-                    //   signInProvider.changeFocus(context, 'password');
-                    // },
                   ),
                 ),
                 SizedBox(
@@ -143,6 +135,7 @@ class EnterChangePassword extends StatelessWidget {
                     child: ButtonDefault(
                         content: "Submit",
                         voidCallBack: () {
+                          mapProvider.reset();
                           provider.submit(context);
                         }))
               ],

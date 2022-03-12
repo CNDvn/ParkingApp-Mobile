@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
 import 'package:parkingappmobile/view/parkingDetail/parking_detail.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class ValidationItem {
@@ -75,6 +76,7 @@ class NetworkHelper {
 }
 
 class MapProvider with ChangeNotifier {
+  final SecureStorage secureStorage = SecureStorage();
   final _getAddress = TextEditingController();
 
   TextEditingController get addressController => _getAddress;
@@ -121,19 +123,28 @@ class MapProvider with ChangeNotifier {
     } catch (e) {
       log(e.toString());
     }
+    notifyListeners();
+  }
+
+  resetAll() async {
+    mapController = MapController();
+    location.clear();
+    polyPoints.clear();
+    clearGetAddress();
+    point = LatLng(0, 0);
+    destination = LatLng(0, 0);
+    notifyListeners();
   }
 
   reset() async {
     mapController = MapController();
-    // LatLng pos = await determinePosition();
-    // point = pos;
     getJsonData();
     notifyListeners();
   }
 
   Future<void> updatePosition() async {
     LatLng pos = await determinePosition();
-    point = pos;    
+    point = pos;
     mapController.move(point, zoomMap);
     getJsonData();
     notifyListeners();
@@ -161,7 +172,8 @@ class MapProvider with ChangeNotifier {
     return LatLng(pos.latitude, pos.longitude);
   }
 
-  void detailParking(BuildContext context, String? id) {
+  void detailParking(BuildContext context, String? id) async {
+    secureStorage.writeSecureData("idParking", id!);
     ParkingImpl()
         .getParkingDetail(UrlApi.serverPath + "/parkings/$id")
         .then((value) async {

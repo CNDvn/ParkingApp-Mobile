@@ -6,6 +6,7 @@ import 'package:parkingappmobile/view/bookParking/tracking_car.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/bookParking/booking_details.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
+import 'package:parkingappmobile/view/my_car/qrcode_mycar.dart';
 import 'package:parkingappmobile/view/password/enter_newpassword.dart';
 import 'package:parkingappmobile/view/qr_code/qr_code.dart';
 import 'package:parkingappmobile/view/sign_up/enter_password.dart';
@@ -36,5 +37,7 @@ class Routes {
     "/SuccessfulBooking": (context) => const SuccessfulBooking(),
     //Auth
     "/EnterChangePassword": (context) => const EnterChangePassword(),
+    //QRCode
+    "/QRCodeMyCar": (context) => const QRCodeMyCar(),
   };
 }
