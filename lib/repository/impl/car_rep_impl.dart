@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/request/create_car_req.dart';
 import 'package:parkingappmobile/model/response/create_car_res.dart';
+import 'package:parkingappmobile/model/response/mycar_res.dart';
 import 'package:parkingappmobile/model/response/type_cars_res.dart';
 import 'package:parkingappmobile/repository/car_rep.dart';
 
@@ -35,6 +36,18 @@ class CarRepImpl implements CarRepo {
             HttpHeaders.authorizationHeader: 'Bearer $accessToken'
           }));
       result = CreateCarRes.createCarResFromJson(jsonEncode(response.data));
+    } on DioError catch (e) {
+      showToastFail(e.response?.data["message"]);
+    }
+    return result;
+  }
+
+  @override
+  Future<MyCarRes> getMyCar(String url, String accessToken) async {
+    var result = MyCarRes();
+    try {
+      Response response = await Dio().get(url, options: Options(headers: {HttpHeaders.authorizationHeader: 'Bearer $accessToken'}));
+      result = MyCarRes.myCarResFromJson(jsonEncode(response.data));
     } on DioError catch (e) {
       showToastFail(e.response?.data["message"]);
     }

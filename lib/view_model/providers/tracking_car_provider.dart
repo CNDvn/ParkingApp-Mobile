@@ -1,12 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
+import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:provider/provider.dart';
 
 class TrackingCarProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
   String bookingTime = "";
   String parkingTime = "";
+  String id = "";
 
   addInformation(String bookingTime, String parkingTime) async {
     this.bookingTime = bookingTime;
@@ -18,5 +21,39 @@ class TrackingCarProvider with ChangeNotifier {
     secureStorage.writeSecureData("bookingTime", bookingTime);
     secureStorage.writeSecureData("parkingTime", parkingTime);
     notifyListeners();
+  }
+
+  checkOut(BuildContext context) async {
+    BookingDetailProvider bookingDetailProvider =
+        Provider.of<BookingDetailProvider>(context, listen: false);
+    String idParking = await secureStorage.readSecureData("idParking");
+    String idCar = await secureStorage.readSecureData("idCar");
+    String firstNameSto = await secureStorage.readSecureData('firstName');
+    String lastNameSto = await secureStorage.readSecureData('lastName');
+    String url =
+        "https://parking-app-project.herokuapp.com/api/v1/bookings/checkOut/parking/$idParking/car/$idCar";
+    String accessToken = await secureStorage.readSecureData("token");
+    BookingRepImpl().postCheckOut(url, accessToken).then((value) {
+      if (value.statusCode == 201) {
+        //parking
+        bookingDetailProvider.parkingName =
+            value.result!.booking!.parking!.name!;
+        bookingDetailProvider.phoneNumber =
+            value.result!.booking!.parking!.phoneNumber!;
+        bookingDetailProvider.address =
+            value.result!.booking!.parking!.address!;
+        //user
+        bookingDetailProvider.fullName = '$firstNameSto $lastNameSto';
+        //booking
+        bookingDetailProvider.startTime =
+            DateFormat('KK:mm:a').format(value.result!.booking!.startTime!);
+        bookingDetailProvider.checkInTime =
+            DateFormat('KK:mm:a').format(value.result!.booking!.checkinTime!);
+        bookingDetailProvider.price = value.result!.booking!.price!;
+        secureStorage.writeSecureData("idBooking", value.result!.booking!.id!);
+        Future.delayed(const Duration(seconds: 3));
+        Navigator.pushReplacementNamed(context, "/BookingDetails");
+      }
+    });
   }
 }

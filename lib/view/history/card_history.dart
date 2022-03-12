@@ -100,6 +100,7 @@ class CardHistory extends StatelessWidget {
                             'Text to announce in accessibility modes',
                       ),
                       Text(
+                        // ignore: prefer_adjacent_string_concatenation
                         !isComplete ? "1h30p" : "1h30p - " + "30s.000đ",
                         style: const TextStyle(
                             fontWeight: FontWeight.w700,

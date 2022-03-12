@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
-import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
-import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
-import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-
-GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class BookingDetails extends StatelessWidget {
   const BookingDetails({Key? key}) : super(key: key);
@@ -20,82 +17,49 @@ class BookingDetails extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     BookingDetailProvider providerBooking =
         Provider.of<BookingDetailProvider>(context);
-    UserProfileProvider userProvider =
-        Provider.of<UserProfileProvider>(context);
+    MyCarProvider providerCar = Provider.of<MyCarProvider>(context);
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
+    String formattedTime = DateFormat('KK:mm:a').format(DateTime.now());
     return Scaffold(
-        key: scaffoldKey,
-        drawer: const DrawerDefault(),
         body: SingleChildScrollView(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          child: IconButton(
-                        icon: const Icon(
-                          Icons.menu,
-                          color: Colors.black87,
-                        ),
-                        onPressed: () {
-                          scaffoldKey.currentState!.openDrawer();
-                        },
-                      )),
-                      SizedBox(
-                        child: ClipOval(
-                          child: Material(
-                            color: AppColor.blueBackground,
-                            child: InkWell(
-                              splashColor: AppColor.whiteBackground,
-                              onTap: () {
-                                userProvider.getProfile();
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return const UserProfile();
-                                }));
-                              },
-                              child: SizedBox(
-                                  width: 32,
-                                  height: 32,
-                                  child: Image.asset(AssetPath.profilePhoto)),
-                            ),
-                          ),
-                        ),
-                      )
-                    ]),
+            child: Container(
+      height: size.height,
+      margin:
+          EdgeInsets.fromLTRB(0, size.height * 0.005, 0, size.height * 0.005),
+      padding: const EdgeInsets.all(20),
+      child: SingleChildScrollView(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+              SizedBox(
+                child: Text(
+                  "PAYMENT",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: AppColor.greyText,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w400),
+                ),
               ),
               Container(
-                margin: const EdgeInsets.only(
-                    top: 30, left: 30, right: 30, bottom: 20),
-                height: size.height * 0.07,
-                width: size.width * 1.2,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.all(Radius.circular(6)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
+                margin: EdgeInsets.only(top: size.height * 0.01),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      child: Text(
+                        "Your Name: ",
+                        textAlign: TextAlign.left,
+                        style: AppTextStyles.h4black,
+                      ),
                     ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(providerBooking.parkingName,
-                            textAlign: TextAlign.center,
-                            style: AppTextStyles.h2Black),
-                      ],
+                    SizedBox(
+                      child: Text(providerBooking.fullName,
+                          textAlign: TextAlign.end,
+                          style: AppTextStyles.h4black),
                     ),
                   ],
                 ),
@@ -110,13 +74,16 @@ class BookingDetails extends StatelessWidget {
                 children: [
                   SizedBox(
                     child: Text(
-                      "Unique ID: ",
+                      "N°Plate:  ",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: AppColor.blackText, fontSize: 17),
                     ),
                   ),
                   SizedBox(
-                    child: Text("CPA-0129",
+                    height: size.height * 0.03,
+                  ),
+                  SizedBox(
+                    child: Text(providerCar.firstCar!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: AppColor.blackText,
@@ -125,11 +92,10 @@ class BookingDetails extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
               Container(
-                margin: const EdgeInsets.only(
-                    top: 20, left: 30, right: 30, bottom: 20),
-                height: size.height * 0.4,
-                width: size.width * 0.8,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: const BorderRadius.all(Radius.circular(6)),
@@ -138,179 +104,205 @@ class BookingDetails extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
                 child: Container(
-                  margin: EdgeInsets.only(top: size.width * 0.05),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.zero,
-                        child: Text(
-                          "Booking Details",
-                          textAlign: TextAlign.start,
-                          style: AppTextStyles.h3black,
+                  height: size.height * 0.35,
+                  margin: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.zero,
+                          child: Text(
+                            "Information Parking",
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.h3black,
+                          ),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: size.height * 0.01),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              child: Text(
-                                "Booking Time:",
-                                textAlign: TextAlign.left,
-                                style: AppTextStyles.h4black,
-                              ),
+                            Text(
+                              "Name: ",
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColor.greyText),
                             ),
                             SizedBox(
-                              child: Text(providerBooking.bookingTime,
-                                  textAlign: TextAlign.end,
-                                  style: AppTextStyles.h4black),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: size.height * 0.01),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(
-                                child: Text(
-                                  "Check-in Time:",
-                                  textAlign: TextAlign.left,
-                                  style: AppTextStyles.h4black,
-                                ),
-                              ),
-                              SizedBox(
-                                child: Text(providerBooking.timeCheckIn,
-                                    textAlign: TextAlign.end,
-                                    style: AppTextStyles.h4black),
-                              )
-                            ]),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: size.height * 0.01),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
+                              width: size.width * 0.58,
                               child: Text(
-                                "Check-out Time (Est):",
-                                textAlign: TextAlign.left,
-                                style: AppTextStyles.h4black,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Text(
-                                providerBooking.timeCheckOut,
-                                textAlign: TextAlign.end,
-                                style: AppTextStyles.h4black,
+                                providerBooking.parkingName,
+                                maxLines: 5,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.blackText,
+                                    fontWeight: FontWeight.bold),
                               ),
                             )
                           ],
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: size.height * 0.01),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SizedBox(
-                                child: Text(
-                                  "Parking Time:",
-                                  textAlign: TextAlign.left,
-                                  style: AppTextStyles.h4black,
-                                ),
-                              ),
-                              SizedBox(
-                                child: Text(providerBooking.parkingTime,
-                                    textAlign: TextAlign.end,
-                                    style: AppTextStyles.h4black),
-                              )
-                            ]),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: size.height * 0.01),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              child: Text(
-                                "Promotion:",
-                                textAlign: TextAlign.left,
-                                style: AppTextStyles.h4black,
-                              ),
+                            Text(
+                              "Address: ",
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColor.greyText),
                             ),
                             SizedBox(
+                              width: size.width * 0.58,
                               child: Text(
-                                providerBooking.promotion,
-                                textAlign: TextAlign.end,
-                                style: AppTextStyles.h4black,
+                                providerBooking.address,
+                                maxLines: 5,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.blackText,
+                                    fontWeight: FontWeight.bold),
                               ),
                             )
                           ],
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: size.height * 0.01),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              child: Text(
-                                "Total:",
-                                textAlign: TextAlign.left,
-                                style: AppTextStyles.h4black,
-                              ),
+                            Text(
+                              "Phone: ",
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColor.greyText),
                             ),
                             SizedBox(
+                              width: size.width * 0.58,
                               child: Text(
-                                providerBooking.total,
-                                textAlign: TextAlign.end,
-                                style: AppTextStyles.h4black,
+                                providerBooking.phoneNumber,
+                                maxLines: 5,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.blackText,
+                                    fontWeight: FontWeight.bold),
                               ),
                             )
                           ],
                         ),
-                      )
-                    ],
+                        Container(
+                          margin: EdgeInsets.zero,
+                          child: Text(
+                            "Information Payment",
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.h3black,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Start Time: ",
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColor.greyText),
+                            ),
+                            SizedBox(
+                              child: Text(
+                                providerBooking.startTime,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.greenToast,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Check-in Time: ",
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColor.greyText),
+                            ),
+                            SizedBox(
+                              child: Text(
+                                providerBooking.checkInTime,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.greenToast,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Check-out Time: ",
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColor.greyText),
+                            ),
+                            SizedBox(
+                              child: Text(
+                                formattedTime,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.greenToast,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Total Price: ",
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColor.greyText),
+                            ),
+                            SizedBox(
+                              child: Text(
+                                providerBooking.price,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.greenToast,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      child: Text(
-                        "Don’t know the route? ",
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: AppColor.greyText, fontSize: 16),
-                      ),
-                    ),
-                    SizedBox(
-                      child: Text(
-                        "Get Directions ",
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: AppColor.blueText, fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               SizedBox(
-                  height: size.height * 0.08,
-                  width: size.width * 0.85,
-                  child: ButtonDefault(
-                      content: "Go Back to Home Screen", voidCallBack: () {}))
-            ])));
+                height: size.height * 0.03,
+              ),
+              providerBooking.flag
+                  ? SizedBox(
+                      height: size.height * 0.08,
+                      width: size.width * 0.85,
+                      child: ButtonDefault(
+                          content: "Go Back Home",
+                          voidCallBack: () {
+                            mapProvider.resetAll();
+                            Navigator.pushReplacementNamed(
+                                context, "/BottomTabBar");
+                            providerBooking.flag = false;
+                          }))
+                  : SizedBox(
+                      height: size.height * 0.08,
+                      width: size.width * 0.85,
+                      child: ButtonDefault(
+                          content: "Payment",
+                          voidCallBack: () {
+                            providerBooking.showDiaLog(context);
+                          })),
+            ]),
+      ),
+    )));
   }
 }

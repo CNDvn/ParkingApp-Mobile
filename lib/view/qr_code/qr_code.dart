@@ -3,15 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
-import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view/viewPark/view_park.dart';
-import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
-import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
-import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRCodePage extends StatefulWidget {
@@ -22,7 +16,6 @@ class QRCodePage extends StatefulWidget {
 }
 
 class _QRCodePageState extends State<QRCodePage> {
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -41,54 +34,10 @@ class _QRCodePageState extends State<QRCodePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    UserProfileProvider userProvider =
-        Provider.of<UserProfileProvider>(context);
     return Scaffold(
-      key: scaffoldKey,
-      drawer: const DrawerDefault(),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
-            Column(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 28, right: 20),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          child: IconButton(
-                        icon: const Icon(
-                          Icons.menu,
-                          color: Colors.black87,
-                        ),
-                        onPressed: () {
-                          scaffoldKey.currentState!.openDrawer();
-                        },
-                      )),
-                      SizedBox(
-                        child: ClipOval(
-                          child: Material(
-                            color: AppColor.blueBackground,
-                            child: InkWell(
-                              splashColor: AppColor.whiteBackground,
-                              onTap: () {
-                                userProvider.getProfile();
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return const UserProfile();
-                                }));
-                              },
-                              child: SizedBox(
-                                  width: 32,
-                                  height: 32,
-                                  child: Image.asset(AssetPath.profilePhoto)),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ]),
-              ),
-            ]),
+          children: <Widget>[            
             Column(children: [
               SizedBox(
                 child: Text(

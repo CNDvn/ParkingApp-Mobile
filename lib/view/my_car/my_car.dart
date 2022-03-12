@@ -31,7 +31,6 @@ class _MyCarState extends State<MyCar> {
           SizedBox(
             height: 0.7 * size.height,
             child: ListView.builder(
-              // shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               itemCount: 3,
               itemBuilder: (context, index) {

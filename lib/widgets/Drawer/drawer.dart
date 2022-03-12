@@ -1,24 +1,34 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:provider/provider.dart';
 
-class DrawerDefault extends StatelessWidget {
+class DrawerDefault extends StatefulWidget {
   const DrawerDefault({Key? key}) : super(key: key);
+
+  @override
+  State<DrawerDefault> createState() => _DrawerDefaultState();
+}
+
+class _DrawerDefaultState extends State<DrawerDefault> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double sizeImage = size.width * 0.08;
+    double sizeImage = size.width * 0.1;
     SignInProvider signInProvider = Provider.of<SignInProvider>(context);
     UserProfileProvider userProvider =
         Provider.of<UserProfileProvider>(context);
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     return Drawer(
       backgroundColor: AppColor.whiteBackground,
       child: ListView(
@@ -31,7 +41,7 @@ class DrawerDefault extends StatelessWidget {
                     Container(
                         margin: const EdgeInsets.fromLTRB(20, 30, 0, 0),
                         child: IconButton(
-                          icon: Image.asset(AssetPath.close),
+                          icon: const Icon(Icons.arrow_back),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -49,7 +59,7 @@ class DrawerDefault extends StatelessWidget {
                   child: Text(
                       userProvider.fullNameSto != null
                           ? userProvider.fullNameSto!
-                          : "Meo` 4`",
+                          : "Parking App",
                       style: AppTextStyles.h2Black),
                   onPressed: () {
                     Navigator.push(
@@ -68,31 +78,38 @@ class DrawerDefault extends StatelessWidget {
           ),
           ListTile(
             leading: Image.asset(
-              AssetPath.creditCardPayment,
+              AssetPath.changePassword,
               width: sizeImage,
               height: sizeImage,
             ),
             title: const Text(
-              'Payment methods',
+              'Change Password',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, "/EnterChangePassword");
+            },
           ),
           ListTile(
             leading: Image.asset(
-              AssetPath.history,
+              AssetPath.carBookingTime,
               width: sizeImage,
               height: sizeImage,
             ),
             title: const Text(
-              'Parking History',
+              'Car in Parking',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                myCarProvider.getCarBooking();
+              });
+              Navigator.pushReplacementNamed(context, "/TrackingCar");
+            },
           ),
           ListTile(
             leading: Image.asset(
-              AssetPath.promotions,
+              AssetPath.promotion,
               width: sizeImage,
               height: sizeImage,
             ),
@@ -108,19 +125,23 @@ class DrawerDefault extends StatelessWidget {
           ),
           ListTile(
             leading: Image.asset(
-              AssetPath.customerService,
+              AssetPath.qscanCode,
               width: sizeImage,
               height: sizeImage,
             ),
             title: const Text(
-              'Support',
+              'QScan Code',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {},
+            onTap: () {
+              if (myCarProvider.cars.isNotEmpty) {
+                Navigator.pushReplacementNamed(context, "/QRCodeMyCar");
+              }
+            },
           ),
           ListTile(
             leading: Image.asset(
-              AssetPath.setting,
+              AssetPath.settings,
               width: sizeImage,
               height: sizeImage,
             ),
@@ -147,7 +168,12 @@ class DrawerDefault extends StatelessWidget {
             onTap: () {
               signInProvider.confirmSignOut(context);
             },
-          )
+          ),
+          SizedBox(
+            height: size.height * 0.2,
+            width: size.width * 0.9,
+            child: Image.asset(AssetPath.logoPath),
+          ),
         ],
       ),
     );
