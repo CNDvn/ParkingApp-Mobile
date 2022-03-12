@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:parkingappmobile/model/entity/car.dart';
 import 'package:parkingappmobile/view/my_car/create_car.dart';
 
 class CardCar extends StatelessWidget {
-  const CardCar({Key? key}) : super(key: key);
-
+   CardCar({Key? key,this.car}) : super(key: key);
+  Car? car; 
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -14,18 +15,18 @@ class CardCar extends StatelessWidget {
           children: <Widget>[
             ListTile(
               leading: Image.network(
-                'https://i.ibb.co/GMv63Nr/e391ff1ef747.png',
+               car!.images.length == 0 ?  "https://i.ibb.co/GMv63Nr/e391ff1ef747.png" :  car!.images[0].url,
                 width: 100,
                 height: 100,
               ),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [const Text('Mecs'), Text("inParking".toUpperCase())],
+                children: [Text(car!.brand), Text(car!.status.toUpperCase())],
               ),
               subtitle: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('30F- 678.99'),
+                  Text(car!.nPlates),
                   TextButton(
                     style: ButtonStyle(
                       foregroundColor:

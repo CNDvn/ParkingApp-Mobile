@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/model/entity/typeCar.dart';
 import 'package:parkingappmobile/view/qr_code/qr_code.dart';
 import 'package:parkingappmobile/model/response/type_cars_res.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
@@ -78,7 +79,7 @@ class ActionButtonMid extends StatelessWidget {
               CarRepImpl()
                   .getTypeCars(UrlApi.typeCarsPath, token)
                   .then((value) async {
-                final List<Result>? typeCars = value.result;
+                final List<TypeCar>? typeCars = value.result;
                 myCarProvider.dropdownValue = typeCars![0].id;
                 await Navigator.push(context,
                     MaterialPageRoute(builder: (context) {

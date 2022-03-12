@@ -16,13 +16,13 @@ import 'package:parkingappmobile/view/viewPark/view_park.dart';
 class Routes {
   static final Map<String, Widget Function(BuildContext)> routes = {
     // "/": (context) => const Welcome(),
-    // "/": (context) => const SignInPage(),    
+    "/": (context) => const SignInPage(),    
     //SignUp
     "/SignUpPage": (context) => const SignUpPage(),
     "/EnterPassword": (context) => const EnterPassword(),
     "/EnterVerificationCode": (context) => const EnterVerificationCode(),
     //Map
-    "/": (context) => const BottomTabBar(),
+    "/BottomTabBar": (context) => const BottomTabBar(),
     "/UserProfile": (context) => const UserProfile(),
     "/ViewPark": (context) => const ViewPark(),
     "/TrackingCar": (context) => const TrackingCar(),

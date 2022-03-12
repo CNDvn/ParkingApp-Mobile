@@ -35,6 +35,8 @@ class MyCarProvider with ChangeNotifier {
   TextEditingController get modelCodeController => _modelCodeTextEditController;
   TextEditingController get nPlateController => _nPlateTextEditController;
 
+  
+
   String get textBrand => brandController.text;
   String get textColor => colorController.text;
   String get textModelCode => modelCodeController.text;
@@ -74,6 +76,11 @@ class MyCarProvider with ChangeNotifier {
     nPlateController.clear();
     _nPlate = ValidationItem("", "");
     notifyListeners();
+  }
+
+  TextEditingController setBrandController(String value) {
+    brandController.value = TextEditingValue(text: value);
+    return brandController;
   }
 
   void checkValidation(String value, String key) {

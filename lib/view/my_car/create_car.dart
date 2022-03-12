@@ -4,16 +4,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/model/response/type_cars_res.dart';
+import 'package:parkingappmobile/model/entity/car.dart';
+import 'package:parkingappmobile/model/entity/typeCar.dart';
 import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/upload_image/upload_image.dart';
 import 'package:provider/provider.dart';
 
 class CreateCar extends StatefulWidget {
-  final List<Result>? typeCars;
+  final List<TypeCar>? typeCars;
   final bool isUpdate;
-  const CreateCar({Key? key, required this.typeCars, required this.isUpdate})
+  final Car? car;
+  const CreateCar({Key? key,
+    required this.typeCars, 
+    required this.isUpdate,
+    this.car
+    })
       : super(key: key);
 
   @override
@@ -109,11 +115,11 @@ class _CreateCarState extends State<CreateCar> {
                                     provider.clearBrandController(),
                               )
                             : null,
-                        labelText: 'Brand',
+                        labelText: 'Brands',
                         errorText:
                             provider.submitValid ? provider.brand.error : null),
                     autofocus: false,
-                    controller: provider.brandController,
+                    controller: widget.isUpdate ? provider.setBrandController(widget.car!.brand) : provider.brandController,
                     focusNode: provider.brandFocus,
                     onEditingComplete: () {
                       provider.changeFocus(context, "brand");
@@ -211,10 +217,10 @@ class _CreateCarState extends State<CreateCar> {
                   DropdownButton(
                     value: provider.dropdownValue,
                     icon: const Icon(Icons.keyboard_arrow_down),
-                    items: widget.typeCars!.map((Result items) {
+                    items: widget.typeCars!.map((TypeCar items) {
                       return DropdownMenuItem(
                         value: items.id,
-                        child: Text(items.name),
+                        child: Text(items.name!),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {
