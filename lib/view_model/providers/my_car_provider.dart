@@ -88,7 +88,7 @@ class MyCarProvider with ChangeNotifier {
     return colorController;
   }
 
-  TextEditingController setnPlateController(String value) {
+  TextEditingController setPlateController(String value) {
     nPlateController.value = TextEditingValue(text: value);
     return nPlateController;
   }

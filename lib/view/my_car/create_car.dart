@@ -14,12 +14,8 @@ import 'package:provider/provider.dart';
 class CreateCar extends StatefulWidget {
   final List<TypeCar>? typeCars;
   final bool isUpdate;
-  final Car? car;
-  const CreateCar({Key? key,
-    required this.typeCars, 
-    required this.isUpdate,
-    this.car
-    })
+  Car? car;
+  CreateCar({Key? key, this.typeCars, required this.isUpdate, this.car})
       : super(key: key);
 
   @override
@@ -90,10 +86,16 @@ class _CreateCarState extends State<CreateCar> {
                               provider.image!,
                               fit: BoxFit.cover,
                             )
-                          : const Image(
-                              image: AssetImage(AssetPath.defaultCar),
-                              fit: BoxFit.cover,
-                            ),
+                          : (widget.isUpdate
+                              ? Image.network(
+                                  widget.car!.images.isEmpty
+                                      ? "https://i.ibb.co/GMv63Nr/e391ff1ef747.png"
+                                      : widget.car!.images[0].url,
+                                )
+                              : const Image(
+                                  image: AssetImage(AssetPath.defaultCar),
+                                  fit: BoxFit.cover,
+                                )),
                     ),
                   ),
                   pickImage: pickImage,
@@ -119,7 +121,9 @@ class _CreateCarState extends State<CreateCar> {
                         errorText:
                             provider.submitValid ? provider.brand.error : null),
                     autofocus: false,
-                    controller: widget.isUpdate ? provider.setBrandController(widget.car!.brand) : provider.brandController,
+                    controller: widget.isUpdate
+                        ? provider.setBrandController(widget.car!.brand)
+                        : provider.brandController,
                     focusNode: provider.brandFocus,
                     onEditingComplete: () {
                       provider.changeFocus(context, "brand");
@@ -145,7 +149,9 @@ class _CreateCarState extends State<CreateCar> {
                         errorText:
                             provider.submitValid ? provider.color.error : null),
                     autofocus: false,
-                    controller: widget.isUpdate ? provider.setColorController(widget.car!.color) : provider.colorController,
+                    controller: widget.isUpdate
+                        ? provider.setColorController(widget.car!.color)
+                        : provider.colorController,
                     focusNode: provider.colorFocus,
                     onEditingComplete: () {
                       provider.changeFocus(context, "color");
@@ -172,7 +178,9 @@ class _CreateCarState extends State<CreateCar> {
                             ? provider.modelCode.error
                             : null),
                     autofocus: false,
-                    controller: widget.isUpdate ? provider.setModelCodeController(widget.car!.color) : provider.modelCodeController,
+                    controller: widget.isUpdate
+                        ? provider.setModelCodeController(widget.car!.modelCode)
+                        : provider.modelCodeController,
                     focusNode: provider.modelCodeFocus,
                     onEditingComplete: () {
                       provider.changeFocus(context, "modelCode");
@@ -199,7 +207,9 @@ class _CreateCarState extends State<CreateCar> {
                             ? provider.nPlate.error
                             : null),
                     autofocus: false,
-                    controller: widget.isUpdate ? provider.setnPlateController(widget.car!.color) : provider.nPlateController,
+                    controller: widget.isUpdate
+                        ? provider.setPlateController(widget.car!.nPlates)
+                        : provider.nPlateController,
                     focusNode: provider.nPlateFocus,
                     onEditingComplete: () {
                       provider.changeFocus(context, "nPlate");
