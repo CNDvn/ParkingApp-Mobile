@@ -83,6 +83,21 @@ class MyCarProvider with ChangeNotifier {
     return brandController;
   }
 
+  TextEditingController setColorController(String value) {
+    colorController.value = TextEditingValue(text: value);
+    return colorController;
+  }
+
+  TextEditingController setnPlateController(String value) {
+    nPlateController.value = TextEditingValue(text: value);
+    return nPlateController;
+  }
+
+  TextEditingController setModelCodeController(String value) {
+    modelCodeController.value = TextEditingValue(text: value);
+    return modelCodeController;
+  }
+
   void checkValidation(String value, String key) {
     switch (key) {
       case "brand":

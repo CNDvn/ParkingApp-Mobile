@@ -145,7 +145,7 @@ class _CreateCarState extends State<CreateCar> {
                         errorText:
                             provider.submitValid ? provider.color.error : null),
                     autofocus: false,
-                    controller: provider.colorController,
+                    controller: widget.isUpdate ? provider.setColorController(widget.car!.color) : provider.colorController,
                     focusNode: provider.colorFocus,
                     onEditingComplete: () {
                       provider.changeFocus(context, "color");
@@ -172,7 +172,7 @@ class _CreateCarState extends State<CreateCar> {
                             ? provider.modelCode.error
                             : null),
                     autofocus: false,
-                    controller: provider.modelCodeController,
+                    controller: widget.isUpdate ? provider.setModelCodeController(widget.car!.color) : provider.modelCodeController,
                     focusNode: provider.modelCodeFocus,
                     onEditingComplete: () {
                       provider.changeFocus(context, "modelCode");
@@ -199,7 +199,7 @@ class _CreateCarState extends State<CreateCar> {
                             ? provider.nPlate.error
                             : null),
                     autofocus: false,
-                    controller: provider.nPlateController,
+                    controller: widget.isUpdate ? provider.setnPlateController(widget.car!.color) : provider.nPlateController,
                     focusNode: provider.nPlateFocus,
                     onEditingComplete: () {
                       provider.changeFocus(context, "nPlate");
