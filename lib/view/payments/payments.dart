@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:parkingappmobile/model/response/card_res.dart';
+import 'package:parkingappmobile/repository/impl/card_payment_rep_impl.dart';
 import 'package:parkingappmobile/view/payments/card_payment.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class Payments extends StatefulWidget {
   const Payments({Key? key}) : super(key: key);
@@ -10,6 +15,17 @@ class Payments extends StatefulWidget {
 }
 
 class _PaymentsState extends State<Payments> {
+  List<CardBank>? listCard = [];
+  @override
+  void initState() {
+    super.initState();
+    CardPaymentRepImp().getListCardMe(UrlApi.cardsPath).then((value) => {
+          setState(() {
+            listCard = value.result;
+          })
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -27,11 +43,11 @@ class _PaymentsState extends State<Payments> {
               childAspectRatio: 5 / 6,
               scrollDirection: Axis.horizontal,
               children: List.generate(
-                10,
+                listCard!.length,
                 (index) {
-                  return const SizedBox(
+                  return SizedBox(
                     width: 160.0,
-                    child: CardPayment(),
+                    child: CardPayment(card: listCard![index]),
                   );
                 },
               )),
