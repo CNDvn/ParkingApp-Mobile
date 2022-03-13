@@ -9,6 +9,7 @@ import 'package:geocoding/geocoding.dart';
 // ignore: unused_import
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/entity/parking.dart';
 import 'package:parkingappmobile/repository/impl/parking_rep_impl.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
@@ -25,7 +26,6 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
-  String? id;
   List<String> cities = [];
   List<Marker> markers = [];
   // ignore: prefer_collection_literals
@@ -41,12 +41,24 @@ class _GoogleMapState extends State<GoogleMap> {
         Map<ParkingDetailValue, Marker> tmp = Map<ParkingDetailValue, Marker>();
         tmp[ParkingDetailValue(id: item.id, name: item.name)] = Marker(
             width: 100,
+            height: 50,
             point:
                 LatLng(item.coordinates.latitude, item.coordinates.longitude),
             builder: (ctx) => SizedBox(
-                width: 100,
-                child:
-                    Icon(Icons.local_parking_sharp, color: Colors.blue[800])));
+                    child: SingleChildScrollView(
+                  child: Column(children: [
+                    Text(
+                      item.name,
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 8,
+                          color: AppColor.blackText,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Icon(Icons.local_parking_sharp, color: Colors.blue[800])
+                  ]),
+                )));
         list.addAll(tmp);
       }
       setState(() {
@@ -56,19 +68,17 @@ class _GoogleMapState extends State<GoogleMap> {
         });
       });
     });
-    const Duration(milliseconds: 375);
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     MapProvider mapProvider = Provider.of<MapProvider>(context);
-
     onTapDestination(p) {
       list.forEach((key, value) {
         if (p == key.name) {
+          mapProvider.id = key.id;
           setState(() {
-            id = key.id;
             LatLng tmp = LatLng(0, 0);
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
@@ -80,8 +90,10 @@ class _GoogleMapState extends State<GoogleMap> {
       mapProvider.getJsonData();
     }
 
-    if (mapProvider.point.latitude == 0) {
-      mapProvider.updatePosition();
+    if (mounted) {
+      if (mapProvider.point.latitude == 0) {
+        mapProvider.updatePosition();
+      }
     }
 
     return Scaffold(
@@ -107,7 +119,7 @@ class _GoogleMapState extends State<GoogleMap> {
                   });
                 },
                 center: mapProvider.point,
-                zoom: 16.0,
+                zoom: 16.5,
                 plugins: [
                   MarkerClusterPlugin(),
                 ],
@@ -176,7 +188,10 @@ class _GoogleMapState extends State<GoogleMap> {
                       suffixIcon: mapProvider.addressController.text.isNotEmpty
                           ? IconButton(
                               icon: const Icon(Icons.close),
-                              onPressed: () => mapProvider.clearGetAddress(),
+                              onPressed: () {
+                                mapProvider.clearGetAddress();
+                                mapProvider.resetAll();
+                              },
                             )
                           : null,
                     ),
@@ -186,12 +201,13 @@ class _GoogleMapState extends State<GoogleMap> {
                   ),
                 ),
                 Card(
-                  child: mapProvider.addressController.text.isNotEmpty
+                  child: mapProvider.addressController.text.isNotEmpty &&
+                          cities.contains(mapProvider.addressController.text)
                       ? SizedBox(
                           child: ButtonDefault(
                           content: "View Parking Detail",
                           voidCallBack: () {
-                            mapProvider.detailParking(context, id);
+                            mapProvider.detailParking(context, mapProvider.id);
                           },
                         ))
                       : Text(
