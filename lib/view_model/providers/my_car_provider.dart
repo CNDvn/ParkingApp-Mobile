@@ -2,13 +2,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/configs/base/base_validation.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/request/create_car_req.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/image_rep_impl.dart';
+import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
+import 'package:provider/provider.dart';
 
 class MyCarProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
@@ -34,8 +36,6 @@ class MyCarProvider with ChangeNotifier {
   TextEditingController get colorController => _colorTextEditController;
   TextEditingController get modelCodeController => _modelCodeTextEditController;
   TextEditingController get nPlateController => _nPlateTextEditController;
-
-  
 
   String get textBrand => brandController.text;
   String get textColor => colorController.text;
@@ -78,24 +78,12 @@ class MyCarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  TextEditingController setBrandController(String value) {
-    brandController.value = TextEditingValue(text: value);
-    return brandController;
-  }
-
-  TextEditingController setColorController(String value) {
-    colorController.value = TextEditingValue(text: value);
-    return colorController;
-  }
-
-  TextEditingController setPlateController(String value) {
-    nPlateController.value = TextEditingValue(text: value);
-    return nPlateController;
-  }
-
-  TextEditingController setModelCodeController(String value) {
-    modelCodeController.value = TextEditingValue(text: value);
-    return modelCodeController;
+  void clearAll() {
+    clearBrandController();
+    clearColorController();
+    clearModelCodeController();
+    clearNPlateController();
+    image = null;
   }
 
   void checkValidation(String value, String key) {
@@ -157,6 +145,7 @@ class MyCarProvider with ChangeNotifier {
   }
 
   void submitData(BuildContext context) async {
+    MapProvider mapProvider = Provider.of<MapProvider>(context, listen: false);
     submitValid = _brand.error != null ||
         _color.error != null ||
         _modelCode.error != null ||
@@ -185,11 +174,11 @@ class MyCarProvider with ChangeNotifier {
             images: images);
         CarRepImpl().postCar(UrlApi.carsPath, data, token).then((value) async {
           showToastSuccess("Create success");
-          clearBrandController();
-          clearColorController();
-          clearModelCodeController();
-          clearNPlateController();
-          image = null;
+          mapProvider.reset();
+          clearAll();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const BottomTabBar();
+          }));
         }).onError((error, stackTrace) {
           log(error.toString());
         });

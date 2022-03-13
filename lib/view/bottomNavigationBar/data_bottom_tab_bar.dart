@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/entity/typeCar.dart';
 import 'package:parkingappmobile/view/qr_code/qr_code.dart';
-import 'package:parkingappmobile/model/response/type_cars_res.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/view/my_car/create_car.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
@@ -84,7 +83,6 @@ class ActionButtonMid extends StatelessWidget {
                 await Navigator.push(context,
                     MaterialPageRoute(builder: (context) {
                   return CreateCar(
-                    isUpdate: false,
                     typeCars: typeCars,
                   );
                 }));

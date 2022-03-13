@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/model/entity/car.dart';
 import 'package:parkingappmobile/model/entity/typeCar.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
-import 'package:parkingappmobile/view/my_car/create_car.dart';
+import 'package:parkingappmobile/view/my_car/detail_car.dart';
+import 'package:parkingappmobile/view_model/providers/car_detail_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
+import 'package:provider/provider.dart';
 
 class CardCar extends StatefulWidget {
   CardCar({Key? key, this.car, this.typeCars}) : super(key: key);
@@ -33,6 +35,8 @@ class _CardCarState extends State<CardCar> {
 
   @override
   Widget build(BuildContext context) {
+    CarDetailProvider carDetailProvider =
+        Provider.of<CarDetailProvider>(context);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -64,14 +68,24 @@ class _CardCarState extends State<CardCar> {
                           MaterialStateProperty.all<Color>(Colors.blue),
                     ),
                     onPressed: () {
+                      carDetailProvider.addData(
+                          widget.car!.id,
+                          widget.car!.images[0].id,
+                          widget.car!.images.isNotEmpty
+                              ? widget.car!.images[0].url
+                              : "https://i.ibb.co/GMv63Nr/e391ff1ef747.png",
+                          widget.car!.brand,
+                          widget.car!.color,
+                          widget.car!.modelCode,
+                          widget.car!.nPlates,
+                          widget.car!.typeCar.id!);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => CreateCar(
-                                  car: widget.car,
-                                  typeCars: widget.typeCars,
-                                  isUpdate: true,
-                                )),
+                        MaterialPageRoute(builder: (context) {
+                          return DetailCar(
+                            typeCars: widget.typeCars,
+                          );
+                        }),
                       );
                     },
                     child: const Text('View Detail'),

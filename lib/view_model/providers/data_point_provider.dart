@@ -122,6 +122,12 @@ class MapProvider with ChangeNotifier {
     }
   }
 
+  reset() async {
+    mapController = MapController();
+    getJsonData();
+    notifyListeners();
+  }
+
   Future<void> updatePosition() async {
     LatLng pos = await determinePosition();
     point = pos;
