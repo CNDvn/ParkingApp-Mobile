@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/request/change_password_rep.dart';
+import 'package:parkingappmobile/repository/impl/auth_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/change_password_rep_impl.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
@@ -14,7 +15,6 @@ class ValidationPassword {
 }
 
 class EnterChangePasswordProvider with ChangeNotifier {
-
   bool isPasswordVariable = true;
   bool isNewPasswordVariable = true;
 
@@ -30,7 +30,8 @@ class EnterChangePasswordProvider with ChangeNotifier {
   String get textPassword => passwordController.text;
 
   final _newPasswordTextEditController = TextEditingController();
-  TextEditingController get newPasswordController => _newPasswordTextEditController;
+  TextEditingController get newPasswordController =>
+      _newPasswordTextEditController;
   String get textNewPassword => newPasswordController.text;
 
   void clearPasswordController() {
@@ -73,8 +74,7 @@ class EnterChangePasswordProvider with ChangeNotifier {
       newPassword.error = "Confirm password is not empty";
       flag = false;
     } else if (value.length < 8) {
-      newPassword.error =
-          "New Password must 8 charactor ";
+      newPassword.error = "New Password must 8 charactor ";
     } else {
       newPassword.error = null;
     }
@@ -88,18 +88,25 @@ class EnterChangePasswordProvider with ChangeNotifier {
     bool isNewPassword = checkNewPassword(newPassword.value);
     final SecureStorage secureStorage = SecureStorage();
     final token = await secureStorage.readSecureData("token");
-
     if (isPassword && isNewPassword) {
       showDialogCustom(context);
-      ChangePasswordRepImpl().putChangePassword(UrlApi.changePasswordPath, ChangePasswordReq(password: password.value, newPassword: newPassword.value), token)
-      .then((value) async {
+      ChangePasswordRepImpl()
+          .putChangePassword(
+              UrlApi.changePasswordPath,
+              ChangePasswordReq(
+                  password: password.value, newPassword: newPassword.value),
+              token)
+          .then((value) async {
         showToastSuccess(value.result!);
+        //--------------
+        String accessToken = await secureStorage.readSecureData("token");
+        AuthRepImpl().postSignOut("", accessToken);
+        secureStorage.deleteAll();
+        //----------------
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const SignInPage()),
-          (route) => false);
-      }).then((value) => {
-
-      });
+            MaterialPageRoute(builder: (context) => const SignInPage()),
+            (route) => false);
+      }).then((value) => {});
     }
   }
 }

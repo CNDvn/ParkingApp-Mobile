@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/providers/enter_change_password_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class EnterChangePassword extends StatelessWidget {
   Widget build(BuildContext context) {
     EnterChangePasswordProvider provider =
         Provider.of<EnterChangePasswordProvider>(context);
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColor.whiteBackground,
@@ -22,6 +24,20 @@ class EnterChangePassword extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Column(
               children: <Widget>[
+                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                SizedBox(
+                    child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black87,
+                  ),
+                  onPressed: () {
+                    mapProvider.reset();
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/BottomTabBar", (route) => false);
+                  },
+                )),
+              ]),
                 SizedBox(
                   height: size.height * 0.2,
                   width: size.width * 0.9,
@@ -74,10 +90,6 @@ class EnterChangePassword extends StatelessWidget {
                     onChanged: (String value) {
                       provider.checkPassword(value);
                     },
-                    // focusNode: provider.passwordFocus,
-                    // onEditingComplete: () {
-                    //   signInProvider.changeFocus(context, 'password');
-                    // },
                   ),
                 ),
                 SizedBox(
@@ -116,10 +128,6 @@ class EnterChangePassword extends StatelessWidget {
                     onChanged: (String value) {
                       provider.checkNewPassword(value);
                     },
-                    // focusNode: provider.passwordFocus,
-                    // onEditingComplete: () {
-                    //   signInProvider.changeFocus(context, 'password');
-                    // },
                   ),
                 ),
                 SizedBox(
@@ -127,6 +135,7 @@ class EnterChangePassword extends StatelessWidget {
                     child: ButtonDefault(
                         content: "Submit",
                         voidCallBack: () {
+                          mapProvider.reset();
                           provider.submit(context);
                         }))
               ],

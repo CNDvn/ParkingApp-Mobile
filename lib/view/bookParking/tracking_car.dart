@@ -6,8 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/parking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
@@ -43,6 +44,11 @@ class _TrackingCarState extends State<TrackingCar> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
@@ -60,18 +66,17 @@ class _TrackingCarState extends State<TrackingCar> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     DateTime now = DateTime.now();
-    String formattedTime = DateFormat('KK:mm:a').format(now);
     ParkingDetailsProvider providerParking =
         Provider.of<ParkingDetailsProvider>(context);
     TrackingCarProvider providerTracking =
         Provider.of<TrackingCarProvider>(context);
     BookingDetailProvider providerBooking =
         Provider.of<BookingDetailProvider>(context);
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
+    String formattedTime = DateFormat('KK:mm:a').format(now);
 
     stopTimer() {
-      setState(() {
-        timer?.cancel();
-      });
       var toalTime = timer?.tick;
       log(toalTime.toString());
       pauseTime = toalTime.toString();
@@ -80,7 +85,11 @@ class _TrackingCarState extends State<TrackingCar> {
       providerTracking.insertStorage();
       log(providerTracking.bookingTime);
       providerBooking.getInformation();
-      Navigator.pushReplacementNamed(context, "/BookingDetails");
+      //------------------
+      providerTracking.checkOut(context);
+      setState(() {
+        timer?.cancel();
+      });
     }
 
     return Scaffold(
@@ -93,14 +102,27 @@ class _TrackingCarState extends State<TrackingCar> {
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.only(bottom: 30, top: 50),
-                child: Text(
-                  providerParking.parkingName,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: AppColor.greyText,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w400),
-                ),
+                child: myCarProvider.carBooked.isNotEmpty
+                    ? Text(
+                        providerParking.parkingName,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: AppColor.greyText,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w400),
+                      )
+                    : SizedBox(
+                        height: size.height * 0.08,
+                        width: size.width * 0.9,
+                        child: Text(
+                          "Your Cars In The Parking",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: AppColor.greyText,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
               ),
               SizedBox(
                 child: Container(
@@ -108,7 +130,7 @@ class _TrackingCarState extends State<TrackingCar> {
                   child: Row(children: [
                     Container(
                       margin: const EdgeInsets.only(left: 40, right: 60),
-                      child: Text("Booking Time: ",
+                      child: Text("Start Time: ",
                           style: TextStyle(
                               color: AppColor.greyText, fontSize: 17)),
                     ),
@@ -120,6 +142,36 @@ class _TrackingCarState extends State<TrackingCar> {
                     ),
                   ]),
                 ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    child: Text("Choose Your Car: "),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.09,
+                    child: myCarProvider.carBooked.isNotEmpty
+                        ? Text(myCarProvider.carBooked)
+                        : DropdownButton(
+                            value: myCarProvider.firstCarBooked,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                myCarProvider.firstCarBooked = newValue!;
+                                myCarProvider.getIdCarBooked();
+                              });
+                            },
+                            items:
+                                myCarProvider.myCarsBooked.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                  ),
+                ],
               ),
               SizedBox(child: Image.asset(AssetPath.car)),
               SizedBox(
@@ -151,17 +203,23 @@ class _TrackingCarState extends State<TrackingCar> {
                                       child: ConfirmationSlider(
                                           onConfirmation: stopTimer),
                                     )),
-                                GestureDetector(
-                                    child: Text(
-                                      "Go back Home",
-                                      style: AppTextStyles.h4black,
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return const BottomTabBar();
-                                      }));
-                                    }),
+                                SizedBox(
+                                  height: size.height * 0.05,
+                                ),
+                                SizedBox(
+                                  child: GestureDetector(
+                                      child: Text(
+                                        "Go back Home",
+                                        style: AppTextStyles.h3black,
+                                      ),
+                                      onTap: () {
+                                        mapProvider.reset();
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            "/BottomTabBar",
+                                            (route) => false);
+                                      }),
+                                ),
                               ],
                             )));
                       }),

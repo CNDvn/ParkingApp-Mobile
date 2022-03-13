@@ -10,18 +10,22 @@ import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:provider/provider.dart';
-
 class BottomTabBar extends StatefulWidget {
   const BottomTabBar({Key? key}) : super(key: key);
 
   @override
   _BottomTabBarState createState() => _BottomTabBarState();
 }
-
-class _BottomTabBarState extends State<BottomTabBar> {
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+class _BottomTabBarState extends State<BottomTabBar> with AutomaticKeepAliveClientMixin<BottomTabBar>{
+  GlobalKey<ScaffoldState>? scaffoldKey = GlobalKey<ScaffoldState>();
   int currentTab = 0;
   TabController? _tabController;
+  List<Widget> screens = [
+      const GoogleMap(),
+      const Payments(),
+      const History(),
+      const MyCar()
+    ];
   @override
   void dispose() {
     _tabController?.dispose();
@@ -35,18 +39,13 @@ class _BottomTabBarState extends State<BottomTabBar> {
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     double windowHeight = MediaQuery.of(context).size.height;
     double windowWidth = MediaQuery.of(context).size.width;
     UserProfileProvider userProvider =
-        Provider.of<UserProfileProvider>(context);
-    List<Widget> screens = [
-      const GoogleMap(),
-      const Payments(),
-      const History(),
-      const MyCar()
-    ];
-    return Scaffold(
+        Provider.of<UserProfileProvider>(context);      
+    return Scaffold(      
       key: scaffoldKey,
       drawer: const DrawerDefault(),
       body: Stack(children: [
@@ -65,7 +64,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
                 color: Colors.black87,
               ),
               onPressed: () {
-                scaffoldKey.currentState!.openDrawer();
+                scaffoldKey!.currentState?.openDrawer();
               },
             )),
             SizedBox(
@@ -149,4 +148,7 @@ class _BottomTabBarState extends State<BottomTabBar> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -22,4 +22,9 @@ class AssetPath {
   static const String car = '$prePath/car.png';
   static const String defaultAvatar = '$prePath/default_avatar.png';
   static const String defaultCar = '$prePath/default_car.png';
+  static const String changePassword = '$prePath/change_password.png';
+  static const String carBookingTime = '$prePath/car_booking_time.jpg';
+  static const String promotion = '$prePath/promotion_percent.jpg';
+  static const String qscanCode = '$prePath/qscan_code.jpeg';
+  static const String settings = '$prePath/settings.jpg';  
 }

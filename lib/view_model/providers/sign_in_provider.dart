@@ -9,8 +9,9 @@ import 'package:parkingappmobile/repository/impl/users_me_rep_impl.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
-import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
@@ -109,6 +110,7 @@ class SignInProvider with ChangeNotifier {
   void submitData(BuildContext context) {
     UserProfileProvider userProvider =
         Provider.of<UserProfileProvider>(context, listen: false);
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context, listen: false);
     submitValid = _phone.error != null ||
         _password.error != null ||
         _phone.value == null ||
@@ -131,16 +133,13 @@ class SignInProvider with ChangeNotifier {
         await secureStorage.writeSecureData(
             "customer", value.result!.refreshToken);
         await UsersMeRepImpl()
-            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken)
-            .then((value) async {
-          userProvider.getProfile();
-          await Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const BottomTabBar();
-          }));
-        });
-        showToastSuccess(value.result!.message);
+            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);   
+         userProvider.getProfile();
+          myCarProvider.getList();      
+          showToastSuccess(value.result!.message);
         clearPhoneController();
         clearPasswordController();
+          await Navigator.pushReplacementNamed(context, "/BottomTabBar");
       }).onError((error, stackTrace) {
         log(error.toString());
         Navigator.pushReplacementNamed(context, "/");
@@ -158,6 +157,9 @@ class SignInProvider with ChangeNotifier {
 
   final AuthBase auth = Auth();
   Future<void> signInWithGoogle(BuildContext context) async {
+    UserProfileProvider userProvider =
+        Provider.of<UserProfileProvider>(context, listen: false);
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context, listen: false);
     try {
       showDialogCustom(context);
       User? user = await auth.signInWithGoogle();
@@ -178,7 +180,11 @@ class SignInProvider with ChangeNotifier {
               "customer", value.result!.refreshToken);
           UsersMeRepImpl()
               .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
+          userProvider.getProfile();
+          myCarProvider.getList();      
           showToastSuccess(value.result!.message);
+        clearPhoneController();
+        clearPasswordController();
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const BottomTabBar();
           }));
@@ -195,24 +201,26 @@ class SignInProvider with ChangeNotifier {
       String accessToken = await secureStorage.readSecureData("token");
       AuthRepImpl().postSignOut("", accessToken);
       secureStorage.deleteAll();
+      _phone = ValidationItem(null, null);
+      _password = ValidationItem(null, null);
+      phoneController.clear();
+      passwordController.clear();
     } catch (e) {
       log(e.toString());
     }
   }
 
   Future<void> confirmSignOut(BuildContext context) async {
+    MapProvider mapProvider = Provider.of<MapProvider>(context, listen: false);
     final didRequestSignOut = await showAlertDialog(context,
         title: 'Logout',
         content: 'Are you sure that you want to logout?',
         defaultActionText: 'Logout',
         cancelActionText: 'Cancel');
     if (didRequestSignOut == true) {
+      mapProvider.resetAll();
       _signOut(context);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const SignInPage()),
-          ModalRoute.withName('/'));
+      Navigator.pushReplacementNamed(context, "/");
     }
   }
 }
