@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/model/response/card_res.dart';
 
 class CardPayment extends StatelessWidget {
-  CardPayment({Key? key, required this.card}) : super(key: key);
-  CardBank card;
+  const CardPayment({Key? key, 
+  // required this.card
+  }) : super(key: key);
+  // CardBank card;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -39,22 +41,23 @@ class CardPayment extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("* * * *",
+            children:const [
+               Text("* * * *",
                   style: TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 18, height: 2)),
-              const Text("* * * *",
+               Text("* * * *",
                   style: TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 18, height: 2)),
-              const Text("* * * *",
+               Text("* * * *",
                   style: TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 18, height: 2)),
               Text(
-                  card.cardNumber[card.cardNumber.length - 4].toString() +
-                      card.cardNumber[card.cardNumber.length - 3].toString() +
-                      card.cardNumber[card.cardNumber.length - 2].toString() +
-                      card.cardNumber[card.cardNumber.length - 1].toString(),
-                  style: const TextStyle(
+                  // card.cardNumber[card.cardNumber.length - 4].toString() +
+                  //     card.cardNumber[card.cardNumber.length - 3].toString() +
+                  //     card.cardNumber[card.cardNumber.length - 2].toString() +
+                  //     card.cardNumber[card.cardNumber.length - 1].toString(),
+                  "999",
+                  style:  TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 18, height: 1.6)),
             ],
           ),
@@ -68,9 +71,10 @@ class CardPayment extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(card.cardHolder,
-                  style: const TextStyle(
+            children:const [
+               Text("DIEP LOC",
+                // card.cardHolder,
+                  style:  TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 18, height: 1.6)),
             ],
           ),
@@ -79,12 +83,13 @@ class CardPayment extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Expires",
+            children:const [
+               Text("Expires",
                   style: TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 18, height: 1.6)),
-              Text(card.dateValidFrom,
-                  style: const TextStyle(
+              Text("01/2022",
+                // card.dateValidFrom,
+                  style:  TextStyle(
                       fontWeight: FontWeight.w700, fontSize: 18, height: 1.6))
             ],
           ),

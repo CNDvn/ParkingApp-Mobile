@@ -45,11 +45,17 @@ class _CreateCarState extends State<CreateCar> {
         SingleChildScrollView(
             child: Container(
           margin:
-              EdgeInsets.fromLTRB(0, size.height * 0.05, 0, size.height * 0.05),
+              EdgeInsets.fromLTRB(0, size.height * 0.02, 0, size.height * 0.05),
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                 child: Row(
@@ -236,12 +242,6 @@ class _CreateCarState extends State<CreateCar> {
             ],
           ),
         )),
-        IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )
       ]),
     );
   }

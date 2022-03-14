@@ -48,7 +48,7 @@ class IconButtonStyle extends StatelessWidget {
 
 final List<IconData> iconMid = [
   Icons.near_me_sharp,
-  Icons.qr_code_2,
+  Icons.camera_alt,
   Icons.query_builder,
   Icons.add
 ];

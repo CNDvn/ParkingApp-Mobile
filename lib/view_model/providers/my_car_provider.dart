@@ -2,10 +2,12 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/base/base_validation.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/entity/car.dart';
 import 'package:parkingappmobile/model/request/create_car_req.dart';
+import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/image_rep_impl.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
@@ -202,7 +204,7 @@ class MyCarProvider with ChangeNotifier {
         cars.add(item.nPlates!);
       }
       firstCar = cars[0];
-      key = listMyCar[0]!.id!;
+      key = listMyCar[0]!.id!;      
     });
     notifyListeners();
   }
@@ -242,10 +244,34 @@ class MyCarProvider with ChangeNotifier {
 
   getIdCarBooked() {
     secureStorage.deleteSecureData("idCar");
-    listMyCar.forEach((key, value) {
+    listMyCar.forEach((key, value) async {
       if (firstCarBooked!.contains(value.nPlates!)) {
         this.key = key;
         secureStorage.writeSecureData("idCar", this.key);
+      }
+    });
+    notifyListeners();
+  }
+
+  String startTime ="";
+  int countTime =0;
+  String parkingName= "";
+  int hoursBook = 0;
+  int minutesBook = 0;
+  int secondsBook = 0;
+  DateTime? now;
+  getBookingByIdCar() async {
+    startTime ="";
+    parkingName= "";
+    String accessToken = await secureStorage.readSecureData("token");
+    String url = "https://parking-app-project.herokuapp.com/api/v1/bookings/car/$key";
+    BookingRepImpl().getBookingByIdCar(url, accessToken).then((value) {
+      if (value.statusCode == 200){
+        hoursBook = DateTime.now().hour - value.result!.startTime!.add(const Duration(hours: 7)).hour;
+        minutesBook = DateTime.now().minute - value.result!.startTime!.add(const Duration(hours: 7)).minute;
+        secondsBook = DateTime.now().second -  value.result!.startTime!.add(const Duration(hours: 7)).second;
+        startTime = DateFormat('KK:mm:a').format(value.result!.startTime!.add(const Duration(hours: 7)));
+        parkingName = value.result!.parking!.name!;
       }
     });
     notifyListeners();
