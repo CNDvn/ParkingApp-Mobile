@@ -3,6 +3,7 @@ import 'package:parkingappmobile/configs/exception/show_alert_dialog.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/repository/impl/payment_rep_impl.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 
 class BookingDetailProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();

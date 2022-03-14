@@ -115,21 +115,13 @@ class BookingDetails extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.zero,
-                          child: Text(
-                            "Information Parking",
-                            textAlign: TextAlign.start,
-                            style: AppTextStyles.h3black,
-                          ),
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Name: ",
+                              "Parking: ",
                               style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
+                                  fontSize: 16, color: AppColor.blueText),
                             ),
                             SizedBox(
                               width: size.width * 0.58,
@@ -151,7 +143,7 @@ class BookingDetails extends StatelessWidget {
                             Text(
                               "Address: ",
                               style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
+                                  fontSize: 16, color: AppColor.blueText),
                             ),
                             SizedBox(
                               width: size.width * 0.58,
@@ -173,7 +165,7 @@ class BookingDetails extends StatelessWidget {
                             Text(
                               "Phone: ",
                               style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
+                                  fontSize: 16, color: AppColor.blueText),
                             ),
                             SizedBox(
                               width: size.width * 0.58,
@@ -189,85 +181,77 @@ class BookingDetails extends StatelessWidget {
                             )
                           ],
                         ),
-                        Container(
-                          margin: EdgeInsets.zero,
-                          child: Text(
-                            "Information Payment",
-                            textAlign: TextAlign.start,
-                            style: AppTextStyles.h3black,
-                          ),
-                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Start Time: ",
                               style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
+                                  fontSize: 16, color: AppColor.blueText),
                             ),
                             SizedBox(
                               child: Text(
                                 providerBooking.startTime,
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: AppColor.greenToast,
+                                    color: AppColor.blackText,
                                     fontWeight: FontWeight.bold),
                               ),
                             )
                           ],
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Check-in Time: ",
                               style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
+                                  fontSize: 16, color: AppColor.blueText),
                             ),
                             SizedBox(
                               child: Text(
                                 providerBooking.checkInTime,
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: AppColor.greenToast,
+                                    color: AppColor.blackText,
                                     fontWeight: FontWeight.bold),
                               ),
                             )
                           ],
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Check-out Time: ",
                               style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
+                                  fontSize: 16, color: AppColor.blueText),
                             ),
                             SizedBox(
                               child: Text(
                                 formattedTime,
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: AppColor.greenToast,
+                                    color: AppColor.blackText,
                                     fontWeight: FontWeight.bold),
                               ),
                             )
                           ],
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Total Price: ",
                               style: TextStyle(
-                                  fontSize: 16, color: AppColor.greyText),
+                                  fontSize: 16, color: AppColor.blueText),
                             ),
                             SizedBox(
                               child: Text(
                                 providerBooking.price,
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: AppColor.greenToast,
+                                    color: AppColor.blackText,
                                     fontWeight: FontWeight.bold),
                               ),
                             )

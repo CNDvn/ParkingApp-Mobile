@@ -145,7 +145,7 @@ class MapProvider with ChangeNotifier {
   Future<void> updatePosition() async {
     LatLng pos = await determinePosition();
     point = pos;
-    mapController.move(point, zoomMap);
+    Future.delayed(const Duration(milliseconds: 600),(){mapController.move(point, zoomMap);});
     getJsonData();
     notifyListeners();
   }

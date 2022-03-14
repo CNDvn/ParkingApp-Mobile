@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
@@ -53,11 +54,12 @@ class _TrackingCarState extends State<TrackingCar> {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
-  Widget buildTime() {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
+  Widget buildTime(int hourbook,int minutebook,int secondbook) {
+      String twoDigits(int n) => n.toString().padLeft(2, '0');
+      seconds = twoDigits((duration.inSeconds).remainder(60));
     hours = twoDigits(duration.inHours);
-    minutes = twoDigits(duration.inMinutes.remainder(60));
-    seconds = twoDigits(duration.inSeconds.remainder(60));
+    minutes = twoDigits((duration.inMinutes).remainder(60));
+    
 
     return Text('$hours:$minutes:$seconds', style: AppTextStyles.h1Black);
   }
@@ -126,19 +128,23 @@ class _TrackingCarState extends State<TrackingCar> {
               ),
               SizedBox(
                 child: Container(
-                  padding: const EdgeInsets.only(bottom: 40),
+                  padding: EdgeInsets.only(bottom: size.height * 0.01),
                   child: Row(children: [
                     Container(
                       margin: const EdgeInsets.only(left: 40, right: 60),
                       child: Text("Start Time: ",
                           style: TextStyle(
-                              color: AppColor.greyText, fontSize: 17)),
+                              color: AppColor.blackText, fontSize: 17)),
                     ),
                     Container(
                       margin: const EdgeInsets.only(left: 60),
-                      child: Text(formattedTime,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17)),
+                      child: myCarProvider.startTime.isNotEmpty
+                          ? Text(myCarProvider.startTime,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17))
+                          : Text(formattedTime,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17)),
                     ),
                   ]),
                 ),
@@ -147,83 +153,101 @@ class _TrackingCarState extends State<TrackingCar> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    child: Text("Choose Your Car: "),
+                  SizedBox(
+                    height: size.height * 0.06,
+                    child: const Text("Choose Your Car: "),
                   ),
                   SizedBox(
                     height: size.height * 0.09,
                     child: myCarProvider.carBooked.isNotEmpty
-                        ? Text(myCarProvider.carBooked)
+                        ? Text(
+                            myCarProvider.carBooked,
+                            style: AppTextStyles.h3black,
+                          )
                         : DropdownButton(
                             value: myCarProvider.firstCarBooked,
                             onChanged: (String? newValue) {
                               setState(() {
                                 myCarProvider.firstCarBooked = newValue!;
                                 myCarProvider.getIdCarBooked();
+                                myCarProvider.getBookingByIdCar();
                               });
                             },
                             items:
                                 myCarProvider.myCarsBooked.map((String value) {
                               return DropdownMenuItem(
                                 value: value,
-                                child: Text(value),
+                                child: Text(value,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17)),
                               );
                             }).toList(),
                           ),
                   ),
                 ],
               ),
-              SizedBox(child: Image.asset(AssetPath.car)),
               SizedBox(
-                child: Container(
-                  padding: const EdgeInsets.only(top: 40, bottom: 30),
-                  child: const Text("Parking Time",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18)),
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.3,
-                width: size.width * 0.8,
-                child: Container(
-                  padding: EdgeInsets.only(left: size.width * 0.025),
+                  height: size.height * 0.4,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(child: Lottie.asset(AssetPath.trackingCar)),
+                      SizedBox(
+                          height: size.height * 0.2,
+                          child: Image.asset(AssetPath.car))
+                    ],
+                  )),
+              // if (myCarProvider.carBooked.isNotEmpty)
+                SizedBox(
+                  height: size.height * 0.1,
                   child: StreamBuilder<Object>(
                       stream: null,
                       builder: (context, snapshot) {
-                        return Scaffold(
-                            backgroundColor: AppColor.whiteBackground,
-                            body: SingleChildScrollView(
-                                child: Column(
-                              children: [
-                                buildTime(),
-                                Container(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: SizedBox(
-                                      width: size.width * 0.8,
-                                      child: ConfirmationSlider(
-                                          onConfirmation: stopTimer),
-                                    )),
-                                SizedBox(
-                                  height: size.height * 0.05,
-                                ),
-                                SizedBox(
-                                  child: GestureDetector(
-                                      child: Text(
-                                        "Go back Home",
-                                        style: AppTextStyles.h3black,
-                                      ),
-                                      onTap: () {
-                                        mapProvider.reset();
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            "/BottomTabBar",
-                                            (route) => false);
-                                      }),
-                                ),
-                              ],
-                            )));
+                        return Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                // mainAxisAlignment: MainAxisAlignment.,
+                                children: [
+                                  SizedBox(
+                                    child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: size.height * 0.01),
+                                      child: const Text("Time Clock",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 18)),
+                                    ),
+                                  ),
+                                  buildTime(myCarProvider.hoursBook,myCarProvider.minutesBook,myCarProvider.secondsBook),
+                                ],
+                              )
+                            ]);
                       }),
                 ),
+              Container(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: SizedBox(
+                    width: size.width * 0.8,
+                    child: ConfirmationSlider(onConfirmation: stopTimer),
+                  )),
+              Container(
+                margin: EdgeInsets.only(top: size.height * 0.04),
+                child: GestureDetector(
+                    child: Text(
+                      "Go back Home",
+                      style: AppTextStyles.h3black,
+                    ),
+                    onTap: () {
+                      mapProvider.reset();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/BottomTabBar", (route) => false);
+                    }),
+              ),
+              SizedBox(
+                height: size.height * 0.05,
               ),
             ],
           ),
