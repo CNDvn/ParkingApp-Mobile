@@ -16,4 +16,5 @@ class UrlApi {
   static const String loginGooglePath = '$serverPath/auths/loginGoogle';
   static const String userCar = '$serverPath/cars/me';
   static const String cardsPath = '$serverPath/cards';
+  static const String pushNotify = '$serverPath/push-notification/deviceToken';
 }
