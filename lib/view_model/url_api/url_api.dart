@@ -1,5 +1,5 @@
 class UrlApi {
-  static const String serverPath = "https://parking-app-project.herokuapp.com/api/v1";
+  static const String serverPath = "http://13.70.20.93:5000/api/v1";
   static const String signinPath = '$serverPath/auths/login';
   static const String otpPath = '$serverPath/auths/OTPSMS';
   static const String resetpasswordPath = '$serverPath/auths/resetPassword';
@@ -17,4 +17,5 @@ class UrlApi {
   static const String cardCarPath = '$serverPath/cars/me';
   static const String userCar = '$serverPath/cars/me';
   static const String cardsPath = '$serverPath/cards';
+  static const String signOut = "$serverPath/auths/logout";
 }

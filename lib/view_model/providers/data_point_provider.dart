@@ -13,6 +13,9 @@ import 'package:parkingappmobile/view/parkingDetail/parking_detail.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
+const String apiKey =
+    '5b3ce3597851110001cf62480a3c8b8ff5eb4d889ea0af6dd8059502';
+
 class ValidationItem {
   final String? value;
   final String? error;
@@ -53,8 +56,7 @@ class NetworkHelper {
       required this.endLat});
 
   final String url = 'https://api.openrouteservice.org/v2/directions/';
-  final String apiKey =
-      '5b3ce3597851110001cf6248de01881e3c1a42508851f987bff20c42';
+
   final String journeyMode =
       'driving-car'; // Change it if you want or make it variable
   final double startLng;
@@ -63,8 +65,28 @@ class NetworkHelper {
   final double endLat;
 
   Future getData() async {
-    http.Response response = await http.get(Uri.parse(
-        '$url$journeyMode?api_key=$apiKey&start=$startLng,$startLat&end=$endLng,$endLat'));
+    String uri =
+        '$url$journeyMode?api_key=$apiKey&start=$startLng,$startLat&end=$endLng,$endLat';
+    http.Response response = await http.get(Uri.parse(uri));
+
+    if (response.statusCode == 200) {
+      String data = response.body;
+      return jsonDecode(data);
+    } else {
+      log(response.statusCode.toString());
+    }
+  }
+}
+
+class GetLocal {
+  GetLocal({required this.address});
+  final String address;
+
+  String url = 'https://api.openrouteservice.org/geocode/search';
+
+  Future getData() async {
+    http.Response response =
+        await http.get(Uri.parse('$url?api_key=$apiKey&text=$address&size=1'));
 
     if (response.statusCode == 200) {
       String data = response.body;
@@ -77,13 +99,19 @@ class NetworkHelper {
 
 class MapProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
-  final _getAddress = TextEditingController();
+  ValidationItem _addressParking = ValidationItem(null, null);
+  final _getAddressParkingController = TextEditingController();
 
-  TextEditingController get addressController => _getAddress;
-  String get textAddress => addressController.text;
+  ValidationItem get addressParking => _addressParking;
+  TextEditingController get addressParkingController =>
+      _getAddressParkingController;
+  String get textAddressParking => addressParkingController.text;
 
-  void clearGetAddress() {
-    addressController.clear();
+  final _addressParkingFocus = FocusNode();
+  FocusNode get addressParkingFocus => _addressParkingFocus;
+
+  void clearGetAddressParking() {
+    addressParkingController.clear();
     notifyListeners();
   }
 
@@ -99,7 +127,9 @@ class MapProvider with ChangeNotifier {
   String? id;
 
   void getJsonData() async {
-    polyPoints.clear();
+    Future.delayed(const Duration(milliseconds: 100), () {
+      polyPoints.clear();
+    });
 
     NetworkHelper network = NetworkHelper(
       startLat: point.latitude,
@@ -109,6 +139,7 @@ class MapProvider with ChangeNotifier {
     );
 
     try {
+      data = null;
       data = await network.getData();
       LineString ls =
           LineString(data['features'][0]['geometry']['coordinates']);
@@ -126,11 +157,46 @@ class MapProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void submitData(BuildContext context) {
+    if (_getAddressParkingController.text.isNotEmpty) {
+      FocusScope.of(context).unfocus();
+      _addressParking = ValidationItem("", null);
+      _addressParking = ValidationItem(_getAddressParkingController.text, null);
+      getJsonData1();
+      // Future.delayed(const Duration(milliseconds: 50), () {
+      //   mapController.move(destination, zoomMap);
+      // });
+      notifyListeners();
+    }
+  }
+
+  void getJsonData1() async {
+    polyPoints.clear();
+
+    GetLocal local = GetLocal(address: textAddressParking);
+
+    try {
+      // ignore: prefer_typing_uninitialized_variables
+      var data1;
+      data1 = await local.getData();
+      LineString ls_1 =
+          LineString(data1['features'][0]['geometry']['coordinates']);
+      destination = LatLng(ls_1.lineString[1], ls_1.lineString[0]);
+      Future.delayed(const Duration(milliseconds: 50), () {
+        mapController.move(destination, zoomMap);
+      });
+      getJsonData();
+    } catch (e) {
+      log(e.toString());
+    }
+    notifyListeners();
+  }
+
   resetAll() async {
     mapController = MapController();
     location.clear();
     polyPoints.clear();
-    clearGetAddress();
+    clearGetAddressParking();
     point = LatLng(0, 0);
     destination = LatLng(0, 0);
     notifyListeners();
@@ -151,8 +217,11 @@ class MapProvider with ChangeNotifier {
   Future<void> updatePosition() async {
     LatLng pos = await determinePosition();
     point = pos;
-    mapController.move(point, zoomMap);
+    Future.delayed(const Duration(milliseconds: 50), () {
+      mapController.move(point, zoomMap);
+    });
     getJsonData();
+    getJsonData1();
     notifyListeners();
   }
 

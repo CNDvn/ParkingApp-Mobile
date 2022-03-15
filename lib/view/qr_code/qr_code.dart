@@ -37,62 +37,80 @@ class _QRCodePageState extends State<QRCodePage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[            
-            Column(children: [
-              SizedBox(
-                child: Text(
-                  "Scan QR Code",
-                  style: AppTextStyles.h4black,
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.05,
-                child: Text(
-                  "Align the QR code within the frame to scan.",
-                  style: AppTextStyles.h5black,
-                ),
-              ),
-              SizedBox(
-                  height: size.height * 0.6,
-                  width: size.width * 0.8,
-                  child: _buildQrView(context)),              
-              FittedBox(
-                fit: BoxFit.contain,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    if (result != null)
-                      Text(
-                          'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                    else
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await controller?.pauseCamera();
-                              },
-                              child: const Icon(Icons.not_started_outlined),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await controller?.resumeCamera();
-                              },
-                              child: const Icon(Icons.pause),
-                            ),
-                          )
-                        ],
+          children: <Widget>[
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    SizedBox(
+                        child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.black87,
                       ),
-                  ],
-                ),
-              )
-            ]),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )),
+                  ]),
+                  SizedBox(
+                    child: Text(
+                      "Scan QR Code",
+                      style: AppTextStyles.h4black,
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.05,
+                    child: Text(
+                      "Align the QR code within the frame to scan.",
+                      style: AppTextStyles.h5black,
+                    ),
+                  ),
+                  SizedBox(
+                      height: size.height * 0.6,
+                      width: size.width * 0.8,
+                      child: _buildQrView(context)),
+                  FittedBox(
+                    fit: BoxFit.contain,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        if (result != null)
+                          Text(
+                              'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                        else
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                margin: const EdgeInsets.all(8),
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    await controller?.pauseCamera();
+                                  },
+                                  child: const Icon(Icons.not_started_outlined),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.all(8),
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    await controller?.resumeCamera();
+                                  },
+                                  child: const Icon(Icons.pause),
+                                ),
+                              )
+                            ],
+                          ),
+                      ],
+                    ),
+                  )
+                ]),
             SizedBox(
               child: ButtonDefault(
                   content: "Validate",
@@ -102,7 +120,10 @@ class _QRCodePageState extends State<QRCodePage> {
                       return const ViewPark();
                     }));
                   }),
-            )
+            ),
+            SizedBox(
+              height: size.height * 0.05,
+            ),
           ],
         ),
       ),

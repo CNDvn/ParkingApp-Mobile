@@ -2,9 +2,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/model/entity/car.dart';
 import 'package:parkingappmobile/model/request/create_car_req.dart';
+import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/image_rep_impl.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
@@ -208,12 +210,12 @@ class MyCarProvider with ChangeNotifier {
       for (var item in myCars!) {
         // ignore: prefer_collection_literals
         Map<String, Car> tmp = Map<String, Car>();
-        tmp[item.id!] = item;
+        tmp[item.id] = item;
         listMyCar.addAll(tmp);
-        cars.add(item.nPlates!);
+        cars.add(item.nPlates);
       }
       firstCar = cars[0];
-      key = listMyCar[0]!.id!;
+      key = listMyCar[0]!.id;      
     });
     notifyListeners();
   }
@@ -226,11 +228,11 @@ class MyCarProvider with ChangeNotifier {
     CarRepImpl().getMyCar(UrlApi.userCar, accessToken).then((value) {
       myCars = value.result;
       for (var item in myCars!) {
-        if (!item.status!.contains("active")) {
-          myCarsBooked.add(item.nPlates!);
+        if (!item.status.contains("active")) {
+          myCarsBooked.add(item.nPlates);
           // ignore: prefer_collection_literals
           Map<String, String> carBooktmp = Map();
-          carBooktmp[item.id!] = item.nPlates!;
+          carBooktmp[item.id] = item.nPlates;
           carBook.addAll(carBooktmp);
         }
       }
@@ -242,7 +244,7 @@ class MyCarProvider with ChangeNotifier {
   getIdCar() {
     secureStorage.deleteSecureData("idCar");
     listMyCar.forEach((key, value) {
-      if (firstCar!.contains(value.nPlates!)) {
+      if (firstCar!.contains(value.nPlates)) {
         this.key = key;
         secureStorage.writeSecureData("idCar", this.key);
         carBooked = firstCar!;
@@ -253,10 +255,36 @@ class MyCarProvider with ChangeNotifier {
 
   getIdCarBooked() {
     secureStorage.deleteSecureData("idCar");
-    listMyCar.forEach((key, value) {
-      if (firstCarBooked!.contains(value.nPlates!)) {
+    listMyCar.forEach((key, value) async {
+      if (firstCarBooked!.contains(value.nPlates)) {
         this.key = key;
         secureStorage.writeSecureData("idCar", this.key);
+      }
+    });
+    notifyListeners();
+  }
+
+  String startTime ="";
+  int countTime =0;
+  String parkingName= "";
+  int hoursBook = 0;
+  int minutesBook = 0;
+  int secondsBook = 0;
+  DateTime now = DateTime.now();
+  getBookingByIdCar() async {
+    startTime ="";
+    countTime =0;
+    String accessToken = await secureStorage.readSecureData("token");
+    String url = "${UrlApi.serverPath}/bookings/car/$key";
+    BookingRepImpl().getBookingByIdCar(url, accessToken).then((value) {
+      if (value.statusCode == 200){
+        now =  DateTime.now().subtract(Duration(hours: value.result!.startTime!.add(const Duration(hours: 7)).hour,minutes: value.result!.startTime!.add(const Duration(hours: 7)).minute,seconds: value.result!.startTime!.add(const Duration(hours: 7)).second));
+        hoursBook = DateTime.now().hour - value.result!.startTime!.add(const Duration(hours: 7)).hour;
+        minutesBook = DateTime.now().minute - value.result!.startTime!.add(const Duration(hours: 7)).minute;
+        secondsBook = DateTime.now().second -  value.result!.startTime!.add(const Duration(hours: 7)).second;        
+        startTime = DateFormat('KK:mm:a').format(value.result!.startTime!.add(const Duration(hours: 7)));
+        secureStorage.writeSecureData("startTime", startTime);
+        parkingName = value.result!.parking!.name!;
       }
     });
     notifyListeners();

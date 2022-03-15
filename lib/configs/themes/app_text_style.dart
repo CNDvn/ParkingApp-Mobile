@@ -24,4 +24,6 @@ class AppTextStyles {
       fontWeight: FontWeight.w400, fontSize: 16, color: AppColor.blackText);
   static final h5black = TextStyle(
       fontWeight: FontWeight.w300, fontSize: 13, color: AppColor.blackText);
+  static final h3blue = TextStyle(
+      fontWeight: FontWeight.w500, fontSize: 18, color: AppColor.blueText);
 }

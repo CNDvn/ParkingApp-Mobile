@@ -47,7 +47,7 @@ class AuthRepImpl implements AuthRepo {
   @override
   Future<SignOutRes> postSignOut(String url, String accessToken) async {
     var result = SignOutRes();
-    url = "https://parking-app-project.herokuapp.com/api/v1/auths/logout";
+    
     try {
       Response response = await Dio().post(url,options: Options(headers: {HttpHeaders.authorizationHeader: 'Bearer $accessToken'}));
       result = SignOutRes.signOutResFromJson(jsonEncode(response.data));

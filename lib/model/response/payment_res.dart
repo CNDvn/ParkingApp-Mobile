@@ -143,8 +143,8 @@ class WalletForm {
   DateTime? updatedAt;
   dynamic createdBy;
   dynamic updatedBy;
-  int? currentBalance;
-  int? frozenMoney;
+  dynamic currentBalance;
+  dynamic frozenMoney;
   DateTime? expiredTime;
   DateTime? createdTime;
   User? user;
@@ -335,7 +335,7 @@ class WalletTo {
   DateTime? updatedAt;
   dynamic createdBy;
   dynamic updatedBy;
-  int? currentBalance;
+  double? currentBalance;
   String? frozenMoney;
   DateTime? expiredTime;
   DateTime? createdTime;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
+import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
@@ -100,11 +101,15 @@ class _DrawerDefaultState extends State<DrawerDefault> {
               'Car in Parking',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {
+            onTap: () async {
               setState(() {
-                myCarProvider.getCarBooking();
+                Future.delayed(const Duration(milliseconds: 600),(){myCarProvider.getCarBooking();});
+                if (myCarProvider.carBook.isNotEmpty) {
+                  Navigator.pushReplacementNamed(context, "/TrackingCar");
+                } else {
+                  showToastFail("Don't have your cars are in the parking lot");
+                }
               });
-              Navigator.pushReplacementNamed(context, "/TrackingCar");
             },
           ),
           ListTile(
@@ -135,6 +140,7 @@ class _DrawerDefaultState extends State<DrawerDefault> {
             ),
             onTap: () {
               if (myCarProvider.cars.isNotEmpty) {
+                myCarProvider.getIdCar();
                 Navigator.pushReplacementNamed(context, "/QRCodeMyCar");
               }
             },
