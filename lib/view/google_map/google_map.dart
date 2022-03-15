@@ -82,15 +82,17 @@ class _GoogleMapState extends State<GoogleMap> {
             LatLng tmp = LatLng(0, 0);
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
+            mapProvider.addressParkingController.text = "";
             mapProvider.addressParkingController.text = key.name;
-            Future.delayed(const Duration(milliseconds: 600), () {
-              mapProvider.mapController.move(tmp, mapProvider.zoomMap);
+            Future.delayed(const Duration(milliseconds: 50), () {
+              mapProvider.mapController
+                  .move(mapProvider.destination, mapProvider.zoomMap);
             });
           });
+          mapProvider.getJsonData();
+          return;
         }
       });
-      mapProvider.clearGetAddress();
-      mapProvider.getJsonData();
     }
 
     if (mounted) {
@@ -119,7 +121,7 @@ class _GoogleMapState extends State<GoogleMap> {
                           LatLng(mapProvider.destination.latitude,
                               mapProvider.destination.longitude),
                           mapProvider.zoomMap);
-                    });                                    
+                    });
                     mapProvider.getJsonData();
                   });
                 },
@@ -202,60 +204,48 @@ class _GoogleMapState extends State<GoogleMap> {
               children: [
                 Card(
                     margin: EdgeInsets.only(
-                        left: 16.0, top: size.height * 0.1, right: 16.0),
-                    child: Column(children: [
-                      SizedBox(
-                        child: TextField(
-                          decoration: InputDecoration(
+                        left: 16.0, top: size.height * 0.2, right: 16.0),
+                    child: SizedBox(
+                      child: SearchField(
+                        controller: mapProvider.addressParkingController,
+                        hint: "Where are you going to ?",
+                        searchInputDecoration: InputDecoration(
                             contentPadding: const EdgeInsets.all(16.0),
-                            suffixIcon: mapProvider.textAddress.isNotEmpty
-                                ? IconButton(
-                                    icon: const Icon(Icons.close),
-                                    onPressed: () {
-                                      mapProvider.clearGetAddress();
-                                      mapProvider.resetAll();
-                                    },
-                                  )
-                                : null,
-                            hintText: "Where are you going to ?",
-                          ),
-                          keyboardType: TextInputType.multiline,
-                          textInputAction: TextInputAction.done,
-                          controller: mapProvider.addressController,
-                          onChanged: (String value) {
-                            mapProvider.checkAddress(value);
-                          },
-                          onEditingComplete: () {
-                            setState(() {
-                              mapProvider.submitData(context);
-                              FocusScope.of(context).unfocus();
-                            });
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        child: SearchField(
-                          controller: mapProvider.addressParkingController,
-                          hint: "What parking lot are you finding ?",
-                          searchInputDecoration: InputDecoration(
-                            contentPadding: const EdgeInsets.all(16.0),
-                            suffixIcon: mapProvider
-                                    .addressParkingController.text.isNotEmpty
-                                ? IconButton(
+                            suffixIcon: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                if (!cities.contains(
+                                    mapProvider.addressParkingController.text))
+                                  IconButton(
+                                      icon: const Icon(Icons.search),
+                                      onPressed: () => {
+                                            setState(() {
+                                              mapProvider.submitData(context);
+                                            })
+                                          }),
+                                if (mapProvider
+                                    .addressParkingController.text.isNotEmpty)
+                                  IconButton(
                                     icon: const Icon(Icons.close),
                                     onPressed: () {
                                       mapProvider.clearGetAddressParking();
-                                      mapProvider.resetAll();
+                                      mapProvider.polyPoints.clear();
+                                      Future.delayed(
+                                          const Duration(milliseconds: 50), () {
+                                        mapProvider.mapController.move(
+                                            mapProvider.point,
+                                            mapProvider.zoomMap);
+                                      });
                                     },
                                   )
-                                : null,
-                          ),
-                          maxSuggestionsInViewPort: 5,
-                          suggestions: cities,
-                          onTap: onTapDestination,
-                        ),
+                              ],
+                            )),
+                        maxSuggestionsInViewPort: 5,
+                        suggestions: cities,
+                        onTap: onTapDestination,
                       ),
-                    ])),
+                    )),
                 Card(
                   margin: const EdgeInsets.only(
                     left: 16.0,
