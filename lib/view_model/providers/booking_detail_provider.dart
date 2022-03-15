@@ -24,7 +24,7 @@ class BookingDetailProvider with ChangeNotifier {
     parkingName = await secureStorage.readSecureData("parkingName");
     phoneNumber = await secureStorage.readSecureData("phoneNumber");
     address = await secureStorage.readSecureData("address");
-    startTime = await secureStorage.readSecureData("bookingTime");
+    startTime = await secureStorage.readSecureData("startTime");
     notifyListeners();
   }
 
