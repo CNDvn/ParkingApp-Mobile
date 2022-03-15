@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 import 'package:provider/provider.dart';
 
 class TrackingCarProvider with ChangeNotifier {
@@ -51,7 +52,6 @@ class TrackingCarProvider with ChangeNotifier {
             DateFormat('KK:mm:a').format(value.result!.booking!.checkinTime!);
         bookingDetailProvider.price = value.result!.booking!.price!;
         secureStorage.writeSecureData("idBooking", value.result!.booking!.id!);
-        Future.delayed(const Duration(seconds: 3));
         Navigator.pushReplacementNamed(context, "/BookingDetails");
       }
     });

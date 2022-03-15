@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 
 class ParkingDetailsProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
@@ -28,6 +29,7 @@ class ParkingDetailsProvider with ChangeNotifier {
     BookingRepImpl().postBooking(url, accessToken).then((value) {
       if (value.statusCode == 201){
         startTime = value.result!.startTime.toString();
+      showDialogCustom(context);
       Navigator.pushReplacementNamed(context, "/TrackingCar");
       }
       

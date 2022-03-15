@@ -42,7 +42,7 @@ class Result {
 
   Booking? booking;
   DateTime? endTime;
-  int? amount;
+  dynamic amount;
   dynamic createdBy;
   dynamic updatedBy;
   String? id;

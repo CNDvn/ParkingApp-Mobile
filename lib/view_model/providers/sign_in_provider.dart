@@ -161,7 +161,7 @@ class SignInProvider with ChangeNotifier {
         Provider.of<UserProfileProvider>(context, listen: false);
     MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context, listen: false);
     try {
-      showDialogCustom(context);
+      // showDialogCustom(context);
       User? user = await auth.signInWithGoogle();
       if (user != null) {
         await secureStorage.writeSecureData("emailAddress", user.email ?? "");

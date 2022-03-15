@@ -83,7 +83,7 @@ class _GoogleMapState extends State<GoogleMap> {
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
             mapProvider.addressController.text = key.name;
-            mapProvider.mapController.move(tmp, mapProvider.zoomMap);
+            Future.delayed(const Duration(milliseconds: 600),(){mapProvider.mapController.move(tmp, mapProvider.zoomMap);});
           });
         }
       });
@@ -111,10 +111,10 @@ class _GoogleMapState extends State<GoogleMap> {
                   setState(() {
                     mapProvider.point = p;
                     mapProvider.location = tmp;
-                    mapProvider.mapController.move(
+                    Future.delayed(const Duration(milliseconds: 600),(){mapProvider.mapController.move(
                         LatLng(mapProvider.point.latitude,
                             mapProvider.point.longitude),
-                        mapProvider.zoomMap);
+                        mapProvider.zoomMap);});
                     mapProvider.getJsonData();
                   });
                 },
