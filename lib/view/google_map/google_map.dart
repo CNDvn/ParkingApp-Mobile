@@ -82,11 +82,14 @@ class _GoogleMapState extends State<GoogleMap> {
             LatLng tmp = LatLng(0, 0);
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
-            mapProvider.addressController.text = key.name;
-            Future.delayed(const Duration(milliseconds: 600),(){mapProvider.mapController.move(tmp, mapProvider.zoomMap);});
+            mapProvider.addressParkingController.text = key.name;
+            Future.delayed(const Duration(milliseconds: 600), () {
+              mapProvider.mapController.move(tmp, mapProvider.zoomMap);
+            });
           });
         }
       });
+      mapProvider.clearGetAddress();
       mapProvider.getJsonData();
     }
 
@@ -109,16 +112,18 @@ class _GoogleMapState extends State<GoogleMap> {
                   tmp = await Geocoder.local.findAddressesFromCoordinates(
                       Coordinates(p.latitude, p.longitude));
                   setState(() {
-                    mapProvider.point = p;
+                    mapProvider.destination = p;
                     mapProvider.location = tmp;
-                    Future.delayed(const Duration(milliseconds: 600),(){mapProvider.mapController.move(
-                        LatLng(mapProvider.point.latitude,
-                            mapProvider.point.longitude),
-                        mapProvider.zoomMap);});
+                    Future.delayed(const Duration(milliseconds: 50), () {
+                      mapProvider.mapController.move(
+                          LatLng(mapProvider.destination.latitude,
+                              mapProvider.destination.longitude),
+                          mapProvider.zoomMap);
+                    });                                    
                     mapProvider.getJsonData();
                   });
                 },
-                center: mapProvider.point,
+                center: mapProvider.destination,
                 zoom: 16.5,
                 plugins: [
                   MarkerClusterPlugin(),
@@ -140,6 +145,17 @@ class _GoogleMapState extends State<GoogleMap> {
                       builder: (ctx) => const SizedBox(
                         child: Icon(
                           Icons.location_on,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                    Marker(
+                      width: 50,
+                      height: 50,
+                      point: mapProvider.destination,
+                      builder: (ctx) => const SizedBox(
+                        child: Icon(
+                          Icons.share_location_outlined,
                           color: Colors.red,
                         ),
                       ),
@@ -166,6 +182,13 @@ class _GoogleMapState extends State<GoogleMap> {
                       radius: 100,
                       color: Colors.blue.withOpacity(0.2),
                       borderStrokeWidth: 2,
+                      borderColor: Colors.blue),
+                  CircleMarker(
+                      point: mapProvider.destination,
+                      useRadiusInMeter: true,
+                      radius: 200,
+                      color: Colors.blue.withOpacity(0.2),
+                      borderStrokeWidth: 2,
                       borderColor: Colors.blue)
                 ])
               ],
@@ -178,31 +201,69 @@ class _GoogleMapState extends State<GoogleMap> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Card(
-                  margin: EdgeInsets.only(
-                      left: 16.0, top: size.height * 0.2, right: 16.0),
-                  child: SearchField(
-                    controller: mapProvider.addressController,
-                    hint: "What parking lot are you finding ?",
-                    searchInputDecoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(16.0),
-                      suffixIcon: mapProvider.addressController.text.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                mapProvider.clearGetAddress();
-                                mapProvider.resetAll();
-                              },
-                            )
-                          : null,
-                    ),
-                    maxSuggestionsInViewPort: 5,
-                    suggestions: cities,
-                    onTap: onTapDestination,
-                  ),
-                ),
+                    margin: EdgeInsets.only(
+                        left: 16.0, top: size.height * 0.1, right: 16.0),
+                    child: Column(children: [
+                      SizedBox(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(16.0),
+                            suffixIcon: mapProvider.textAddress.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () {
+                                      mapProvider.clearGetAddress();
+                                      mapProvider.resetAll();
+                                    },
+                                  )
+                                : null,
+                            hintText: "Where are you going to ?",
+                          ),
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.done,
+                          controller: mapProvider.addressController,
+                          onChanged: (String value) {
+                            mapProvider.checkAddress(value);
+                          },
+                          onEditingComplete: () {
+                            setState(() {
+                              mapProvider.submitData(context);
+                              FocusScope.of(context).unfocus();
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        child: SearchField(
+                          controller: mapProvider.addressParkingController,
+                          hint: "What parking lot are you finding ?",
+                          searchInputDecoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(16.0),
+                            suffixIcon: mapProvider
+                                    .addressParkingController.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () {
+                                      mapProvider.clearGetAddressParking();
+                                      mapProvider.resetAll();
+                                    },
+                                  )
+                                : null,
+                          ),
+                          maxSuggestionsInViewPort: 5,
+                          suggestions: cities,
+                          onTap: onTapDestination,
+                        ),
+                      ),
+                    ])),
                 Card(
-                  child: mapProvider.addressController.text.isNotEmpty &&
-                          cities.contains(mapProvider.addressController.text)
+                  margin: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16.0,
+                  ),
+                  child: mapProvider.addressParkingController.text.isNotEmpty &&
+                          cities.contains(
+                              mapProvider.addressParkingController.text)
                       ? SizedBox(
                           child: ButtonDefault(
                           content: "View Parking Detail",

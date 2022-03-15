@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 
 class ParkingDetailsProvider with ChangeNotifier {
@@ -25,7 +26,7 @@ class ParkingDetailsProvider with ChangeNotifier {
     String idParking =await secureStorage.readSecureData("idParking");
     String idCar = await secureStorage.readSecureData("idCar");
     String accessToken = await secureStorage.readSecureData("token");
-    String url = "https://parking-app-project.herokuapp.com/api/v1/bookings/parking/$idParking/car/$idCar";
+    String url = "${UrlApi.serverPath}/bookings/parking/$idParking/car/$idCar";
     BookingRepImpl().postBooking(url, accessToken).then((value) {
       if (value.statusCode == 201){
         startTime = value.result!.startTime.toString();

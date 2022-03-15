@@ -199,7 +199,7 @@ class SignInProvider with ChangeNotifier {
     try {
       await auth.signOut();
       String accessToken = await secureStorage.readSecureData("token");
-      AuthRepImpl().postSignOut("", accessToken);
+      AuthRepImpl().postSignOut(UrlApi.signOut, accessToken);
       secureStorage.deleteAll();
       _phone = ValidationItem(null, null);
       _password = ValidationItem(null, null);
