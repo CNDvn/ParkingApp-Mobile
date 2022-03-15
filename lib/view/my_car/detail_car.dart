@@ -3,27 +3,27 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:parkingappmobile/constants/assets_path.dart';
-import 'package:parkingappmobile/model/entity/car.dart';
 import 'package:parkingappmobile/model/entity/typeCar.dart';
-import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
+import 'package:parkingappmobile/view_model/providers/car_detail_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/upload_image/upload_image.dart';
 import 'package:provider/provider.dart';
 
-class CreateCar extends StatefulWidget {
+class DetailCar extends StatefulWidget {
   final List<TypeCar>? typeCars;
-  Car? car;
-  CreateCar({Key? key, this.typeCars, this.car}) : super(key: key);
+  const DetailCar({
+    Key? key,
+    this.typeCars,
+  }) : super(key: key);
 
   @override
-  State<CreateCar> createState() => _CreateCarState();
+  State<DetailCar> createState() => _DetailCarState();
 }
 
-class _CreateCarState extends State<CreateCar> {
+class _DetailCarState extends State<DetailCar> {
   @override
   Widget build(BuildContext context) {
-    MyCarProvider provider = Provider.of<MyCarProvider>(context);
+    CarDetailProvider provider = Provider.of<CarDetailProvider>(context);
 
     Future pickImage(ImageSource source) async {
       try {
@@ -69,7 +69,7 @@ class _CreateCarState extends State<CreateCar> {
                   const Expanded(
                     flex: 6,
                     child: Text(
-                      "Create New Car",
+                      "Detail Car",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
@@ -95,8 +95,8 @@ class _CreateCarState extends State<CreateCar> {
                             provider.image!,
                             fit: BoxFit.cover,
                           )
-                        : const Image(
-                            image: AssetImage(AssetPath.defaultCar),
+                        : Image.network(
+                            provider.imageSto!,
                             fit: BoxFit.cover,
                           ),
                   ),
@@ -218,7 +218,7 @@ class _CreateCarState extends State<CreateCar> {
                 DropdownButton(
                   value: provider.dropdownValue,
                   icon: const Icon(Icons.keyboard_arrow_down),
-                  items: widget.typeCars!.map((TypeCar items) {
+                  items: widget.typeCars?.map((TypeCar items) {
                     return DropdownMenuItem(
                       value: items.id,
                       child: Text(items.name!),
