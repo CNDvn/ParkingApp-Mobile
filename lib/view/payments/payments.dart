@@ -1,11 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:parkingappmobile/model/response/card_res.dart';
-import 'package:parkingappmobile/repository/impl/card_payment_rep_impl.dart';
 import 'package:parkingappmobile/view/payments/card_payment.dart';
-import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class Payments extends StatefulWidget {
   const Payments({Key? key}) : super(key: key);

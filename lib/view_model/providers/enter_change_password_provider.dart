@@ -100,7 +100,7 @@ class EnterChangePasswordProvider with ChangeNotifier {
         showToastSuccess(value.result!);
         //--------------
         String accessToken = await secureStorage.readSecureData("token");
-        AuthRepImpl().postSignOut("", accessToken);
+        AuthRepImpl().postSignOut(UrlApi.signOut, accessToken);
         secureStorage.deleteAll();
         //----------------
         Navigator.of(context).pushAndRemoveUntil(

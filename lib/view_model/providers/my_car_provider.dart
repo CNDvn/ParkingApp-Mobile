@@ -259,17 +259,18 @@ class MyCarProvider with ChangeNotifier {
   int hoursBook = 0;
   int minutesBook = 0;
   int secondsBook = 0;
-  DateTime? now;
+  DateTime now = DateTime.now();
   getBookingByIdCar() async {
     startTime ="";
-    parkingName= "";
+    countTime =0;
     String accessToken = await secureStorage.readSecureData("token");
-    String url = "https://parking-app-project.herokuapp.com/api/v1/bookings/car/$key";
+    String url = "${UrlApi.serverPath}/bookings/car/$key";
     BookingRepImpl().getBookingByIdCar(url, accessToken).then((value) {
       if (value.statusCode == 200){
+        now =  DateTime.now().subtract(Duration(hours: value.result!.startTime!.add(const Duration(hours: 7)).hour,minutes: value.result!.startTime!.add(const Duration(hours: 7)).minute,seconds: value.result!.startTime!.add(const Duration(hours: 7)).second));
         hoursBook = DateTime.now().hour - value.result!.startTime!.add(const Duration(hours: 7)).hour;
         minutesBook = DateTime.now().minute - value.result!.startTime!.add(const Duration(hours: 7)).minute;
-        secondsBook = DateTime.now().second -  value.result!.startTime!.add(const Duration(hours: 7)).second;
+        secondsBook = DateTime.now().second -  value.result!.startTime!.add(const Duration(hours: 7)).second;        
         startTime = DateFormat('KK:mm:a').format(value.result!.startTime!.add(const Duration(hours: 7)));
         parkingName = value.result!.parking!.name!;
       }
