@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
-import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:provider/provider.dart';
 
 class TrackingCarProvider with ChangeNotifier {
@@ -11,6 +11,7 @@ class TrackingCarProvider with ChangeNotifier {
   String bookingTime = "";
   String parkingTime = "";
   String id = "";
+  bool flag = false;
 
   addInformation(String bookingTime, String parkingTime) async {
     this.bookingTime = bookingTime;
@@ -32,7 +33,7 @@ class TrackingCarProvider with ChangeNotifier {
     String firstNameSto = await secureStorage.readSecureData('firstName');
     String lastNameSto = await secureStorage.readSecureData('lastName');
     String url =
-        "https://parking-app-project.herokuapp.com/api/v1/bookings/checkOut/parking/$idParking/car/$idCar";
+        "${UrlApi.serverPath}/bookings/checkOut/parking/$idParking/car/$idCar";
     String accessToken = await secureStorage.readSecureData("token");
     BookingRepImpl().postCheckOut(url, accessToken).then((value) {
       if (value.statusCode == 201) {
@@ -52,6 +53,7 @@ class TrackingCarProvider with ChangeNotifier {
             DateFormat('KK:mm:a').format(value.result!.booking!.checkinTime!);
         bookingDetailProvider.price = value.result!.booking!.price!;
         secureStorage.writeSecureData("idBooking", value.result!.booking!.id!);
+        flag = true;
         Navigator.pushReplacementNamed(context, "/BookingDetails");
       }
     });

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/model/response/card_res.dart';
 
 class CardPayment extends StatelessWidget {
   const CardPayment({Key? key, 
