@@ -54,12 +54,11 @@ class _TrackingCarState extends State<TrackingCar> {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
-  Widget buildTime(int hourbook,int minutebook,int secondbook) {
-      String twoDigits(int n) => n.toString().padLeft(2, '0');
-      seconds = twoDigits((duration.inSeconds).remainder(60));
-    hours = twoDigits(duration.inHours);
-    minutes = twoDigits((duration.inMinutes).remainder(60));
-    
+  Widget buildTime(DateTime now) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    seconds = twoDigits((duration.inSeconds + now.second).remainder(60));
+    hours = twoDigits(duration.inHours + now.hour);
+    minutes = twoDigits((duration.inMinutes + now.minute).remainder(60));
 
     return Text('$hours:$minutes:$seconds', style: AppTextStyles.h1Black);
   }
@@ -80,17 +79,17 @@ class _TrackingCarState extends State<TrackingCar> {
 
     stopTimer() {
       var toalTime = timer?.tick;
-      log(toalTime.toString());
       pauseTime = toalTime.toString();
       providerTracking.addInformation(
           formattedTime, '$hours:$minutes:$seconds');
       providerTracking.insertStorage();
-      log(providerTracking.bookingTime);
       providerBooking.getInformation();
       //------------------
       providerTracking.checkOut(context);
       setState(() {
-        timer?.cancel();
+        if (providerTracking.flag) {
+          timer?.cancel();
+        }
       });
     }
 
@@ -104,27 +103,18 @@ class _TrackingCarState extends State<TrackingCar> {
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.only(bottom: 30, top: 50),
-                child: myCarProvider.carBooked.isNotEmpty
-                    ? Text(
-                        providerParking.parkingName,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: AppColor.greyText,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w400),
-                      )
-                    : SizedBox(
-                        height: size.height * 0.08,
-                        width: size.width * 0.9,
-                        child: Text(
-                          "Your Cars In The Parking",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: AppColor.greyText,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ),
+                child: SizedBox(
+                  height: size.height * 0.08,
+                  width: size.width * 0.9,
+                  child: Text(
+                    "Your Cars In The Parking",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: AppColor.greyText,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ),
               ),
               SizedBox(
                 child: Container(
@@ -142,13 +132,19 @@ class _TrackingCarState extends State<TrackingCar> {
                           ? Text(myCarProvider.startTime,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17))
-                          : Text(formattedTime,
-                              style: const TextStyle(
+                          : const Text("--:--:--",
+                              style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17)),
                     ),
                   ]),
                 ),
               ),
+              if (myCarProvider.parkingName.isNotEmpty)
+                Text(
+                  providerParking.parkingName,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.h3black,
+                ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -198,9 +194,10 @@ class _TrackingCarState extends State<TrackingCar> {
                           child: Image.asset(AssetPath.car))
                     ],
                   )),
-              // if (myCarProvider.carBooked.isNotEmpty)
+              if (myCarProvider.carBooked.isNotEmpty ||
+                  myCarProvider.startTime.isNotEmpty)
                 SizedBox(
-                  height: size.height * 0.1,
+                  height: size.height * 0.2,
                   child: StreamBuilder<Object>(
                       stream: null,
                       builder: (context, snapshot) {
@@ -210,7 +207,6 @@ class _TrackingCarState extends State<TrackingCar> {
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                // mainAxisAlignment: MainAxisAlignment.,
                                 children: [
                                   SizedBox(
                                     child: Container(
@@ -221,23 +217,22 @@ class _TrackingCarState extends State<TrackingCar> {
                                           style: TextStyle(fontSize: 18)),
                                     ),
                                   ),
-                                  buildTime(myCarProvider.hoursBook,myCarProvider.minutesBook,myCarProvider.secondsBook),
+                                  SizedBox(child: buildTime(myCarProvider.now)),
+                                  SizedBox(
+                                    width: size.width * 0.8,
+                                    child: ConfirmationSlider(
+                                        onConfirmation: stopTimer),
+                                  ),
                                 ],
                               )
                             ]);
                       }),
                 ),
               Container(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: SizedBox(
-                    width: size.width * 0.8,
-                    child: ConfirmationSlider(onConfirmation: stopTimer),
-                  )),
-              Container(
                 margin: EdgeInsets.only(top: size.height * 0.04),
                 child: GestureDetector(
                     child: Text(
-                      "Go back Home",
+                      "Go back Map",
                       style: AppTextStyles.h3black,
                     ),
                     onTap: () {

@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'dart:ffi';
-
 class PaymentRes {
   PaymentRes({
     this.result,
@@ -146,7 +144,7 @@ class WalletForm {
   dynamic createdBy;
   dynamic updatedBy;
   dynamic currentBalance;
-  int? frozenMoney;
+  dynamic frozenMoney;
   DateTime? expiredTime;
   DateTime? createdTime;
   User? user;

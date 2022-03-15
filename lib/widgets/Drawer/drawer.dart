@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/configs/exception/show_alert_dialog.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
