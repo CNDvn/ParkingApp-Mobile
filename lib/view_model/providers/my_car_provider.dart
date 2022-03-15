@@ -272,6 +272,7 @@ class MyCarProvider with ChangeNotifier {
         minutesBook = DateTime.now().minute - value.result!.startTime!.add(const Duration(hours: 7)).minute;
         secondsBook = DateTime.now().second -  value.result!.startTime!.add(const Duration(hours: 7)).second;        
         startTime = DateFormat('KK:mm:a').format(value.result!.startTime!.add(const Duration(hours: 7)));
+        secureStorage.writeSecureData("startTime", startTime);
         parkingName = value.result!.parking!.name!;
       }
     });
