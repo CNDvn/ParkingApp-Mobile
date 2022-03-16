@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     messaging = FirebaseMessaging.instance;
     _registerOnFireBase();
-    // getMessage();
+    getMessage();
     super.initState();
   }
 
@@ -55,25 +55,25 @@ class _MyAppState extends State<MyApp> {
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
 
-      // if (message.notification != null) {
-      //   print('Message also contained a notification: ${message.notification}');
-      //   showDialog(
-      //       context: context,
-      //       builder: (BuildContext context) {
-      //         return AlertDialog(
-      //           title: Text("Notification"),
-      //           content: Text(message.notification!.body!),
-      //           actions: [
-      //             TextButton(
-      //               child: Text("Ok"),
-      //               onPressed: () {
-      //                 Navigator.of(context).pop();
-      //               },
-      //             )
-      //           ],
-      //         );
-      //       });
-      // }
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Notification"),
+                content: Text(message.notification!.body!),
+                actions: [
+                  TextButton(
+                    child: Text("Ok"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+      }
       // setState(() {
       //   widget.message = message.notification!.body;
       // });
