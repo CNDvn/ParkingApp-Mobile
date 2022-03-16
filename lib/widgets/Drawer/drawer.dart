@@ -102,13 +102,17 @@ class _DrawerDefaultState extends State<DrawerDefault> {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () async {
+              myCarProvider.getMyCar();
               setState(() {
-                Future.delayed(const Duration(milliseconds: 600),(){myCarProvider.getCarBooking();});
-                if (myCarProvider.carBook.isNotEmpty) {
+                Future.delayed(const Duration(milliseconds: 100),(){
+                  myCarProvider.getMyCar();
+                  if (myCarProvider.listMyCarNotActive.isNotEmpty) {
                   Navigator.pushReplacementNamed(context, "/TrackingCar");
                 } else {
                   showToastFail("Don't have your cars are in the parking lot");
                 }
+                  });
+                
               });
             },
           ),

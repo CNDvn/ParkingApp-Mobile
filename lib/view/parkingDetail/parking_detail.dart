@@ -108,8 +108,8 @@ class _ParkingDetailState extends State<ParkingDetail> {
                   ),
                   onPressed: () {
                     mapProvider.reset();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/BottomTabBar", (route) => false);
+                    Navigator.popAndPushNamed(
+                        context, "/BottomTabBar");
                   },
                 )),
               ]),
@@ -433,7 +433,7 @@ class _ParkingDetailState extends State<ParkingDetail> {
                           myCarProvider.firstCar = newValue!;
                         });
                       },
-                      items: myCarProvider.cars.map((value) {
+                      items: myCarProvider.listMyCar.keys.map((value) {
                         return DropdownMenuItem(
                           value: value,
                           child: Text(value),
@@ -446,7 +446,7 @@ class _ParkingDetailState extends State<ParkingDetail> {
               ),
               ButtonDefault(
                 width: size.width,
-                content: 'Booking',
+                content: 'Booked',
                 voidCallBack: () {
                   setState(() {
                     myCarProvider.getIdCar();

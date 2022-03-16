@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/view/viewPark/view_park.dart';
+import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRCodePage extends StatefulWidget {
@@ -34,6 +36,8 @@ class _QRCodePageState extends State<QRCodePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    TrackingCarProvider providerTracking =
+        Provider.of<TrackingCarProvider>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -53,7 +57,7 @@ class _QRCodePageState extends State<QRCodePage> {
                         color: Colors.black87,
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.popAndPushNamed(context, "/TrackingCar");
                       },
                     )),
                   ]),
@@ -115,10 +119,8 @@ class _QRCodePageState extends State<QRCodePage> {
               child: ButtonDefault(
                   content: "Validate",
                   voidCallBack: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const ViewPark();
-                    }));
+                    providerTracking.checkOut(context);
+                    // Navigator.pushReplacementNamed(context, "/BookingDetails");
                   }),
             ),
             SizedBox(

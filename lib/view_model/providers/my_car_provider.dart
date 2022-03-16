@@ -15,6 +15,8 @@ import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:provider/provider.dart';
 
+enum StatusCarEnum { active, booked, inParking }
+
 class MyCarProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
 
@@ -193,16 +195,26 @@ class MyCarProvider with ChangeNotifier {
 
   // ignore: prefer_collection_literals
   Map<String, Car> listMyCar = Map<String, Car>();
+  // ignore: prefer_collection_literals
+  Map<String, Car> listMyCarBooked = Map<String, Car>();
+  // ignore: prefer_collection_literals
+  Map<String, Car> listMyCarInParking = Map<String, Car>();
+  // ignore: prefer_collection_literals
+  Map<String, Car> listMyCarNotActive = Map<String, Car>();
   List<String> cars = [];
   String? firstCar;
   String key = "";
   String? keyFirst = "";
   List<String> myCarsBooked = [];
+  List<String> myCarsInParking = [];
   String? firstCarBooked;
   String carBooked = "";
   // ignore: prefer_collection_literals
   Map<String, String> carBook = Map();
   getMyCar() async {
+    // listMyCarBooked.clear();
+    // listMyCarInParking.clear();
+    // listMyCarNotActive.clear();
     String accessToken = await secureStorage.readSecureData("token");
     List<Car>? myCars = [];
     CarRepImpl().getMyCar(UrlApi.userCar, accessToken).then((value) {
@@ -210,33 +222,19 @@ class MyCarProvider with ChangeNotifier {
       for (var item in myCars!) {
         // ignore: prefer_collection_literals
         Map<String, Car> tmp = Map<String, Car>();
-        tmp[item.id] = item;
-        listMyCar.addAll(tmp);
-        cars.add(item.nPlates);
-      }
-      firstCar = cars[0];
-      key = listMyCar[0]!.id;      
-    });
-    notifyListeners();
-  }
-
-  getCarBooking() async {
-    myCarsBooked.clear();
-    carBooked = "";
-    String accessToken = await secureStorage.readSecureData("token");
-    List<Car>? myCars = [];
-    CarRepImpl().getMyCar(UrlApi.userCar, accessToken).then((value) {
-      myCars = value.result;
-      for (var item in myCars!) {
-        if (!item.status.contains("active")) {
-          myCarsBooked.add(item.nPlates);
-          // ignore: prefer_collection_literals
-          Map<String, String> carBooktmp = Map();
-          carBooktmp[item.id] = item.nPlates;
-          carBook.addAll(carBooktmp);
+        tmp[item.nPlates] = item;
+        if (item.status.contains(StatusCarEnum.booked.name)) {
+          listMyCarBooked.addAll(tmp);
+          listMyCarNotActive.addAll(tmp);
         }
+        if (item.status.contains(StatusCarEnum.inParking.name)) {
+          listMyCarInParking.addAll(tmp);
+          listMyCarNotActive.addAll(tmp);
+        }
+        listMyCar.addAll(tmp);
       }
-      firstCarBooked = carBook[0];
+      firstCar = listMyCar.keys.first;
+      key = listMyCar[0]!.id;
     });
     notifyListeners();
   }
@@ -244,9 +242,9 @@ class MyCarProvider with ChangeNotifier {
   getIdCar() {
     secureStorage.deleteSecureData("idCar");
     listMyCar.forEach((key, value) {
-      if (firstCar!.contains(value.nPlates)) {
-        this.key = key;
-        secureStorage.writeSecureData("idCar", this.key);
+      if (firstCar!.contains(key)) {
+        // this.key = key;
+        secureStorage.writeSecureData("idCar", value.id);
         carBooked = firstCar!;
       }
     });
@@ -256,33 +254,47 @@ class MyCarProvider with ChangeNotifier {
   getIdCarBooked() {
     secureStorage.deleteSecureData("idCar");
     listMyCar.forEach((key, value) async {
-      if (firstCarBooked!.contains(value.nPlates)) {
-        this.key = key;
-        secureStorage.writeSecureData("idCar", this.key);
+      if (firstCarBooked!.contains(key)) {
+        this.key = value.id;
+        secureStorage.writeSecureData("idCar", value.id);
       }
     });
     notifyListeners();
   }
 
-  String startTime ="";
-  int countTime =0;
-  String parkingName= "";
-  int hoursBook = 0;
-  int minutesBook = 0;
-  int secondsBook = 0;
+  String checkinTime = "";
+  String startTime = "";
+  int countTime = 0;
+  String parkingName = "";
   DateTime now = DateTime.now();
-  getBookingByIdCar() async {
-    startTime ="";
-    countTime =0;
+  getInParkingByIdCar() async {
+    checkinTime = "";
+    startTime = "";
+    countTime = 0;
+    now = DateTime.now();
     String accessToken = await secureStorage.readSecureData("token");
     String url = "${UrlApi.serverPath}/bookings/car/$key";
-    BookingRepImpl().getBookingByIdCar(url, accessToken).then((value) {
-      if (value.statusCode == 200){
-        now =  DateTime.now().subtract(Duration(hours: value.result!.startTime!.add(const Duration(hours: 7)).hour,minutes: value.result!.startTime!.add(const Duration(hours: 7)).minute,seconds: value.result!.startTime!.add(const Duration(hours: 7)).second));
-        hoursBook = DateTime.now().hour - value.result!.startTime!.add(const Duration(hours: 7)).hour;
-        minutesBook = DateTime.now().minute - value.result!.startTime!.add(const Duration(hours: 7)).minute;
-        secondsBook = DateTime.now().second -  value.result!.startTime!.add(const Duration(hours: 7)).second;        
-        startTime = DateFormat('KK:mm:a').format(value.result!.startTime!.add(const Duration(hours: 7)));
+    BookingRepImpl().getBookingByIdCar1(url, accessToken).then((value) {
+      if (value.statusCode == 200) {
+        now = DateTime.now().subtract(Duration(
+            hours:
+                value.result!.checkinTime!.add(const Duration(hours: 7)).hour,
+            minutes:
+                value.result!.checkinTime!.add(const Duration(hours: 7)).minute,
+            seconds: value.result!.checkinTime!
+                .add(const Duration(hours: 7))
+                .second));
+        // hoursBook = DateTime.now().hour -
+        //     value.result!.checkinTime!.add(const Duration(hours: 7)).hour;
+        // minutesBook = DateTime.now().minute -
+        //     value.result!.checkinTime!.add(const Duration(hours: 7)).minute;
+        // secondsBook = DateTime.now().second -
+        //     value.result!.checkinTime!.add(const Duration(hours: 7)).second;
+        checkinTime = DateFormat('KK:mm:a')
+            .format(value.result!.checkinTime!.add(const Duration(hours: 7)));
+        startTime = DateFormat('KK:mm:a')
+            .format(value.result!.startTime!.add(const Duration(hours: 7)));
+        secureStorage.writeSecureData("checkinTime", checkinTime);
         secureStorage.writeSecureData("startTime", startTime);
         parkingName = value.result!.parking!.name!;
       }
@@ -290,9 +302,34 @@ class MyCarProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  getInBookedByIdCar() async {
+    startTime = "";
+    String accessToken = await secureStorage.readSecureData("token");
+    String url = "${UrlApi.serverPath}/bookings/car/$key";
+    BookingRepImpl().getBookingByIdCar(url, accessToken).then((value) {
+      if (value.statusCode == 200) {
+        startTime = DateFormat('KK:mm:a')
+            .format(value.result!.startTime!.add(const Duration(hours: 7)));
+        secureStorage.writeSecureData("startTime", startTime);
+        parkingName = value.result!.parking!.name!;
+      }
+    });
+    notifyListeners();
+  }
+
+  checkFirstCarBooked() {
+    if (listMyCarInParking.containsKey(firstCarBooked)) {
+      getInParkingByIdCar();
+    }
+    if (listMyCarBooked.containsKey(firstCarBooked)) {
+      checkinTime ="";
+      getInBookedByIdCar();
+    }
+  }
+
   getList() async {
     getMyCar();
-    getCarBooking();
+    // getCarBooking();
     notifyListeners();
   }
 }

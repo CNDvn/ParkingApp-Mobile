@@ -36,10 +36,12 @@ class DataPoint {
 class ParkingDetailValue {
   final String name;
   final String id;
+  final String address;
 
   const ParkingDetailValue({
     required this.name,
     required this.id,
+    required this.address,
   });
 }
 
@@ -127,7 +129,7 @@ class MapProvider with ChangeNotifier {
   String? id;
 
   void getJsonData() async {
-    Future.delayed(const Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 50), () {
       polyPoints.clear();
     });
 
@@ -204,6 +206,7 @@ class MapProvider with ChangeNotifier {
 
   reset() async {
     mapController = MapController();
+    // updatePosition();
     getJsonData();
     notifyListeners();
   }

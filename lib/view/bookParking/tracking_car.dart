@@ -57,7 +57,7 @@ class _TrackingCarState extends State<TrackingCar> {
   Widget buildTime(DateTime now) {
     MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    if (myCarProvider.startTime.isNotEmpty) {
+    if (myCarProvider.checkinTime.isNotEmpty) {
       seconds = twoDigits((duration.inSeconds + now.second).remainder(60));
       hours = twoDigits(duration.inHours + now.hour);
       minutes = twoDigits((duration.inMinutes + now.minute).remainder(60));
@@ -92,7 +92,8 @@ class _TrackingCarState extends State<TrackingCar> {
       providerTracking.insertStorage();
       providerBooking.getInformation();
       //------------------
-      providerTracking.checkOut(context);
+      // providerTracking.checkOut(context);
+      Navigator.pushReplacementNamed(context, "/QRCodePage"); 
       setState(() {
         if (providerTracking.flag) {
           timer?.cancel();
@@ -114,7 +115,7 @@ class _TrackingCarState extends State<TrackingCar> {
                   height: size.height * 0.08,
                   width: size.width * 0.9,
                   child: Text(
-                    "Your Cars In The Parking",
+                    "Your Car Reserved",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: AppColor.greyText,
@@ -149,6 +150,27 @@ class _TrackingCarState extends State<TrackingCar> {
                   ]),
                 ),
               ),
+              SizedBox(
+                child: Container(
+                  padding: EdgeInsets.only(bottom: size.height * 0.01),
+                  child: Row(children: [
+                    Container(
+                        margin: const EdgeInsets.only(left: 40, right: 60),
+                        child: myCarProvider.checkinTime.isNotEmpty
+                            ? Text("Check-in Time: ",
+                                style: TextStyle(
+                                    color: AppColor.blackText, fontSize: 17))
+                            : null),
+                    Container(
+                        margin: const EdgeInsets.only(left: 30),
+                        child: myCarProvider.checkinTime.isNotEmpty
+                            ? Text(myCarProvider.checkinTime,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 17))
+                            : null),
+                  ]),
+                ),
+              ),
               if (myCarProvider.parkingName.isNotEmpty)
                 Text(
                   providerParking.parkingName,
@@ -166,31 +188,26 @@ class _TrackingCarState extends State<TrackingCar> {
                           : const Text("Choose Your Car: ")),
                   SizedBox(
                     height: size.height * 0.09,
-                    child: myCarProvider.carBooked.isNotEmpty
-                        ? Text(
-                            myCarProvider.carBooked,
-                            style: AppTextStyles.h3black,
-                          )
-                        : DropdownButton(
-                            value: myCarProvider.firstCarBooked,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                myCarProvider.firstCarBooked = newValue!;
-                                myCarProvider.getIdCarBooked();
-                                myCarProvider.getBookingByIdCar();
-                              });
-                            },
-                            items:
-                                myCarProvider.myCarsBooked.map((String value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17)),
-                              );
-                            }).toList(),
-                          ),
+                    child: DropdownButton(
+                      value: myCarProvider.firstCarBooked,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          myCarProvider.firstCarBooked = newValue!;
+                          myCarProvider.getMyCar();
+                          myCarProvider.getIdCarBooked();
+                          myCarProvider.checkFirstCarBooked();
+                        });
+                      },
+                      items: myCarProvider.listMyCarNotActive.keys
+                          .map((String value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17)),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ),
@@ -205,40 +222,39 @@ class _TrackingCarState extends State<TrackingCar> {
                           child: Image.asset(AssetPath.car))
                     ],
                   )),
-              // if (myCarProvider.carBooked.isNotEmpty ||
-              //     myCarProvider.startTime.isNotEmpty)
-              SizedBox(
-                height: size.height * 0.2,
-                child: StreamBuilder<Object>(
-                    stream: null,
-                    builder: (context, snapshot) {
-                      return Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                        bottom: size.height * 0.01),
-                                    child: const Text("Time Clock",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 18)),
+              if (myCarProvider.checkinTime.isNotEmpty)
+                SizedBox(
+                  height: size.height * 0.2,
+                  child: StreamBuilder<Object>(
+                      stream: null,
+                      builder: (context, snapshot) {
+                        return Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: size.height * 0.01),
+                                      child: const Text("Time Clock",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 18)),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(child: buildTime(myCarProvider.now)),
-                                SizedBox(
-                                  width: size.width * 0.8,
-                                  child: ConfirmationSlider(
-                                      onConfirmation: stopTimer),
-                                ),
-                              ],
-                            )
-                          ]);
-                    }),
-              ),
+                                  SizedBox(child: buildTime(myCarProvider.now)),
+                                  SizedBox(
+                                    width: size.width * 0.8,
+                                    child: ConfirmationSlider(
+                                        onConfirmation: stopTimer),
+                                  ),
+                                ],
+                              )
+                            ]);
+                      }),
+                ),
               Container(
                 margin: EdgeInsets.only(top: size.height * 0.04),
                 child: GestureDetector(
@@ -248,8 +264,7 @@ class _TrackingCarState extends State<TrackingCar> {
                     ),
                     onTap: () {
                       mapProvider.reset();
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, "/BottomTabBar", (route) => false);
+                      Navigator.popAndPushNamed(context, "/BottomTabBar");
                     }),
               ),
               SizedBox(

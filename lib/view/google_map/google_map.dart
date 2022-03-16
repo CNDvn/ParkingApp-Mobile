@@ -26,7 +26,7 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
-  List<String> cities = [];
+  List<String> addressParking = [];
   List<Marker> markers = [];
   // ignore: prefer_collection_literals
   Map<ParkingDetailValue, Marker> list = Map<ParkingDetailValue, Marker>();
@@ -39,7 +39,9 @@ class _GoogleMapState extends State<GoogleMap> {
       for (var item in listParking!) {
         // ignore: prefer_collection_literals
         Map<ParkingDetailValue, Marker> tmp = Map<ParkingDetailValue, Marker>();
-        tmp[ParkingDetailValue(id: item.id, name: item.name)] = Marker(
+        tmp[
+            ParkingDetailValue(
+                id: item.id, name: item.name, address: item.address)] = Marker(
             width: 100,
             height: 50,
             point:
@@ -63,7 +65,7 @@ class _GoogleMapState extends State<GoogleMap> {
       }
       setState(() {
         list.forEach((key, value) {
-          cities.add(key.name);
+          addressParking.add(key.address);
           markers.add(value);
         });
       });
@@ -76,14 +78,14 @@ class _GoogleMapState extends State<GoogleMap> {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
     onTapDestination(p) {
       list.forEach((key, value) {
-        if (p == key.name) {
+        if (p == key.address) {
           mapProvider.id = key.id;
           setState(() {
             LatLng tmp = LatLng(0, 0);
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
             mapProvider.addressParkingController.text = "";
-            mapProvider.addressParkingController.text = key.name;
+            mapProvider.addressParkingController.text = key.address;
             Future.delayed(const Duration(milliseconds: 50), () {
               mapProvider.mapController
                   .move(mapProvider.destination, mapProvider.zoomMap);
@@ -111,8 +113,10 @@ class _GoogleMapState extends State<GoogleMap> {
               options: MapOptions(
                 onTap: (v, p) async {
                   List<Address> tmp = [];
-                  tmp = await Geocoder.local.findAddressesFromCoordinates(
-                      Coordinates(p.latitude, p.longitude));
+                  Future.delayed(const Duration(milliseconds: 50), () async {
+                    tmp = await Geocoder.local.findAddressesFromCoordinates(
+                        Coordinates(p.latitude, p.longitude));
+                  });
                   setState(() {
                     mapProvider.destination = p;
                     mapProvider.location = tmp;
@@ -147,17 +151,6 @@ class _GoogleMapState extends State<GoogleMap> {
                       builder: (ctx) => const SizedBox(
                         child: Icon(
                           Icons.location_on,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ),
-                    Marker(
-                      width: 50,
-                      height: 50,
-                      point: mapProvider.destination,
-                      builder: (ctx) => const SizedBox(
-                        child: Icon(
-                          Icons.share_location_outlined,
                           color: Colors.red,
                         ),
                       ),
@@ -215,7 +208,7 @@ class _GoogleMapState extends State<GoogleMap> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                if (!cities.contains(
+                                if (!addressParking.contains(
                                     mapProvider.addressParkingController.text))
                                   IconButton(
                                       icon: const Icon(Icons.search),
@@ -231,18 +224,12 @@ class _GoogleMapState extends State<GoogleMap> {
                                     onPressed: () {
                                       mapProvider.clearGetAddressParking();
                                       mapProvider.polyPoints.clear();
-                                      Future.delayed(
-                                          const Duration(milliseconds: 50), () {
-                                        mapProvider.mapController.move(
-                                            mapProvider.point,
-                                            mapProvider.zoomMap);
-                                      });
                                     },
                                   )
                               ],
                             )),
                         maxSuggestionsInViewPort: 5,
-                        suggestions: cities,
+                        suggestions: addressParking,
                         onTap: onTapDestination,
                       ),
                     )),
@@ -252,7 +239,7 @@ class _GoogleMapState extends State<GoogleMap> {
                     right: 16.0,
                   ),
                   child: mapProvider.addressParkingController.text.isNotEmpty &&
-                          cities.contains(
+                          addressParking.contains(
                               mapProvider.addressParkingController.text)
                       ? SizedBox(
                           child: ButtonDefault(

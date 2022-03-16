@@ -55,7 +55,8 @@ class TrackingCarProvider with ChangeNotifier {
         secureStorage.writeSecureData("idBooking", value.result!.booking!.id!);
         flag = true;
         id = value.result!.id!;
-        Navigator.pushReplacementNamed(context, "/BookingDetails");
+        // Navigator.pushReplacementNamed(context, "/QRCodePage"); 
+        Navigator.pushReplacementNamed(context, "/BookingDetails");      
       }
     });
   }
