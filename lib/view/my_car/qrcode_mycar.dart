@@ -85,7 +85,7 @@ class _QRCodeMyCarState extends State<QRCodeMyCar> {
                             myCarProvider.getIdCar();
                           });
                         },
-                        items: myCarProvider.cars.map((value) {
+                        items: myCarProvider.listMyCar.keys.map((value) {
                           return DropdownMenuItem(
                             value: value,
                             child: Text(value),

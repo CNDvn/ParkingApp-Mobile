@@ -230,6 +230,7 @@ class _GoogleMapState extends State<GoogleMap> {
                             )),
                         maxSuggestionsInViewPort: 5,
                         suggestions: addressParking,
+                        itemHeight: 40,
                         onTap: onTapDestination,
                       ),
                     )),

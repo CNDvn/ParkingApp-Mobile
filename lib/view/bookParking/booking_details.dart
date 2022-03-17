@@ -277,11 +277,12 @@ class BookingDetails extends StatelessWidget {
                       height: size.height * 0.08,
                       width: size.width * 0.85,
                       child: ButtonDefault(
-                          content: "Go Back Home",
+                          content: "Go Back Map",
                           voidCallBack: () {
                             mapProvider.resetAll();
-                            Navigator.pushReplacementNamed(
-                                context, "/BottomTabBar");
+                            providerCar.getMyCar();
+                            Navigator.pushReplacementNamed(context, "/BottomTabBar");
+                            
                             providerBooking.flag = false;
                           }))
                   : SizedBox(

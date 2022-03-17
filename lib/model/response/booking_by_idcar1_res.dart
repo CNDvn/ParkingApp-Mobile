@@ -59,7 +59,7 @@ class Result {
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["id"],
         startTime: DateTime.parse(json["startTime"]),
-        checkinTime: DateTime.parse(json["checkinTime"]),
+        checkinTime: DateTime.parse(json["checkinTime"]??json["startTime"]),
         status: json["status"],
         price: json["price"],
         service: json["service"],

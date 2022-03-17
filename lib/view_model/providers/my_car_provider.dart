@@ -201,17 +201,32 @@ class MyCarProvider with ChangeNotifier {
   Map<String, Car> listMyCarInParking = Map<String, Car>();
   // ignore: prefer_collection_literals
   Map<String, Car> listMyCarNotActive = Map<String, Car>();
-  List<String> cars = [];
+  // List<String> cars = [];
   String? firstCar;
   String key = "";
   String? keyFirst = "";
-  List<String> myCarsBooked = [];
-  List<String> myCarsInParking = [];
+  // List<String> myCarsBooked = [];
+  // List<String> myCarsInParking = [];
   String? firstCarBooked;
   String carBooked = "";
   // ignore: prefer_collection_literals
   Map<String, String> carBook = Map();
+  //--------------------
+  String checkinTime = "";
+  String startTime = "";
+  int countTime = 0;
+  String parkingName = "";
+  DateTime now = DateTime.now();
+  // resetMyCar() {
+  //   firstCarBooked="";
+  //   keyFirst="";
+  // }
   getMyCar() async {
+    // if (listMyCarNotActive.isNotEmpty) {
+    //   listMyCarBooked.clear();
+    //   listMyCarInParking.clear();
+    //   listMyCarNotActive.clear();
+    // }
     // listMyCarBooked.clear();
     // listMyCarInParking.clear();
     // listMyCarNotActive.clear();
@@ -243,9 +258,9 @@ class MyCarProvider with ChangeNotifier {
     secureStorage.deleteSecureData("idCar");
     listMyCar.forEach((key, value) {
       if (firstCar!.contains(key)) {
-        // this.key = key;
+        this.key = value.id;
         secureStorage.writeSecureData("idCar", value.id);
-        carBooked = firstCar!;
+        return;
       }
     });
     notifyListeners();
@@ -253,20 +268,19 @@ class MyCarProvider with ChangeNotifier {
 
   getIdCarBooked() {
     secureStorage.deleteSecureData("idCar");
-    listMyCar.forEach((key, value) async {
+    secureStorage.deleteSecureData("nameCar");
+    listMyCarNotActive.forEach((key, value) async {
       if (firstCarBooked!.contains(key)) {
         this.key = value.id;
         secureStorage.writeSecureData("idCar", value.id);
+        secureStorage.writeSecureData("nameCar", firstCarBooked!);
+        carBooked = firstCarBooked!;
+        return;
       }
     });
     notifyListeners();
   }
 
-  String checkinTime = "";
-  String startTime = "";
-  int countTime = 0;
-  String parkingName = "";
-  DateTime now = DateTime.now();
   getInParkingByIdCar() async {
     checkinTime = "";
     startTime = "";
@@ -274,6 +288,9 @@ class MyCarProvider with ChangeNotifier {
     now = DateTime.now();
     String accessToken = await secureStorage.readSecureData("token");
     String url = "${UrlApi.serverPath}/bookings/car/$key";
+    if (!listMyCarInParking.keys.contains(firstCarBooked)){
+      return;
+    }
     BookingRepImpl().getBookingByIdCar1(url, accessToken).then((value) {
       if (value.statusCode == 200) {
         now = DateTime.now().subtract(Duration(
@@ -284,12 +301,6 @@ class MyCarProvider with ChangeNotifier {
             seconds: value.result!.checkinTime!
                 .add(const Duration(hours: 7))
                 .second));
-        // hoursBook = DateTime.now().hour -
-        //     value.result!.checkinTime!.add(const Duration(hours: 7)).hour;
-        // minutesBook = DateTime.now().minute -
-        //     value.result!.checkinTime!.add(const Duration(hours: 7)).minute;
-        // secondsBook = DateTime.now().second -
-        //     value.result!.checkinTime!.add(const Duration(hours: 7)).second;
         checkinTime = DateFormat('KK:mm:a')
             .format(value.result!.checkinTime!.add(const Duration(hours: 7)));
         startTime = DateFormat('KK:mm:a')
@@ -305,7 +316,7 @@ class MyCarProvider with ChangeNotifier {
   getInBookedByIdCar() async {
     startTime = "";
     String accessToken = await secureStorage.readSecureData("token");
-    String url = "${UrlApi.serverPath}/bookings/car/$key";
+    String url = "${UrlApi.serverPath}/bookings/car/$key";    
     BookingRepImpl().getBookingByIdCar(url, accessToken).then((value) {
       if (value.statusCode == 200) {
         startTime = DateFormat('KK:mm:a')
@@ -320,11 +331,14 @@ class MyCarProvider with ChangeNotifier {
   checkFirstCarBooked() {
     if (listMyCarInParking.containsKey(firstCarBooked)) {
       getInParkingByIdCar();
+      return;
     }
     if (listMyCarBooked.containsKey(firstCarBooked)) {
       checkinTime ="";
       getInBookedByIdCar();
+      return;
     }
+    notifyListeners();
   }
 
   getList() async {

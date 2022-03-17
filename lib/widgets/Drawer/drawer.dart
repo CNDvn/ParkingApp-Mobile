@@ -98,16 +98,17 @@ class _DrawerDefaultState extends State<DrawerDefault> {
               height: sizeImage,
             ),
             title: const Text(
-              'Car in Parking',
+              'Tracking Car',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () async {
-              myCarProvider.getMyCar();
+              // myCarProvider.getMyCar();
               setState(() {
                 Future.delayed(const Duration(milliseconds: 100),(){
                   myCarProvider.getMyCar();
                   if (myCarProvider.listMyCarNotActive.isNotEmpty) {
-                  Navigator.pushReplacementNamed(context, "/TrackingCar");
+                  // Navigator.restorablePushReplacementNamed(context, "/TrackingCar",(Route<dynamic> route) => false);
+                   Navigator.pushReplacementNamed(context, "/TrackingCar",);
                 } else {
                   showToastFail("Don't have your cars are in the parking lot");
                 }
@@ -143,7 +144,7 @@ class _DrawerDefaultState extends State<DrawerDefault> {
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              if (myCarProvider.cars.isNotEmpty) {
+              if (myCarProvider.listMyCar.isNotEmpty) {
                 myCarProvider.getIdCar();
                 Navigator.pushReplacementNamed(context, "/QRCodeMyCar");
               }

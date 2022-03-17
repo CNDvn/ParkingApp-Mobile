@@ -1,5 +1,5 @@
 class UrlApi {
-  static const String serverPath = "http://13.70.20.93:5000/api/v1";
+  static const String serverPath = "http://192.168.1.9:5000/api/v1";
   static const String signinPath = '$serverPath/auths/login';
   static const String otpPath = '$serverPath/auths/OTPSMS';
   static const String resetpasswordPath = '$serverPath/auths/resetPassword';

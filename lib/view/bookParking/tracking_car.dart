@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -33,8 +32,13 @@ class _TrackingCarState extends State<TrackingCar> {
   String pauseTime = "";
   @override
   void initState() {
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context,listen: false);
     super.initState();
     startTimer();
+    myCarProvider.getMyCar();
+    // myCarProvider.getMyCar();
+    //                       myCarProvider.getIdCarBooked();
+    //                       myCarProvider.checkFirstCarBooked();
   }
 
   void addTime() {
@@ -83,6 +87,9 @@ class _TrackingCarState extends State<TrackingCar> {
     MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     MapProvider mapProvider = Provider.of<MapProvider>(context);
     String formattedTime = DateFormat('KK:mm:a').format(now);
+    //  myCarProvider.getMyCar();
+    //                       myCarProvider.getIdCarBooked();
+    //                       myCarProvider.checkFirstCarBooked();
 
     stopTimer() {
       var toalTime = timer?.tick;
@@ -93,7 +100,7 @@ class _TrackingCarState extends State<TrackingCar> {
       providerBooking.getInformation();
       //------------------
       // providerTracking.checkOut(context);
-      Navigator.pushReplacementNamed(context, "/QRCodePage"); 
+      Navigator.pushReplacementNamed(context, "/QRCodePage");
       setState(() {
         if (providerTracking.flag) {
           timer?.cancel();
@@ -115,7 +122,7 @@ class _TrackingCarState extends State<TrackingCar> {
                   height: size.height * 0.08,
                   width: size.width * 0.9,
                   child: Text(
-                    "Your Car Reserved",
+                    "Tracking Car",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: AppColor.greyText,
@@ -173,7 +180,7 @@ class _TrackingCarState extends State<TrackingCar> {
               ),
               if (myCarProvider.parkingName.isNotEmpty)
                 Text(
-                  providerParking.parkingName,
+                  myCarProvider.parkingName,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.h3black,
                 ),
@@ -247,7 +254,7 @@ class _TrackingCarState extends State<TrackingCar> {
                                   SizedBox(child: buildTime(myCarProvider.now)),
                                   SizedBox(
                                     width: size.width * 0.8,
-                                    child: ConfirmationSlider(
+                                    child: ConfirmationSlider(text: "Check-out",
                                         onConfirmation: stopTimer),
                                   ),
                                 ],
@@ -255,6 +262,15 @@ class _TrackingCarState extends State<TrackingCar> {
                             ]);
                       }),
                 ),
+              if (myCarProvider.checkinTime.isEmpty &&
+                  myCarProvider.startTime.isNotEmpty)
+                Container(
+                    margin: EdgeInsets.only(top: size.height * 0.04),
+                    child: const Text(
+                      "You are not check-in yet",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                    )),
               Container(
                 margin: EdgeInsets.only(top: size.height * 0.04),
                 child: GestureDetector(

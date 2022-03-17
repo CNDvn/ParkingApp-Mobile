@@ -56,7 +56,7 @@ class TrackingCarProvider with ChangeNotifier {
         flag = true;
         id = value.result!.id!;
         // Navigator.pushReplacementNamed(context, "/QRCodePage"); 
-        Navigator.pushReplacementNamed(context, "/BookingDetails");      
+        Navigator.of(context).pushNamedAndRemoveUntil( "/BookingDetails",(Route<dynamic> route) => false);      
       }
     });
   }
