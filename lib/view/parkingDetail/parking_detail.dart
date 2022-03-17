@@ -446,7 +446,7 @@ class _ParkingDetailState extends State<ParkingDetail> {
               ),
               ButtonDefault(
                 width: size.width,
-                content: 'Booked',
+                content: 'Book',
                 voidCallBack: () {
                   setState(() {
                     myCarProvider.getIdCar();

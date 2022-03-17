@@ -44,7 +44,7 @@ class _HistoryState extends State<History> {
           ),
           // Booking Complete
           const Text(
-            "Booking Complete",
+            "Booked Complete",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontWeight: FontWeight.w700, fontSize: 18, height: 1.6),

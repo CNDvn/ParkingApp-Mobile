@@ -34,7 +34,7 @@ class ParkingDetailsProvider with ChangeNotifier {
     BookingRepImpl().postBooking(url, accessToken).then((value) {
       if (value.statusCode == 201){
         startTime = value.result!.startTime.toString();
-       showToastSuccess("Booked Successful");
+       showToastSuccess("Booking Successfully");
        mapProvider.reset();
       Navigator.pushReplacementNamed(context, "/BottomTabBar");
       }      

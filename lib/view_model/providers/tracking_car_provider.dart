@@ -26,6 +26,7 @@ class TrackingCarProvider with ChangeNotifier {
   }
 
   checkOut(BuildContext context) async {
+    flag=false;
     BookingDetailProvider bookingDetailProvider =
         Provider.of<BookingDetailProvider>(context, listen: false);
     String idParking = await secureStorage.readSecureData("idParking");

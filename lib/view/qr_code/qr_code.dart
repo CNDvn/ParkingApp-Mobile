@@ -117,7 +117,7 @@ class _QRCodePageState extends State<QRCodePage> {
                 ]),
             SizedBox(
               child: ButtonDefault(
-                  content: "Validate",
+                  content: "Confirm Check-out",
                   voidCallBack: () {
                     providerTracking.checkOut(context);
                     // Navigator.pushReplacementNamed(context, "/BookingDetails");

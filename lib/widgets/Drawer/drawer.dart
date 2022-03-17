@@ -110,10 +110,9 @@ class _DrawerDefaultState extends State<DrawerDefault> {
                   // Navigator.restorablePushReplacementNamed(context, "/TrackingCar",(Route<dynamic> route) => false);
                    Navigator.pushReplacementNamed(context, "/TrackingCar",);
                 } else {
-                  showToastFail("Don't have your cars are in the parking lot");
+                  showToastFail("No cars have been booked!!");
                 }
-                  });
-                
+                  });                
               });
             },
           ),
@@ -140,7 +139,7 @@ class _DrawerDefaultState extends State<DrawerDefault> {
               height: sizeImage,
             ),
             title: const Text(
-              'QScan Code',
+              'QR Code Car',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
