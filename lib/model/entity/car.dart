@@ -1,5 +1,5 @@
 import 'package:parkingappmobile/model/entity/image_car.dart';
-import 'package:parkingappmobile/model/entity/typeCar.dart';
+import 'package:parkingappmobile/model/entity/type_car.dart';
 
 class Car {
   Car({

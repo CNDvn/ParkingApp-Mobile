@@ -335,8 +335,8 @@ class WalletTo {
   DateTime? updatedAt;
   dynamic createdBy;
   dynamic updatedBy;
-  double? currentBalance;
-  String? frozenMoney;
+  dynamic currentBalance;
+  dynamic frozenMoney;
   DateTime? expiredTime;
   DateTime? createdTime;
   User? user;

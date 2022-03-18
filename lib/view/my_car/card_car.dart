@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/model/entity/car.dart';
-import 'package:parkingappmobile/model/entity/typeCar.dart';
+import 'package:parkingappmobile/model/entity/type_car.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/view/my_car/detail_car.dart';
 import 'package:parkingappmobile/view_model/providers/car_detail_provider.dart';
@@ -8,6 +8,7 @@ import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class CardCar extends StatefulWidget {
   CardCar({Key? key, this.car, this.typeCars}) : super(key: key);
   Car? car;

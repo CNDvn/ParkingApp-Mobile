@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/exception/show_alert_dialog.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/repository/impl/payment_rep_impl.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
+import 'package:provider/provider.dart';
 
 class BookingDetailProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
@@ -17,6 +19,7 @@ class BookingDetailProvider with ChangeNotifier {
   String startTime = "";
   String checkInTime = "";
   String price = "";
+  String amount = "";
 
   bool flag = false;
 
@@ -40,12 +43,15 @@ class BookingDetailProvider with ChangeNotifier {
   }
 
   payment(BuildContext context) async {
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context,listen: false);
     String idBooking = await secureStorage.readSecureData("idBooking");
     String url =
         "${UrlApi.serverPath}/payments/booking/$idBooking";
     String accessToken = await secureStorage.readSecureData("token");
     PaymentRepImpl().postPayment(url, accessToken).then((value) {
       if (value.statusCode == 201) {
+        myCarProvider.listMyCarNoActive.remove(myCarProvider.firstCarBooked);
+        myCarProvider.resetAfterPay();     
         showToastSuccess("Payment Successfull");
         changeStatusButton();
       }

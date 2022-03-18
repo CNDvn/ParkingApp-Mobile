@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +9,6 @@ import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
-import 'package:parkingappmobile/view_model/providers/parking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +33,11 @@ class _TrackingCarState extends State<TrackingCar> {
   void initState() {
     super.initState();
     startTimer();
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context,listen: false);
+    myCarProvider.getMyCar();
+    if (myCarProvider.listMyCarNoActive.isNotEmpty){
+      myCarProvider.firstCarBooked = myCarProvider.listMyCarNoActive.keys.first;
+    }
   }
 
   void addTime() {
@@ -74,8 +77,6 @@ class _TrackingCarState extends State<TrackingCar> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     DateTime now = DateTime.now();
-    ParkingDetailsProvider providerParking =
-        Provider.of<ParkingDetailsProvider>(context);
     TrackingCarProvider providerTracking =
         Provider.of<TrackingCarProvider>(context);
     BookingDetailProvider providerBooking =
@@ -114,7 +115,7 @@ class _TrackingCarState extends State<TrackingCar> {
                   height: size.height * 0.08,
                   width: size.width * 0.9,
                   child: Text(
-                    "Your Cars In The Parking",
+                    "Tracking Car",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: AppColor.greyText,
@@ -151,7 +152,7 @@ class _TrackingCarState extends State<TrackingCar> {
               ),
               if (myCarProvider.parkingName.isNotEmpty)
                 Text(
-                  providerParking.parkingName,
+                  myCarProvider.parkingName,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.h3black,
                 ),
@@ -167,7 +168,7 @@ class _TrackingCarState extends State<TrackingCar> {
                   SizedBox(
                     height: size.height * 0.09,
                     child: myCarProvider.carBooked.isNotEmpty
-                        ? Text(
+                        ? Text( 
                             myCarProvider.carBooked,
                             style: AppTextStyles.h3black,
                           )
@@ -176,12 +177,14 @@ class _TrackingCarState extends State<TrackingCar> {
                             onChanged: (String? newValue) {
                               setState(() {
                                 myCarProvider.firstCarBooked = newValue!;
+                                myCarProvider.resetAfterPay();
+                                myCarProvider.getMyCar();
                                 myCarProvider.getIdCarBooked();
-                                myCarProvider.getBookingByIdCar();
+                                myCarProvider.getBookingByIdCar();                                
                               });
                             },
                             items:
-                                myCarProvider.myCarsBooked.map((String value) {
+                                myCarProvider.listMyCarNoActive.keys.map((String value) {
                               return DropdownMenuItem(
                                 value: value,
                                 child: Text(value,
@@ -194,6 +197,24 @@ class _TrackingCarState extends State<TrackingCar> {
                   ),
                 ],
               ),
+              if (myCarProvider.price.isNotEmpty)
+                Text(
+                  myCarProvider.price+"VNĐ/Hour",
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.h3black,
+                ),
+              if (myCarProvider.status.isNotEmpty && myCarProvider.status.contains("inParking"))
+              const Text(
+                  "Your car is already in the parking lot",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.green),
+                ),
+              if (myCarProvider.status.isNotEmpty && myCarProvider.status.contains("booked"))
+              const Text(
+                  "You are not check-in yet",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red),
+                ),
               SizedBox(
                   height: size.height * 0.4,
                   child: Stack(
@@ -205,8 +226,8 @@ class _TrackingCarState extends State<TrackingCar> {
                           child: Image.asset(AssetPath.car))
                     ],
                   )),
-              // if (myCarProvider.carBooked.isNotEmpty ||
-              //     myCarProvider.startTime.isNotEmpty)
+              if (myCarProvider.carBooked.isNotEmpty ||
+                  myCarProvider.startTime.isNotEmpty)
               SizedBox(
                 height: size.height * 0.2,
                 child: StreamBuilder<Object>(
@@ -231,7 +252,7 @@ class _TrackingCarState extends State<TrackingCar> {
                                 SizedBox(child: buildTime(myCarProvider.now)),
                                 SizedBox(
                                   width: size.width * 0.8,
-                                  child: ConfirmationSlider(
+                                  child: ConfirmationSlider(text: "Check-out Confirm",
                                       onConfirmation: stopTimer),
                                 ),
                               ],
