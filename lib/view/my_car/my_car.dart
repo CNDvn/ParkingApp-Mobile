@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:parkingappmobile/model/entity/car.dart';
+import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/view/my_car/card_car.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 class MyCar extends StatefulWidget {
   const MyCar({Key? key}) : super(key: key);
@@ -9,6 +13,21 @@ class MyCar extends StatefulWidget {
 }
 
 class _MyCarState extends State<MyCar> {
+  List<Car>? listCar = [];
+  @override
+  void initState() {
+    super.initState();
+    final SecureStorage secureStorage = SecureStorage();
+    secureStorage.readSecureData("token").then((token) => {
+      CarRepImpl().getCardCar(UrlApi.cardCarPath, token).then((value) {
+      
+      setState(() {
+        listCar = value.result;
+      });
+    })
+    });
+    
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -32,9 +51,9 @@ class _MyCarState extends State<MyCar> {
             height: 0.7 * size.height,
             child: ListView.builder(
               padding: const EdgeInsets.all(8),
-              itemCount: 3,
+              itemCount: listCar?.length,
               itemBuilder: (context, index) {
-                return const CardCar();
+                return  CardCar(car: listCar![index],);
               },
             ),
           ),

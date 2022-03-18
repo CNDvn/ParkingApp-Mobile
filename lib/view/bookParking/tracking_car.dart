@@ -55,10 +55,17 @@ class _TrackingCarState extends State<TrackingCar> {
   }
 
   Widget buildTime(DateTime now) {
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    seconds = twoDigits((duration.inSeconds + now.second).remainder(60));
-    hours = twoDigits(duration.inHours + now.hour);
-    minutes = twoDigits((duration.inMinutes + now.minute).remainder(60));
+    if (myCarProvider.startTime.isNotEmpty) {
+      seconds = twoDigits((duration.inSeconds + now.second).remainder(60));
+      hours = twoDigits(duration.inHours + now.hour);
+      minutes = twoDigits((duration.inMinutes + now.minute).remainder(60));
+    } else {
+      seconds = twoDigits((duration.inSeconds).remainder(60));
+      hours = twoDigits(duration.inHours);
+      minutes = twoDigits((duration.inMinutes).remainder(60));
+    }
 
     return Text('$hours:$minutes:$seconds', style: AppTextStyles.h1Black);
   }
@@ -121,19 +128,22 @@ class _TrackingCarState extends State<TrackingCar> {
                   padding: EdgeInsets.only(bottom: size.height * 0.01),
                   child: Row(children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 40, right: 60),
-                      child: Text("Start Time: ",
-                          style: TextStyle(
-                              color: AppColor.blackText, fontSize: 17)),
-                    ),
+                        margin: const EdgeInsets.only(left: 40, right: 60),
+                        child: myCarProvider.startTime.isNotEmpty
+                            ? Text("Start Time: ",
+                                style: TextStyle(
+                                    color: AppColor.blackText, fontSize: 17))
+                            : Text("Present time: ",
+                                style: TextStyle(
+                                    color: AppColor.blackText, fontSize: 17))),
                     Container(
                       margin: const EdgeInsets.only(left: 60),
                       child: myCarProvider.startTime.isNotEmpty
                           ? Text(myCarProvider.startTime,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17))
-                          : const Text("--:--:--",
-                              style: TextStyle(
+                          : Text(formattedTime,
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17)),
                     ),
                   ]),
@@ -150,9 +160,10 @@ class _TrackingCarState extends State<TrackingCar> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: size.height * 0.06,
-                    child: const Text("Choose Your Car: "),
-                  ),
+                      height: size.height * 0.06,
+                      child: myCarProvider.carBooked.isNotEmpty
+                          ? const Text("Your Car: ")
+                          : const Text("Choose Your Car: ")),
                   SizedBox(
                     height: size.height * 0.09,
                     child: myCarProvider.carBooked.isNotEmpty
@@ -194,40 +205,40 @@ class _TrackingCarState extends State<TrackingCar> {
                           child: Image.asset(AssetPath.car))
                     ],
                   )),
-              if (myCarProvider.carBooked.isNotEmpty ||
-                  myCarProvider.startTime.isNotEmpty)
-                SizedBox(
-                  height: size.height * 0.2,
-                  child: StreamBuilder<Object>(
-                      stream: null,
-                      builder: (context, snapshot) {
-                        return Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                          bottom: size.height * 0.01),
-                                      child: const Text("Time Clock",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: 18)),
-                                    ),
+              // if (myCarProvider.carBooked.isNotEmpty ||
+              //     myCarProvider.startTime.isNotEmpty)
+              SizedBox(
+                height: size.height * 0.2,
+                child: StreamBuilder<Object>(
+                    stream: null,
+                    builder: (context, snapshot) {
+                      return Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: size.height * 0.01),
+                                    child: const Text("Time Clock",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 18)),
                                   ),
-                                  SizedBox(child: buildTime(myCarProvider.now)),
-                                  SizedBox(
-                                    width: size.width * 0.8,
-                                    child: ConfirmationSlider(
-                                        onConfirmation: stopTimer),
-                                  ),
-                                ],
-                              )
-                            ]);
-                      }),
-                ),
+                                ),
+                                SizedBox(child: buildTime(myCarProvider.now)),
+                                SizedBox(
+                                  width: size.width * 0.8,
+                                  child: ConfirmationSlider(
+                                      onConfirmation: stopTimer),
+                                ),
+                              ],
+                            )
+                          ]);
+                    }),
+              ),
               Container(
                 margin: EdgeInsets.only(top: size.height * 0.04),
                 child: GestureDetector(
