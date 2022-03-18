@@ -172,6 +172,7 @@ class MapProvider with ChangeNotifier {
     }
   }
 
+  bool flag = false;
   void getJsonData1() async {
     polyPoints.clear();
 
@@ -184,6 +185,13 @@ class MapProvider with ChangeNotifier {
       LineString ls_1 =
           LineString(data1['features'][0]['geometry']['coordinates']);
       destination = LatLng(ls_1.lineString[1], ls_1.lineString[0]);
+      list.forEach((key, value) { 
+        if (value.point == destination) {
+          flag = true;
+          id = key.id;
+          return;
+        }
+      });
       Future.delayed(const Duration(milliseconds: 50), () {
         mapController.move(destination, zoomMap);
       });
@@ -217,8 +225,8 @@ class MapProvider with ChangeNotifier {
     Future.delayed(const Duration(milliseconds: 50), () {
       mapController.move(point, zoomMap);
     });
-    getJsonData();
-    getJsonData1();
+    // getJsonData();
+    // getJsonData1();
     notifyListeners();
   }
 
@@ -268,4 +276,6 @@ class MapProvider with ChangeNotifier {
       log(error.toString());
     });
   }
+  // ignore: prefer_collection_literals
+  Map<ParkingDetailValue, Marker> list = Map<ParkingDetailValue, Marker>();
 }

@@ -52,7 +52,8 @@ class BookingDetailProvider with ChangeNotifier {
     PaymentRepImpl().postPayment(url, accessToken).then((value) {
       if (value.statusCode == 201) {
         showToastSuccess("Payment Successfull");
-        myCarProvider.listMyCarInParking.remove(nameCar);
+        myCarProvider.listMyCarNotActive.remove(nameCar);
+        myCarProvider.checkinTime="";
         changeStatusButton();
       }
     });

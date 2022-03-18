@@ -100,6 +100,7 @@ class _GoogleMapState extends State<GoogleMap> {
     if (mounted) {
       if (mapProvider.point.latitude == 0) {
         mapProvider.updatePosition();
+        mapProvider.list = list;
       }
     }
 
@@ -224,6 +225,7 @@ class _GoogleMapState extends State<GoogleMap> {
                                     onPressed: () {
                                       mapProvider.clearGetAddressParking();
                                       mapProvider.polyPoints.clear();
+                                      mapProvider.flag = false;
                                     },
                                   )
                               ],
@@ -239,9 +241,10 @@ class _GoogleMapState extends State<GoogleMap> {
                     left: 16.0,
                     right: 16.0,
                   ),
-                  child: mapProvider.addressParkingController.text.isNotEmpty &&
+                  child: 
+                  mapProvider.addressParkingController.text.isNotEmpty &&
                           addressParking.contains(
-                              mapProvider.addressParkingController.text)
+                              mapProvider.addressParkingController.text) || mapProvider.flag
                       ? SizedBox(
                           child: ButtonDefault(
                           content: "View Parking Detail",

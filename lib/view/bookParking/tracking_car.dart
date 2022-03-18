@@ -36,9 +36,7 @@ class _TrackingCarState extends State<TrackingCar> {
     super.initState();
     startTimer();
     myCarProvider.getMyCar();
-    // myCarProvider.getMyCar();
-    //                       myCarProvider.getIdCarBooked();
-    //                       myCarProvider.checkFirstCarBooked();
+    myCarProvider.firstCarBooked = myCarProvider.listMyCarNotActive.keys.first;
   }
 
   void addTime() {
@@ -87,9 +85,6 @@ class _TrackingCarState extends State<TrackingCar> {
     MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     MapProvider mapProvider = Provider.of<MapProvider>(context);
     String formattedTime = DateFormat('KK:mm:a').format(now);
-    //  myCarProvider.getMyCar();
-    //                       myCarProvider.getIdCarBooked();
-    //                       myCarProvider.checkFirstCarBooked();
 
     stopTimer() {
       var toalTime = timer?.tick;
