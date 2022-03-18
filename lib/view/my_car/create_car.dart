@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/model/entity/car.dart';
-import 'package:parkingappmobile/model/entity/typeCar.dart';
+import 'package:parkingappmobile/model/entity/type_car.dart';
 import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/upload_image/upload_image.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class CreateCar extends StatefulWidget {
   final List<TypeCar>? typeCars;
   Car? car;

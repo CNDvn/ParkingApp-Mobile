@@ -33,8 +33,8 @@ class EnterChangePassword extends StatelessWidget {
                   ),
                   onPressed: () {
                     mapProvider.reset();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/BottomTabBar", (route) => false);
+                    Navigator.pushReplacementNamed(
+                        context, "/BottomTabBar");
                   },
                 )),
               ]),

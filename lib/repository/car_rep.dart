@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:parkingappmobile/model/request/create_car_req.dart';
 import 'package:parkingappmobile/model/request/upload_car_req.dart';
 import 'package:parkingappmobile/model/response/card_car_res.dart';

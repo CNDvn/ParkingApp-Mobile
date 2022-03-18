@@ -14,6 +14,15 @@ class QRCodeMyCar extends StatefulWidget {
 
 class _QRCodeMyCarState extends State<QRCodeMyCar> {
   @override
+  void initState() {
+    MyCarProvider myCarProvider =
+        Provider.of<MyCarProvider>(context, listen: false);
+    super.initState();
+    myCarProvider.getMyCar();
+    myCarProvider.firstCar = myCarProvider.listMyCar.keys.first;
+  }
+  
+  @override
   Widget build(BuildContext context) {
     MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     MapProvider mapProvider = Provider.of<MapProvider>(context);
@@ -85,7 +94,7 @@ class _QRCodeMyCarState extends State<QRCodeMyCar> {
                             myCarProvider.getIdCar();
                           });
                         },
-                        items: myCarProvider.cars.map((value) {
+                        items: myCarProvider.listMyCar.keys.map((value) {
                           return DropdownMenuItem(
                             value: value,
                             child: Text(value),

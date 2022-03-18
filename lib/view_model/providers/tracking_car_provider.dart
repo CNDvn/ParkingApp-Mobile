@@ -51,7 +51,8 @@ class TrackingCarProvider with ChangeNotifier {
             DateFormat('KK:mm:a').format(value.result!.booking!.startTime!.add(const Duration(hours: 7)));
         bookingDetailProvider.checkInTime =
             DateFormat('KK:mm:a').format(value.result!.booking!.checkinTime!.add(const Duration(hours: 7)));
-        bookingDetailProvider.price = value.result!.booking!.price!;
+        bookingDetailProvider.price = value.result!.booking!.price!.split(".").first+" VND/H";
+        bookingDetailProvider.amount = value.result!.amount.toString().split(".").first+" VND";
         secureStorage.writeSecureData("idBooking", value.result!.booking!.id!);
         flag = true;
         id = value.result!.id!;

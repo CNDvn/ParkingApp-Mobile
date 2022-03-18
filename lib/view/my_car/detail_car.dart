@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:parkingappmobile/model/entity/typeCar.dart';
+import 'package:parkingappmobile/model/entity/type_car.dart';
 import 'package:parkingappmobile/view_model/providers/car_detail_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/upload_image/upload_image.dart';
