@@ -18,4 +18,5 @@ class UrlApi {
   static const String userCar = '$serverPath/cars/me';
   static const String cardsPath = '$serverPath/cards';
   static const String signOut = "$serverPath/auths/logout";
+  static const String historyPath = "$serverPath/historys/me/car";
 }
