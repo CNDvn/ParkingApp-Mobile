@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/model/entity/car.dart';
-import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
-import 'package:parkingappmobile/view/my_car/card_car.dart';
-import 'package:parkingappmobile/view_model/service/service_storage.dart';
-import 'package:parkingappmobile/view_model/url_api/url_api.dart';
+import 'package:parkingappmobile/view/history/card_car_history.dart';
 
-class MyCar extends StatefulWidget {
-  const MyCar({Key? key}) : super(key: key);
+import '../../model/entity/car.dart';
+import '../../repository/impl/car_rep_impl.dart';
+import '../../view_model/service/service_storage.dart';
+import '../../view_model/url_api/url_api.dart';
+
+class ListCarHistory extends StatefulWidget {
+  const ListCarHistory({Key? key}) : super(key: key);
 
   @override
-  _MyCarState createState() => _MyCarState();
+  State<ListCarHistory> createState() => _ListCarHistoryState();
 }
 
-class _MyCarState extends State<MyCar> {
+class _ListCarHistoryState extends State<ListCarHistory> {
   List<Car>? listCar = [];
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _MyCarState extends State<MyCar> {
                 0, size.height * 0.05, 0, size.height * 0.05),
           ),
           const Text(
-            "Your List Car",
+            "Select the car you want to see the history",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontWeight: FontWeight.w700, fontSize: 18, height: 1.6),
@@ -52,7 +53,7 @@ class _MyCarState extends State<MyCar> {
               padding: const EdgeInsets.all(8),
               itemCount: listCar?.length,
               itemBuilder: (context, index) {
-                return CardCar(
+                return CardCarHistory(
                   car: listCar![index],
                 );
               },

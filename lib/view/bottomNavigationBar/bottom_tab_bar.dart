@@ -3,29 +3,32 @@ import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/data_bottom_tab_bar.dart';
 import 'package:parkingappmobile/view/google_map/google_map.dart';
-import 'package:parkingappmobile/view/history/history.dart';
+import 'package:parkingappmobile/view/history/list_car_history.dart';
 import 'package:parkingappmobile/view/my_car/my_car.dart';
 import 'package:parkingappmobile/view/payments/payments.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
 import 'package:provider/provider.dart';
+
 class BottomTabBar extends StatefulWidget {
   const BottomTabBar({Key? key}) : super(key: key);
 
   @override
   _BottomTabBarState createState() => _BottomTabBarState();
 }
-class _BottomTabBarState extends State<BottomTabBar> with AutomaticKeepAliveClientMixin<BottomTabBar>{
+
+class _BottomTabBarState extends State<BottomTabBar>
+    with AutomaticKeepAliveClientMixin<BottomTabBar> {
   GlobalKey<ScaffoldState>? scaffoldKey = GlobalKey<ScaffoldState>();
   int currentTab = 0;
   TabController? _tabController;
   List<Widget> screens = [
-      const GoogleMap(),
-      const Payments(),
-      const History(),
-      const MyCar()
-    ];
+    const GoogleMap(),
+    const Payments(),
+    const ListCarHistory(),
+    const MyCar()
+  ];
   @override
   void dispose() {
     _tabController?.dispose();
@@ -44,8 +47,8 @@ class _BottomTabBarState extends State<BottomTabBar> with AutomaticKeepAliveClie
     double windowHeight = MediaQuery.of(context).size.height;
     double windowWidth = MediaQuery.of(context).size.width;
     UserProfileProvider userProvider =
-        Provider.of<UserProfileProvider>(context);      
-    return Scaffold(      
+        Provider.of<UserProfileProvider>(context);
+    return Scaffold(
       key: scaffoldKey,
       drawer: const DrawerDefault(),
       body: Stack(children: [
