@@ -76,6 +76,8 @@ dependencies:
   slider_button: ^2.0.0
   # QR code
   qr_code_scanner: ^0.7.0
+  shared_preferences: ^2.0.13
+  flutter_local_notifications: ^9.4.0
 
 dev_dependencies:
   flutter_test:

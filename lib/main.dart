@@ -2,16 +2,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/routes/routes.dart';
+import 'package:parkingappmobile/view/notification/notification_page.dart';
 import 'package:parkingappmobile/view_model/providers/main_providers/main_providers.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  print("message ID: " + message.messageId!);
 }
 
 Future<void> main() async {
@@ -47,39 +48,37 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  void getMessage() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  void getMessage() async {
+    final prefes = await SharedPreferences.getInstance();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification notification = message.notification!;
       AndroidNotification? android = message.notification!.android;
-
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Notification"),
-                content: Text(message.notification!.body!),
-                actions: [
-                  TextButton(
-                    child: Text("Ok"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              );
-            });
+        List<String>? noti = await prefes.getStringList("notification");
+        if (noti == null) {
+          noti = <String>[];
+        }
+        noti.add(message.notification!.title! +
+            "|" +
+            message.notification!.body! +
+            "|" +
+            message.sentTime.toString());
+
+        await prefes.setStringList("notification", noti);
       }
-      // setState(() {
-      //   widget.message = message.notification!.body;
-      // });
     });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('Message clicked!');
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      List<String>? noti = await prefes.getStringList("notification");
+      if (noti == null) {
+        noti = <String>[];
+      }
+      noti.add(message.notification!.title! +
+          "|" +
+          message.notification!.body! +
+          "|" +
+          message.sentTime.toString());
+      await prefes.setStringList("notification", noti);
     });
   }
 

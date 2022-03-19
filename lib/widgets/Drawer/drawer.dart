@@ -3,11 +3,14 @@ import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
+import 'package:parkingappmobile/view/notification/notification_page.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
+import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerDefault extends StatefulWidget {
   const DrawerDefault({Key? key}) : super(key: key);
@@ -17,9 +20,17 @@ class DrawerDefault extends StatefulWidget {
 }
 
 class _DrawerDefaultState extends State<DrawerDefault> {
+  List<String>? notifications = [];
+
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((value) {
+      setState(() {
+        notifications = value.getStringList("notification");
+        notifications ??= <String>[];
+      });
+    });
   }
 
   @override
@@ -79,6 +90,25 @@ class _DrawerDefaultState extends State<DrawerDefault> {
           ),
           ListTile(
             leading: Image.asset(
+              AssetPath.bell,
+              width: sizeImage,
+              height: sizeImage,
+            ),
+            title: const Text(
+              'Notification',
+              style: TextStyle(fontWeight: FontWeight.w900),
+            ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationPage(
+                        notifications: notifications!.reversed.toList()),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: Image.asset(
               AssetPath.changePassword,
               width: sizeImage,
               height: sizeImage,
@@ -103,7 +133,9 @@ class _DrawerDefaultState extends State<DrawerDefault> {
             ),
             onTap: () async {
               setState(() {
-                Future.delayed(const Duration(milliseconds: 600),(){myCarProvider.getCarBooking();});
+                Future.delayed(const Duration(milliseconds: 600), () {
+                  myCarProvider.getCarBooking();
+                });
                 if (myCarProvider.carBook.isNotEmpty) {
                   Navigator.pushReplacementNamed(context, "/TrackingCar");
                 } else {
