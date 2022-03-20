@@ -19,4 +19,7 @@ class UrlApi {
   static const String cardsPath = '$serverPath/cards';
   static const String signOut = "$serverPath/auths/logout";
   static const String historyPath = "$serverPath/historys/me/car";
+  static const String walletPath = "$serverPath/wallets/me";
+  static const String banksPath = "$serverPath/banks";
+  static const String cashTransfersPath = "$serverPath/cashTransfers/transfer";
 }
