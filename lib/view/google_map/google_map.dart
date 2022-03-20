@@ -26,7 +26,7 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
-  List<String> cities = [];
+  List<String> addressParking = [];
   List<Marker> markers = [];
   // ignore: prefer_collection_literals
   Map<ParkingDetailValue, Marker> list = Map<ParkingDetailValue, Marker>();
@@ -39,7 +39,9 @@ class _GoogleMapState extends State<GoogleMap> {
       for (var item in listParking!) {
         // ignore: prefer_collection_literals
         Map<ParkingDetailValue, Marker> tmp = Map<ParkingDetailValue, Marker>();
-        tmp[ParkingDetailValue(id: item.id, name: item.name)] = Marker(
+        tmp[
+            ParkingDetailValue(
+                id: item.id, name: item.name, address: item.address)] = Marker(
             width: 100,
             height: 50,
             point:
@@ -63,7 +65,7 @@ class _GoogleMapState extends State<GoogleMap> {
       }
       setState(() {
         list.forEach((key, value) {
-          cities.add(key.name);
+          addressParking.add(key.address);
           markers.add(value);
         });
       });
@@ -76,14 +78,15 @@ class _GoogleMapState extends State<GoogleMap> {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
     onTapDestination(p) {
       list.forEach((key, value) {
-        if (p == key.name) {
+        if (p == key.address) {
           mapProvider.id = key.id;
           setState(() {
             LatLng tmp = LatLng(0, 0);
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
             mapProvider.addressParkingController.text = "";
-            mapProvider.addressParkingController.text = key.name;
+            mapProvider.addressParkingController.text = key.address;
+            mapProvider.checkPoint();
             Future.delayed(const Duration(milliseconds: 50), () {
               mapProvider.mapController
                   .move(mapProvider.destination, mapProvider.zoomMap);
@@ -98,6 +101,7 @@ class _GoogleMapState extends State<GoogleMap> {
     if (mounted) {
       if (mapProvider.point.latitude == 0) {
         mapProvider.updatePosition();
+        mapProvider.list = list;
       }
     }
 
@@ -111,11 +115,15 @@ class _GoogleMapState extends State<GoogleMap> {
               options: MapOptions(
                 onTap: (v, p) async {
                   List<Address> tmp = [];
-                  tmp = await Geocoder.local.findAddressesFromCoordinates(
-                      Coordinates(p.latitude, p.longitude));
+                  Future.delayed(const Duration(microseconds: 50), () async {
+                    tmp = await Geocoder.local.findAddressesFromCoordinates(
+                        Coordinates(p.latitude, p.longitude));
+                  });
                   setState(() {
                     mapProvider.destination = p;
                     mapProvider.location = tmp;
+                    mapProvider.clearGetAddressParking();
+                    mapProvider.checkPoint();
                     Future.delayed(const Duration(milliseconds: 50), () {
                       mapProvider.mapController.move(
                           LatLng(mapProvider.destination.latitude,
@@ -137,7 +145,7 @@ class _GoogleMapState extends State<GoogleMap> {
                       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                   subdomains: ['a', 'b', 'c'],
                 ),
-                MarkerClusterLayerOptions(
+                MarkerLayerOptions(
                   markers: [
                     ...markers,
                     Marker(
@@ -163,11 +171,6 @@ class _GoogleMapState extends State<GoogleMap> {
                       ),
                     ),
                   ],
-                  builder: (context, markers) {
-                    return CircleAvatar(
-                      child: Text(markers.length.toString()),
-                    );
-                  },
                 ),
                 PolylineLayerOptions(
                   polylines: [
@@ -215,7 +218,7 @@ class _GoogleMapState extends State<GoogleMap> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                if (!cities.contains(
+                                if (!addressParking.contains(
                                     mapProvider.addressParkingController.text))
                                   IconButton(
                                       icon: const Icon(Icons.search),
@@ -231,18 +234,14 @@ class _GoogleMapState extends State<GoogleMap> {
                                     onPressed: () {
                                       mapProvider.clearGetAddressParking();
                                       mapProvider.polyPoints.clear();
-                                      Future.delayed(
-                                          const Duration(milliseconds: 50), () {
-                                        mapProvider.mapController.move(
-                                            mapProvider.point,
-                                            mapProvider.zoomMap);
-                                      });
+                                      mapProvider.flag = false;
                                     },
                                   )
                               ],
                             )),
                         maxSuggestionsInViewPort: 5,
-                        suggestions: cities,
+                        suggestions: addressParking,
+                        itemHeight: 40,
                         onTap: onTapDestination,
                       ),
                     )),
@@ -251,9 +250,7 @@ class _GoogleMapState extends State<GoogleMap> {
                     left: 16.0,
                     right: 16.0,
                   ),
-                  child: mapProvider.addressParkingController.text.isNotEmpty &&
-                          cities.contains(
-                              mapProvider.addressParkingController.text)
+                  child: mapProvider.flag
                       ? SizedBox(
                           child: ButtonDefault(
                           content: "View Parking Detail",

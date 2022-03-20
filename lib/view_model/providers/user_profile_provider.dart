@@ -45,8 +45,8 @@ class UserProfileProvider with ChangeNotifier {
     avatarSto = await secureStorage.readSecureData('avatar') == "null"
         ? null
         : await secureStorage.readSecureData('avatar');
-    String firstNameSto = await secureStorage.readSecureData('firstName');
-    String lastNameSto = await secureStorage.readSecureData('lastName');
+    String firstNameSto = await secureStorage.readSecureData('firstName') ?? "";
+    String lastNameSto = await secureStorage.readSecureData('lastName') ?? "";
     String emailSto = await secureStorage.readSecureData('emailAddress');
     String phoneSto = await secureStorage.readSecureData('phoneNumber');
     String dobSto = await secureStorage.readSecureData('DOB');

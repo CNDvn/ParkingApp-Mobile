@@ -44,6 +44,15 @@ class ParkingDetail extends StatefulWidget {
 
 class _ParkingDetailState extends State<ParkingDetail> {
   @override
+  void initState() {
+    MyCarProvider myCarProvider =
+        Provider.of<MyCarProvider>(context, listen: false);
+    super.initState();
+    myCarProvider.getMyCar();
+    myCarProvider.firstCar = myCarProvider.listMyCar.keys.first;
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final format = NumberFormat("#,##0,000");
@@ -343,7 +352,7 @@ class _ParkingDetailState extends State<ParkingDetail> {
                                                                           detail.price.length -
                                                                               4)))
                                                                   .toString() +
-                                                              " VND",
+                                                              " VND/H",
                                                           style: TextStyle(
                                                               fontSize: 16,
                                                               color: AppColor
@@ -433,7 +442,7 @@ class _ParkingDetailState extends State<ParkingDetail> {
                           myCarProvider.firstCar = newValue!;
                         });
                       },
-                      items: myCarProvider.cars.map((value) {
+                      items: myCarProvider.listMyCar.keys.map((value) {
                         return DropdownMenuItem(
                           value: value,
                           child: Text(value),
@@ -446,10 +455,11 @@ class _ParkingDetailState extends State<ParkingDetail> {
               ),
               ButtonDefault(
                 width: size.width,
-                content: 'Booking',
+                content: 'Book',
                 voidCallBack: () {
                   setState(() {
                     myCarProvider.getIdCar();
+                    myCarProvider.parkingName = widget.name;
                   });
                   provider.addInformation(
                       widget.name, widget.phoneNumber, widget.address);

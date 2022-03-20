@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:parkingappmobile/model/entity/typeCar.dart';
+import 'package:parkingappmobile/model/entity/type_car.dart';
 
 class TypeCarsRes {
   TypeCarsRes({

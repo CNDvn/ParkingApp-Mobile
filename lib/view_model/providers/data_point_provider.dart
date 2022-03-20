@@ -36,10 +36,12 @@ class DataPoint {
 class ParkingDetailValue {
   final String name;
   final String id;
+  final String address;
 
   const ParkingDetailValue({
     required this.name,
     required this.id,
+    required this.address,
   });
 }
 
@@ -109,6 +111,8 @@ class MapProvider with ChangeNotifier {
 
   final _addressParkingFocus = FocusNode();
   FocusNode get addressParkingFocus => _addressParkingFocus;
+  // ignore: prefer_collection_literals
+  Map<ParkingDetailValue, Marker> list = Map<ParkingDetailValue, Marker>();
 
   void clearGetAddressParking() {
     addressParkingController.clear();
@@ -127,11 +131,11 @@ class MapProvider with ChangeNotifier {
   String? id;
 
   void getJsonData() async {
-    Future.delayed(const Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(seconds: 1), () {
       polyPoints.clear();
     });
 
-    NetworkHelper network = NetworkHelper(
+      NetworkHelper network = NetworkHelper(
       startLat: point.latitude,
       startLng: point.longitude,
       endLat: destination.latitude,
@@ -154,6 +158,7 @@ class MapProvider with ChangeNotifier {
     } catch (e) {
       log(e.toString());
     }
+        
     notifyListeners();
   }
 
@@ -163,16 +168,26 @@ class MapProvider with ChangeNotifier {
       _addressParking = ValidationItem("", null);
       _addressParking = ValidationItem(_getAddressParkingController.text, null);
       getJsonData1();
-      // Future.delayed(const Duration(milliseconds: 50), () {
-      //   mapController.move(destination, zoomMap);
-      // });
       notifyListeners();
     }
   }
 
+  bool flag = false;
+  checkPoint() {
+    flag = false;
+    list.forEach((key, value) {
+        if (value.point == destination) {
+          flag = true;
+          id = key.id;
+          return;
+        }
+      });
+      notifyListeners();
+  }
+  
   void getJsonData1() async {
     polyPoints.clear();
-
+    
     GetLocal local = GetLocal(address: textAddressParking);
 
     try {
@@ -182,6 +197,7 @@ class MapProvider with ChangeNotifier {
       LineString ls_1 =
           LineString(data1['features'][0]['geometry']['coordinates']);
       destination = LatLng(ls_1.lineString[1], ls_1.lineString[0]);
+      checkPoint();
       Future.delayed(const Duration(milliseconds: 50), () {
         mapController.move(destination, zoomMap);
       });
@@ -197,8 +213,8 @@ class MapProvider with ChangeNotifier {
     location.clear();
     polyPoints.clear();
     clearGetAddressParking();
-    point = LatLng(0, 0);
     destination = LatLng(0, 0);
+    flag =false;
     notifyListeners();
   }
 
@@ -209,13 +225,17 @@ class MapProvider with ChangeNotifier {
   }
 
   Future<void> updatePosition() async {
+    if (point.latitude !=0) {
+      Future.delayed(const Duration(milliseconds: 50), () {
+      mapController.move(point, zoomMap); 
+      return;     
+    });
+    }
     LatLng pos = await determinePosition();
     point = pos;
     Future.delayed(const Duration(milliseconds: 50), () {
       mapController.move(point, zoomMap);
     });
-    getJsonData();
-    getJsonData1();
     notifyListeners();
   }
 
