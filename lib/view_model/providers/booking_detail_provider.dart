@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/exception/show_alert_dialog.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/repository/impl/payment_rep_impl.dart';
@@ -19,6 +20,7 @@ class BookingDetailProvider with ChangeNotifier {
   String startTime = "";
   String checkInTime = "";
   String price = "";
+  String amount = "";  
 
   bool flag = false;
 

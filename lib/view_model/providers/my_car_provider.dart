@@ -217,6 +217,8 @@ class MyCarProvider with ChangeNotifier {
   int countTime = 0;
   String parkingName = "";
   DateTime now = DateTime.now();
+  String price="";
+  final format = NumberFormat("#,##0,000");
   // resetMyCar() {
   //   firstCarBooked="";
   //   keyFirst="";
@@ -308,6 +310,10 @@ class MyCarProvider with ChangeNotifier {
         secureStorage.writeSecureData("checkinTime", checkinTime);
         secureStorage.writeSecureData("startTime", startTime);
         parkingName = value.result!.parking!.name!;
+        price = format.format(double.parse(value.result!.price!
+                              .substring(0, value.result!.price!.length - 4)))
+                          .toString() +
+                      " VND/Hour";
       }
     });
     notifyListeners();

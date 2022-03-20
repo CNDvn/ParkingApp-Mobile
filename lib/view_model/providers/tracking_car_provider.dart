@@ -12,6 +12,7 @@ class TrackingCarProvider with ChangeNotifier {
   String parkingTime = "";
   String id = "";
   bool flag = false;
+  final format = NumberFormat("#,##0,000");
 
   addInformation(String bookingTime, String parkingTime) async {
     this.bookingTime = bookingTime;
@@ -26,7 +27,7 @@ class TrackingCarProvider with ChangeNotifier {
   }
 
   checkOut(BuildContext context) async {
-    flag=false;
+    flag = false;
     BookingDetailProvider bookingDetailProvider =
         Provider.of<BookingDetailProvider>(context, listen: false);
     String idParking = await secureStorage.readSecureData("idParking");
@@ -48,16 +49,27 @@ class TrackingCarProvider with ChangeNotifier {
         //user
         bookingDetailProvider.fullName = '$firstNameSto $lastNameSto';
         //booking
-        bookingDetailProvider.startTime =
-            DateFormat('KK:mm:a').format(value.result!.booking!.startTime!.add(const Duration(hours: 7)));
-        bookingDetailProvider.checkInTime =
-            DateFormat('KK:mm:a').format(value.result!.booking!.checkinTime!.add(const Duration(hours: 7)));
-        bookingDetailProvider.price = value.result!.booking!.price!;
+        bookingDetailProvider.startTime = DateFormat('KK:mm:a').format(
+            value.result!.booking!.startTime!.add(const Duration(hours: 7)));
+        bookingDetailProvider.checkInTime = DateFormat('KK:mm:a').format(
+            value.result!.booking!.checkinTime!.add(const Duration(hours: 7)));
+        bookingDetailProvider.price = format
+                .format(double.parse(value.result!.booking!.price!
+                    .substring(0, value.result!.booking!.price!.length - 4)))
+                .toString() +
+            " VND/Hour";
+        bookingDetailProvider.amount = format
+                .format(double.parse(value.result!.amount
+                    .toString()
+                    .substring(0, value.result!.amount.toString().length - 4)))
+                .toString() +
+            " VND";
         secureStorage.writeSecureData("idBooking", value.result!.booking!.id!);
         flag = true;
         id = value.result!.id!;
-        // Navigator.pushReplacementNamed(context, "/QRCodePage"); 
-        Navigator.of(context).pushNamedAndRemoveUntil( "/BookingDetails",(Route<dynamic> route) => false);      
+        // Navigator.pushReplacementNamed(context, "/QRCodePage");
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            "/BookingDetails", (Route<dynamic> route) => false);
       }
     });
   }

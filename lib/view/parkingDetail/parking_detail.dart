@@ -343,7 +343,7 @@ class _ParkingDetailState extends State<ParkingDetail> {
                                                                           detail.price.length -
                                                                               4)))
                                                                   .toString() +
-                                                              " VND",
+                                                              " VND/Hour",
                                                           style: TextStyle(
                                                               fontSize: 16,
                                                               color: AppColor

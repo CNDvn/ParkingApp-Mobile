@@ -249,13 +249,32 @@ class BookingDetails extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Total Price: ",
+                              "Price: ",
                               style: TextStyle(
                                   fontSize: 16, color: AppColor.blueText),
                             ),
                             SizedBox(
                               child: Text(
                                 providerBooking.price,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColor.blackText,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total Price: ",
+                              style: TextStyle(
+                                  fontSize: 16, color: AppColor.blueText),
+                            ),
+                            SizedBox(
+                              child: Text(
+                                providerBooking.amount,
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: AppColor.blackText,

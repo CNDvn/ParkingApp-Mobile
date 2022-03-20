@@ -76,15 +76,13 @@ class _TrackingCarState extends State<TrackingCar> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     DateTime now = DateTime.now();
-    ParkingDetailsProvider providerParking =
-        Provider.of<ParkingDetailsProvider>(context);
     TrackingCarProvider providerTracking =
         Provider.of<TrackingCarProvider>(context);
     BookingDetailProvider providerBooking =
         Provider.of<BookingDetailProvider>(context);
     MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     MapProvider mapProvider = Provider.of<MapProvider>(context);
-    String formattedTime = DateFormat('KK:mm:a').format(now);
+    String formattedTime = DateFormat('KK:mm:a').format(now);    
 
     stopTimer() {
       var toalTime = timer?.tick;
@@ -213,6 +211,12 @@ class _TrackingCarState extends State<TrackingCar> {
                   ),
                 ],
               ),
+              if (myCarProvider.price.isNotEmpty)
+                Text(
+                  myCarProvider.price,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.h3black,
+                ),
               SizedBox(
                   height: size.height * 0.4,
                   child: Stack(
