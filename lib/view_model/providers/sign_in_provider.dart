@@ -110,7 +110,8 @@ class SignInProvider with ChangeNotifier {
   void submitData(BuildContext context) {
     UserProfileProvider userProvider =
         Provider.of<UserProfileProvider>(context, listen: false);
-    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context, listen: false);
+    MyCarProvider myCarProvider =
+        Provider.of<MyCarProvider>(context, listen: false);
     submitValid = _phone.error != null ||
         _password.error != null ||
         _phone.value == null ||
@@ -133,13 +134,13 @@ class SignInProvider with ChangeNotifier {
         await secureStorage.writeSecureData(
             "customer", value.result!.refreshToken);
         await UsersMeRepImpl()
-            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);   
-         userProvider.getProfile();
-          myCarProvider.getList();      
-          showToastSuccess(value.result!.message);
+            .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
+        userProvider.getProfile();
+        myCarProvider.getList();
+        showToastSuccess(value.result!.message);
         clearPhoneController();
         clearPasswordController();
-          await Navigator.pushReplacementNamed(context, "/BottomTabBar");
+        await Navigator.pushReplacementNamed(context, "/BottomTabBar");
       }).onError((error, stackTrace) {
         log(error.toString());
         Navigator.pushReplacementNamed(context, "/");
@@ -159,7 +160,8 @@ class SignInProvider with ChangeNotifier {
   Future<void> signInWithGoogle(BuildContext context) async {
     UserProfileProvider userProvider =
         Provider.of<UserProfileProvider>(context, listen: false);
-    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context, listen: false);
+    MyCarProvider myCarProvider =
+        Provider.of<MyCarProvider>(context, listen: false);
     try {
       // showDialogCustom(context);
       User? user = await auth.signInWithGoogle();
@@ -182,10 +184,10 @@ class SignInProvider with ChangeNotifier {
           UsersMeRepImpl()
               .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
           userProvider.getProfile();
-          myCarProvider.getList();      
+          myCarProvider.getList();
           showToastSuccess(value.result!.message);
-        clearPhoneController();
-        clearPasswordController();
+          clearPhoneController();
+          clearPasswordController();
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const BottomTabBar();
           }));
@@ -221,7 +223,7 @@ class SignInProvider with ChangeNotifier {
     if (didRequestSignOut == true) {
       mapProvider.resetAll();
       _signOut(context);
-      Navigator.pushReplacementNamed(context, "/");
+      Navigator.pushReplacementNamed(context, "/SignInPage");
     }
   }
 }
