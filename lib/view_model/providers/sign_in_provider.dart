@@ -176,6 +176,7 @@ class SignInProvider with ChangeNotifier {
       if (user != null) {
         await secureStorage.writeSecureData("emailAddress", user.email ?? "");
         await secureStorage.writeSecureData("lastName", user.displayName ?? "");
+        await secureStorage.writeSecureData("firstName", "");
         await secureStorage.writeSecureData(
             "phoneNumber", user.phoneNumber?.substring(3) ?? "");
         await secureStorage.writeSecureData("avatar", user.photoURL ?? "");

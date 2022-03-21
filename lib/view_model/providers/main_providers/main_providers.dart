@@ -1,4 +1,5 @@
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
+import 'package:parkingappmobile/view_model/providers/car_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/parking_detail_provider.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/providers/enter_change_password_provider.dart';
@@ -47,6 +48,9 @@ class MainProviders {
     ),
     ChangeNotifierProvider<BookingDetailProvider>(
       create: (context) => BookingDetailProvider(),
+    ),
+    ChangeNotifierProvider<CarDetailProvider>(
+      create: (context) => CarDetailProvider(),
     ),
   ];
 }

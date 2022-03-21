@@ -4,18 +4,20 @@
 
 import 'dart:convert';
 
+import 'package:parkingappmobile/model/entity/type_car.dart';
+
 class TypeCarsRes {
   TypeCarsRes({
     this.result,
     this.statusCode,
   });
 
-  List<Result>? result;
+  List<TypeCar>? result;
   int? statusCode;
 
   factory TypeCarsRes.fromJson(Map<String, dynamic> json) => TypeCarsRes(
         result:
-            List<Result>.from(json["result"].map((x) => Result.fromJson(x))),
+            List<TypeCar>.from(json["result"].map((x) => TypeCar.fromJson(x))),
         statusCode: json["statusCode"],
       );
 

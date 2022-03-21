@@ -1,12 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
-import 'package:parkingappmobile/model/entity/car.dart';
-import 'package:parkingappmobile/model/request/create_car_req.dart';
-import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
+import 'package:parkingappmobile/model/request/upload_car_req.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/image_rep_impl.dart';
 import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
@@ -15,11 +11,12 @@ import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:provider/provider.dart';
 
-enum StatusCarEnum { active, booked, inParking }
-class MyCarProvider with ChangeNotifier {
+class CarDetailProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
-
+  String? id;
   File? image;
+  String? imageID;
+  String? imageSto;
   ValidationItem _brand = ValidationItem("", "");
   ValidationItem _color = ValidationItem("", "");
   ValidationItem _modelCode = ValidationItem("", "");
@@ -90,6 +87,29 @@ class MyCarProvider with ChangeNotifier {
     image = null;
   }
 
+  void addData(
+      String idData,
+      String imageIdData,
+      String imageStoData,
+      String brandData,
+      String colorData,
+      String modelCodeData,
+      String nPlatesData,
+      String dropdownValueData) {
+    id = idData;
+    imageID = imageIdData;
+    imageSto = imageStoData;
+    brandController.text = brandData;
+    colorController.text = colorData;
+    modelCodeController.text = modelCodeData;
+    nPlateController.text = nPlatesData;
+    dropdownValue = dropdownValueData;
+    _brand = ValidationItem(brandData, null);
+    _color = ValidationItem(colorData, null);
+    _modelCode = ValidationItem(modelCodeData, null);
+    _nPlate = ValidationItem(nPlatesData, null);
+  }
+
   void checkValidation(String value, String key) {
     switch (key) {
       case "brand":
@@ -154,149 +174,62 @@ class MyCarProvider with ChangeNotifier {
         _color.error != null ||
         _modelCode.error != null ||
         _nPlate.error != null;
-
+    String token = await secureStorage.readSecureData('token');
     if (submitValid) {
       checkValidation(_brand.value ?? "", "brand");
       checkValidation(_color.value ?? "", "color");
       checkValidation(_modelCode.value ?? "", "modelCode");
       checkValidation(_nPlate.value ?? "", "nPlate");
-    } else if (image == null) {
-      showToastFail("The image has not been updated yet");
-    } else {
-      final token = await secureStorage.readSecureData("token");
-      ImageRepImpl()
+    } else if (image != null) {
+      await ImageRepImpl()
           .postImage(UrlApi.imagesPath, image!, token)
           .then((value) async {
         final imageID = await secureStorage.readSecureData("imageID");
-        List<String> images = [imageID];
-        final data = CreateCarReq(
-            nPlates: _nPlate.value!.toUpperCase(),
-            brand: _brand.value!.toUpperCase(),
-            color: _color.value!.toUpperCase(),
-            modelCode: _modelCode.value!.toUpperCase(),
-            typeCarId: dropdownValue!,
-            images: images);
-        CarRepImpl().postCar(UrlApi.carsPath, data, token).then((value) async {
-          showToastSuccess("Create success");
+        await CarRepImpl()
+            .putCardCar(
+                UrlApi.carsPath + "/$id",
+                UploadCarReq(
+                    nPlates: _nPlate.value!.toUpperCase(),
+                    brand: _brand.value!.toUpperCase(),
+                    color: _color.value!.toUpperCase(),
+                    modelCode: _modelCode.value!.toUpperCase(),
+                    typeCarId: dropdownValue!,
+                    images: [imageID!]),
+                token)
+            .then((value) async {
+          showToastSuccess("Success");
           mapProvider.reset();
-          clearAll();
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return const BottomTabBar();
           }));
+          await secureStorage.deleteSecureData("imageID");
         }).onError((error, stackTrace) {
           log(error.toString());
         });
       }).onError((error, stackTrace) {
         log(error.toString());
       });
+    } else {
+      await CarRepImpl()
+          .putCardCar(
+              UrlApi.carsPath + "/$id",
+              UploadCarReq(
+                  nPlates: _nPlate.value!.toUpperCase(),
+                  brand: _brand.value!.toUpperCase(),
+                  color: _color.value!.toUpperCase(),
+                  modelCode: _modelCode.value!.toUpperCase(),
+                  typeCarId: dropdownValue!,
+                  images: [imageID!]),
+              token)
+          .then((value) async {
+        showToastSuccess("Success");
+        mapProvider.reset();
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return const BottomTabBar();
+        }));
+      }).onError((error, stackTrace) {
+        log(error.toString());
+      });
     }
-  }
-
-  // ignore: prefer_collection_literals
-  Map<String, Car> listMyCar = Map<String, Car>();
-  // ignore: prefer_collection_literals
-  Map<String, Car> listMyCarNoActive = Map<String, Car>();
-  String? firstCar;
-  String key = "";
-  String? firstCarBooked;
-  String carBooked = "";
-  // ignore: prefer_collection_literals
-  // Map<String, String> carBook = Map();
-  getMyCar() async {
-    String accessToken = await secureStorage.readSecureData("token");
-    List<Car>? myCars = [];
-    CarRepImpl().getMyCar(UrlApi.userCar, accessToken).then((value) {
-      myCars = value.result;
-      for (var item in myCars!) {
-        // ignore: prefer_collection_literals
-        Map<String, Car> tmp = Map<String, Car>();
-        tmp[item.nPlates] = item;
-        listMyCar.addAll(tmp);
-        if (!item.status.contains("active")){
-          listMyCarNoActive.addAll(tmp);
-        }
-      }
-      firstCar = listMyCar.keys.first;
-      key = listMyCar[0]!.id;     
-    });
-    notifyListeners();
-  }
-
-  getIdCar() {
-    status ="";
-    startTime ="";
-    secureStorage.deleteSecureData("idCar");
-    listMyCar.forEach((key, value) {
-      if (firstCar!.contains(key)) {
-        this.key = value.id;
-        secureStorage.writeSecureData("idCar", this.key);
-        carBooked = firstCar!;
-        return;
-      }
-    });
-    notifyListeners();
-  }
-
-  String status ="";
-  getIdCarBooked() {    
-    secureStorage.deleteSecureData("idCar");
-    listMyCarNoActive.forEach((key, value) async {
-      if (firstCarBooked!.contains(key)) {
-        this.key = value.id;
-        secureStorage.writeSecureData("idCar", this.key);
-        if (value.status.contains(StatusCarEnum.booked.name)){
-          status ="";
-          status = value.status;
-          return;
-        }
-        if (value.status.contains(StatusCarEnum.inParking.name)){
-          status ="";
-          status = value.status;
-          return;
-        }        
-      }
-    });
-    notifyListeners();
-  }
-
-  String startTime ="";
-  int countTime =0;
-  String parkingName= "";
-  int hoursBook = 0;
-  int minutesBook = 0;
-  int secondsBook = 0;
-  DateTime now = DateTime.now();
-  String price="";
-  getBookingByIdCar() async {
-    startTime ="";
-    parkingName= "";
-    countTime =0;
-    String accessToken = await secureStorage.readSecureData("token");
-    String url = "${UrlApi.serverPath}/bookings/car/$key";
-    BookingRepImpl().getBookingByIdCar(url, accessToken).then((value) {
-      if (value.statusCode == 200){
-        now =  DateTime.now().subtract(Duration(hours: value.result!.startTime!.add(const Duration(hours: 7)).hour,minutes: value.result!.startTime!.add(const Duration(hours: 7)).minute,seconds: value.result!.startTime!.add(const Duration(hours: 7)).second));
-        hoursBook = DateTime.now().hour - value.result!.startTime!.add(const Duration(hours: 7)).hour;
-        minutesBook = DateTime.now().minute - value.result!.startTime!.minute;
-        secondsBook = DateTime.now().second -  value.result!.startTime!.second;        
-        startTime = DateFormat('KK:mm:a').format(value.result!.startTime!.add(const Duration(hours: 7)));
-        secureStorage.writeSecureData("startTime", startTime);
-        parkingName = value.result!.parking!.name!;
-        price = value.result!.price!;
-      }
-    });
-    notifyListeners();
-  }
-
-  resetAfterPay() {
-    startTime ="";
-    status="";
-    price ="";
-    parkingName="";
-  }
-
-  getList() async {
-    getMyCar();
-    notifyListeners();
   }
 }

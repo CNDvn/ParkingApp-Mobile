@@ -26,7 +26,7 @@ class GoogleMap extends StatefulWidget {
 }
 
 class _GoogleMapState extends State<GoogleMap> {
-  List<String> cities = [];
+  List<String> addressParking = [];
   List<Marker> markers = [];
   // ignore: prefer_collection_literals
   Map<ParkingDetailValue, Marker> list = Map<ParkingDetailValue, Marker>();
@@ -39,7 +39,9 @@ class _GoogleMapState extends State<GoogleMap> {
       for (var item in listParking!) {
         // ignore: prefer_collection_literals
         Map<ParkingDetailValue, Marker> tmp = Map<ParkingDetailValue, Marker>();
-        tmp[ParkingDetailValue(id: item.id, name: item.name)] = Marker(
+        tmp[
+            ParkingDetailValue(
+                id: item.id, name: item.name, address: item.address)] = Marker(
             width: 100,
             height: 50,
             point:
@@ -63,7 +65,7 @@ class _GoogleMapState extends State<GoogleMap> {
       }
       setState(() {
         list.forEach((key, value) {
-          cities.add(key.name);
+          addressParking.add(key.address);
           markers.add(value);
         });
       });
@@ -76,26 +78,30 @@ class _GoogleMapState extends State<GoogleMap> {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
     onTapDestination(p) {
       list.forEach((key, value) {
-        if (p == key.name) {
+        if (p == key.address) {
           mapProvider.id = key.id;
           setState(() {
             LatLng tmp = LatLng(0, 0);
             tmp = LatLng(value.point.latitude, value.point.longitude);
             mapProvider.destination = tmp;
-            mapProvider.addressParkingController.text = key.name;
-            Future.delayed(const Duration(milliseconds: 600), () {
-              mapProvider.mapController.move(tmp, mapProvider.zoomMap);
+            mapProvider.addressParkingController.text = "";
+            mapProvider.addressParkingController.text = key.address;
+            mapProvider.checkPoint();
+            Future.delayed(const Duration(milliseconds: 50), () {
+              mapProvider.mapController
+                  .move(mapProvider.destination, mapProvider.zoomMap);
             });
           });
+          mapProvider.getJsonData();
+          return;
         }
       });
-      mapProvider.clearGetAddress();
-      mapProvider.getJsonData();
     }
 
     if (mounted) {
       if (mapProvider.point.latitude == 0) {
         mapProvider.updatePosition();
+        mapProvider.list = list;
       }
     }
 
@@ -109,17 +115,21 @@ class _GoogleMapState extends State<GoogleMap> {
               options: MapOptions(
                 onTap: (v, p) async {
                   List<Address> tmp = [];
-                  tmp = await Geocoder.local.findAddressesFromCoordinates(
-                      Coordinates(p.latitude, p.longitude));
+                  Future.delayed(const Duration(microseconds: 50), () async {
+                    tmp = await Geocoder.local.findAddressesFromCoordinates(
+                        Coordinates(p.latitude, p.longitude));
+                  });
                   setState(() {
                     mapProvider.destination = p;
                     mapProvider.location = tmp;
+                    mapProvider.clearGetAddressParking();
+                    mapProvider.checkPoint();
                     Future.delayed(const Duration(milliseconds: 50), () {
                       mapProvider.mapController.move(
                           LatLng(mapProvider.destination.latitude,
                               mapProvider.destination.longitude),
                           mapProvider.zoomMap);
-                    });                                    
+                    });
                     mapProvider.getJsonData();
                   });
                 },
@@ -135,7 +145,7 @@ class _GoogleMapState extends State<GoogleMap> {
                       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                   subdomains: ['a', 'b', 'c'],
                 ),
-                MarkerClusterLayerOptions(
+                MarkerLayerOptions(
                   markers: [
                     ...markers,
                     Marker(
@@ -161,11 +171,6 @@ class _GoogleMapState extends State<GoogleMap> {
                       ),
                     ),
                   ],
-                  builder: (context, markers) {
-                    return CircleAvatar(
-                      child: Text(markers.length.toString()),
-                    );
-                  },
                 ),
                 PolylineLayerOptions(
                   polylines: [
@@ -202,68 +207,50 @@ class _GoogleMapState extends State<GoogleMap> {
               children: [
                 Card(
                     margin: EdgeInsets.only(
-                        left: 16.0, top: size.height * 0.1, right: 16.0),
-                    child: Column(children: [
-                      SizedBox(
-                        child: TextField(
-                          decoration: InputDecoration(
+                        left: 16.0, top: size.height * 0.2, right: 16.0),
+                    child: SizedBox(
+                      child: SearchField(
+                        controller: mapProvider.addressParkingController,
+                        hint: "Where are you going to ?",
+                        searchInputDecoration: InputDecoration(
                             contentPadding: const EdgeInsets.all(16.0),
-                            suffixIcon: mapProvider.textAddress.isNotEmpty
-                                ? IconButton(
-                                    icon: const Icon(Icons.close),
-                                    onPressed: () {
-                                      mapProvider.clearGetAddress();
-                                      mapProvider.resetAll();
-                                    },
-                                  )
-                                : null,
-                            hintText: "Where are you going to ?",
-                          ),
-                          keyboardType: TextInputType.multiline,
-                          textInputAction: TextInputAction.done,
-                          controller: mapProvider.addressController,
-                          onChanged: (String value) {
-                            mapProvider.checkAddress(value);
-                          },
-                          onEditingComplete: () {
-                            setState(() {
-                              mapProvider.submitData(context);
-                              FocusScope.of(context).unfocus();
-                            });
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        child: SearchField(
-                          controller: mapProvider.addressParkingController,
-                          hint: "What parking lot are you finding ?",
-                          searchInputDecoration: InputDecoration(
-                            contentPadding: const EdgeInsets.all(16.0),
-                            suffixIcon: mapProvider
-                                    .addressParkingController.text.isNotEmpty
-                                ? IconButton(
+                            suffixIcon: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                if (!addressParking.contains(
+                                    mapProvider.addressParkingController.text))
+                                  IconButton(
+                                      icon: const Icon(Icons.search),
+                                      onPressed: () => {
+                                            setState(() {
+                                              mapProvider.submitData(context);
+                                            })
+                                          }),
+                                if (mapProvider
+                                    .addressParkingController.text.isNotEmpty)
+                                  IconButton(
                                     icon: const Icon(Icons.close),
                                     onPressed: () {
                                       mapProvider.clearGetAddressParking();
-                                      mapProvider.resetAll();
+                                      mapProvider.polyPoints.clear();
+                                      mapProvider.flag = false;
                                     },
                                   )
-                                : null,
-                          ),
-                          maxSuggestionsInViewPort: 5,
-                          suggestions: cities,
-                          onTap: onTapDestination,
-                        ),
+                              ],
+                            )),
+                        maxSuggestionsInViewPort: 5,
+                        suggestions: addressParking,
+                        itemHeight: 40,
+                        onTap: onTapDestination,
                       ),
-                    ])),
+                    )),
                 Card(
                   margin: const EdgeInsets.only(
                     left: 16.0,
                     right: 16.0,
                   ),
-                  child: mapProvider.addressParkingController.text.isNotEmpty &&
-                          cities.contains(
-                              mapProvider.addressParkingController.text)
+                  child: mapProvider.flag
                       ? SizedBox(
                           child: ButtonDefault(
                           content: "View Parking Detail",

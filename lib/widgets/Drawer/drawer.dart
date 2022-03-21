@@ -100,18 +100,18 @@ class _DrawerDefaultState extends State<DrawerDefault> {
               height: sizeImage,
             ),
             title: const Text(
-              'Car in Parking',
+              'Tracking Car',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () async {
               setState(() {
-                Future.delayed(const Duration(milliseconds: 600), () {
-                  myCarProvider.getCarBooking();
-                });
-                if (myCarProvider.carBook.isNotEmpty) {
+                myCarProvider.getMyCar();
+                myCarProvider.carBooked="";
+                myCarProvider.resetAfterPay();
+                if (myCarProvider.listMyCarNoActive.isNotEmpty) {
                   Navigator.pushReplacementNamed(context, "/TrackingCar");
                 } else {
-                  showToastFail("Don't have your cars are in the parking lot");
+                  showToastFail("No cars have been booked!!");
                 }
               });
             },
@@ -139,11 +139,11 @@ class _DrawerDefaultState extends State<DrawerDefault> {
               height: sizeImage,
             ),
             title: const Text(
-              'QScan Code',
+              'QR Code',
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
             onTap: () {
-              if (myCarProvider.cars.isNotEmpty) {
+              if (myCarProvider.listMyCar.isNotEmpty) {
                 myCarProvider.getIdCar();
                 Navigator.pushReplacementNamed(context, "/QRCodeMyCar");
               }

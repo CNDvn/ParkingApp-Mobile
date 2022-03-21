@@ -48,12 +48,14 @@ class TrackingCarProvider with ChangeNotifier {
         bookingDetailProvider.fullName = '$firstNameSto $lastNameSto';
         //booking
         bookingDetailProvider.startTime =
-            DateFormat('KK:mm:a').format(value.result!.booking!.startTime!);
+            DateFormat('KK:mm:a').format(value.result!.booking!.startTime!.add(const Duration(hours: 7)));
         bookingDetailProvider.checkInTime =
-            DateFormat('KK:mm:a').format(value.result!.booking!.checkinTime!);
-        bookingDetailProvider.price = value.result!.booking!.price!;
+            DateFormat('KK:mm:a').format(value.result!.booking!.checkinTime!.add(const Duration(hours: 7)));
+        bookingDetailProvider.price = value.result!.booking!.price!.split(".").first+" VND/H";
+        bookingDetailProvider.amount = value.result!.amount.toString().split(".").first+" VND";
         secureStorage.writeSecureData("idBooking", value.result!.booking!.id!);
         flag = true;
+        id = value.result!.id!;
         Navigator.pushReplacementNamed(context, "/BookingDetails");
       }
     });
