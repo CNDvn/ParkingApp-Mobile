@@ -18,6 +18,8 @@ class DrawerDefault extends StatefulWidget {
 }
 
 class _DrawerDefaultState extends State<DrawerDefault> {
+  List<String>? notifications = [];
+
   @override
   void initState() {
     super.initState();
