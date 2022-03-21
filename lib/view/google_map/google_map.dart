@@ -182,13 +182,6 @@ class _GoogleMapState extends State<GoogleMap> {
                 ),
                 CircleLayerOptions(circles: [
                   CircleMarker(
-                      point: mapProvider.point,
-                      useRadiusInMeter: true,
-                      radius: 100,
-                      color: Colors.blue.withOpacity(0.2),
-                      borderStrokeWidth: 2,
-                      borderColor: Colors.blue),
-                  CircleMarker(
                       point: mapProvider.destination,
                       useRadiusInMeter: true,
                       radius: 200,

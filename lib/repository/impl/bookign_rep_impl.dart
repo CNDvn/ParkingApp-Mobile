@@ -7,6 +7,7 @@ import 'package:parkingappmobile/model/response/booking_by_idcar_res.dart';
 import 'package:parkingappmobile/model/response/booking_res.dart';
 import 'package:parkingappmobile/model/response/checkout_res.dart';
 import 'package:parkingappmobile/repository/booking_rep.dart';
+import 'package:parkingappmobile/model/response/book_cancel_res.dart';
 
 class BookingRepImpl implements BookingRep {
   @override
@@ -44,6 +45,30 @@ class BookingRepImpl implements BookingRep {
       showToastFail(e.response?.data["message"]);
     }
     return result;
+  }
+
+  @override
+  Future<BookCancelRes> putBookCancelByIdCar(String url, String accessToken) async {
+    var result = BookCancelRes();
+    try {
+      Response response = await Dio().put(url,options: Options(headers: {HttpHeaders.authorizationHeader: 'Bearer $accessToken'}));
+      result = BookCancelRes.bookCancelResFromJson(jsonEncode(response.data));
+    } on DioError catch (e) {
+      showToastFail(e.response?.data["message"]);
+    }
+    return result;
+  }
+
+  @override
+  Future<void> putBookCancelByIdCar1(String url, String accessToken) async {
+    try {
+      Response response = await Dio().put(url,options: Options(headers: {HttpHeaders.authorizationHeader: 'Bearer $accessToken'}));
+      if (response.data !=null) {
+        showToastSuccess("Cancel Successful");
+      }
+    } on DioError catch (e) {
+      showToastFail(e.response?.data["message"]);
+    }
   }
 
 }

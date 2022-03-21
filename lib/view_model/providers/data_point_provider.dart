@@ -213,14 +213,14 @@ class MapProvider with ChangeNotifier {
     location.clear();
     polyPoints.clear();
     clearGetAddressParking();
-    destination = LatLng(0, 0);
+    // destination = LatLng(0, 0);
+    updatePosition();
     flag =false;
     notifyListeners();
   }
 
   reset() async {
     mapController = MapController();
-    getJsonData();
     notifyListeners();
   }
 
@@ -233,6 +233,7 @@ class MapProvider with ChangeNotifier {
     }
     LatLng pos = await determinePosition();
     point = pos;
+    destination = pos;
     Future.delayed(const Duration(milliseconds: 50), () {
       mapController.move(point, zoomMap);
     });
