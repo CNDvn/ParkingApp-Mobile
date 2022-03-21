@@ -22,7 +22,7 @@ class BookingDetails extends StatelessWidget {
     MapProvider mapProvider = Provider.of<MapProvider>(context);
     TrackingCarProvider providerTracking =
         Provider.of<TrackingCarProvider>(context);
-    String formattedTime = DateFormat('KK:mm:a').format(DateTime.now());
+    String formattedTime = DateFormat('KK:mm:a').format(DateTime.now());    
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(
@@ -89,8 +89,18 @@ class BookingDetails extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
+                  if (providerCar.firstCarBooked.isNotEmpty)
                   SizedBox(
-                    child: Text(providerCar.firstCar!,
+                    child: Text(providerCar.firstCarBooked,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: AppColor.blackText,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  if (providerCar.carBooked.isNotEmpty)
+                  SizedBox(
+                    child: Text(providerCar.carBooked,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: AppColor.blackText,

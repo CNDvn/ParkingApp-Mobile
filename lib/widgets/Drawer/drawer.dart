@@ -4,6 +4,7 @@ import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
 import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
@@ -17,6 +18,8 @@ class DrawerDefault extends StatefulWidget {
 }
 
 class _DrawerDefaultState extends State<DrawerDefault> {
+  List<String>? notifications = [];
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,7 @@ class _DrawerDefaultState extends State<DrawerDefault> {
     UserProfileProvider userProvider =
         Provider.of<UserProfileProvider>(context);
     MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
+    MapProvider mapProvider = Provider.of<MapProvider>(context);
     return Drawer(
       backgroundColor: AppColor.whiteBackground,
       child: ListView(
