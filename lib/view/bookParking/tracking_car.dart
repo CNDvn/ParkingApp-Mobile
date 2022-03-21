@@ -33,9 +33,10 @@ class _TrackingCarState extends State<TrackingCar> {
   void initState() {
     super.initState();
     startTimer();
-    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context,listen: false);
+    MyCarProvider myCarProvider =
+        Provider.of<MyCarProvider>(context, listen: false);
     myCarProvider.getMyCar();
-    if (myCarProvider.listMyCarNoActive.isNotEmpty){
+    if (myCarProvider.listMyCarNoActive.isNotEmpty) {
       myCarProvider.firstCarBooked = myCarProvider.listMyCarNoActive.keys.first;
     }
   }
@@ -93,7 +94,7 @@ class _TrackingCarState extends State<TrackingCar> {
       providerTracking.insertStorage();
       providerBooking.getInformation();
       //------------------
-      // providerTracking.checkOut(context);      
+      // providerTracking.checkOut(context);
       setState(() {
         if (providerTracking.flag) {
           timer?.cancel();
@@ -101,7 +102,7 @@ class _TrackingCarState extends State<TrackingCar> {
       });
       Navigator.pushReplacementNamed(context, "/QRCodePage");
     }
-    
+
     return Scaffold(
         backgroundColor: AppColor.whiteBackground,
         drawer: const DrawerDefault(),
@@ -169,7 +170,7 @@ class _TrackingCarState extends State<TrackingCar> {
                   SizedBox(
                     height: size.height * 0.09,
                     child: myCarProvider.carBooked.isNotEmpty
-                        ? Text( 
+                        ? Text(
                             myCarProvider.carBooked,
                             style: AppTextStyles.h3black,
                           )
@@ -181,11 +182,11 @@ class _TrackingCarState extends State<TrackingCar> {
                                 myCarProvider.resetAfterPay();
                                 myCarProvider.getMyCar();
                                 myCarProvider.getIdCarBooked();
-                                myCarProvider.getBookingByIdCar();                                
+                                myCarProvider.getBookingByIdCar();
                               });
                             },
-                            items:
-                                myCarProvider.listMyCarNoActive.keys.map((String value) {
+                            items: myCarProvider.listMyCarNoActive.keys
+                                .map((String value) {
                               return DropdownMenuItem(
                                 value: value,
                                 child: Text(value,
@@ -198,20 +199,36 @@ class _TrackingCarState extends State<TrackingCar> {
                   ),
                 ],
               ),
+              if (myCarProvider.status.isNotEmpty &&
+                      myCarProvider.status.contains("booked"))
+                SizedBox(
+                  child: GestureDetector(
+                      child: const Text(
+                        "Cancel Booked",
+                        style: TextStyle(
+                            color: Colors.red,
+                            decorationStyle: TextDecorationStyle.solid),
+                      ),
+                      onTap: () {
+                        providerTracking.showDiaLog(context);
+                      }),
+                ),
               if (myCarProvider.price.isNotEmpty)
                 Text(
-                  myCarProvider.price+"VNĐ/Hour",
+                  myCarProvider.price,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.h3black,
                 ),
-              if (myCarProvider.status.isNotEmpty && myCarProvider.status.contains("inParking"))
-              const Text(
+              if (myCarProvider.status.isNotEmpty &&
+                  myCarProvider.status.contains("inParking"))
+                const Text(
                   "Your car is already in the parking lot",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.green),
                 ),
-              if (myCarProvider.status.isNotEmpty && myCarProvider.status.contains("booked"))
-              const Text(
+              if (myCarProvider.status.isNotEmpty &&
+                  myCarProvider.status.contains("booked"))
+                const Text(
                   "You are not check-in yet",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.red),
@@ -229,38 +246,39 @@ class _TrackingCarState extends State<TrackingCar> {
                   )),
               if (myCarProvider.carBooked.isNotEmpty ||
                   myCarProvider.startTime.isNotEmpty)
-              SizedBox(
-                height: size.height * 0.2,
-                child: StreamBuilder<Object>(
-                    stream: null,
-                    builder: (context, snapshot) {
-                      return Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                        bottom: size.height * 0.01),
-                                    child: const Text("Time Clock",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 18)),
+                SizedBox(
+                  height: size.height * 0.2,
+                  child: StreamBuilder<Object>(
+                      stream: null,
+                      builder: (context, snapshot) {
+                        return Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    child: Container(
+                                      padding: EdgeInsets.only(
+                                          bottom: size.height * 0.01),
+                                      child: const Text("Time Clock",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 18)),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(child: buildTime(myCarProvider.now)),
-                                SizedBox(
-                                  width: size.width * 0.8,
-                                  child: ConfirmationSlider(text: "Check-out Confirm",
-                                      onConfirmation: stopTimer),
-                                ),
-                              ],
-                            )
-                          ]);
-                    }),
-              ),
+                                  SizedBox(child: buildTime(myCarProvider.now)),
+                                  SizedBox(
+                                    width: size.width * 0.8,
+                                    child: ConfirmationSlider(
+                                        text: "Check-out Confirm",
+                                        onConfirmation: stopTimer),
+                                  ),
+                                ],
+                              )
+                            ]);
+                      }),
+                ),
               Container(
                 margin: EdgeInsets.only(top: size.height * 0.04),
                 child: GestureDetector(

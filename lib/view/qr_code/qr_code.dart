@@ -1,10 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
-import 'package:parkingappmobile/view/viewPark/view_park.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
@@ -37,6 +36,7 @@ class _QRCodePageState extends State<QRCodePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -56,9 +56,13 @@ class _QRCodePageState extends State<QRCodePage> {
                         color: Colors.black87,
                       ),
                       onPressed: () {
-                        // Navigator.pop(context);
-                        // Navigator.popAndPushNamed(context, "/TrackingCar");
-                        Navigator.pushNamedAndRemoveUntil(context, "/TrackingCar", (route) => false);
+                        if (myCarProvider.firstCarBooked.isNotEmpty) {
+                          myCarProvider.getMyCar();
+                          myCarProvider.carBooked = "";
+                          myCarProvider.resetAfterPay();
+                        }
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, "/TrackingCar", (route) => false);
                       },
                     )),
                   ]),

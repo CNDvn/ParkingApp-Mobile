@@ -16,6 +16,7 @@ import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:provider/provider.dart';
 
 enum StatusCarEnum { active, booked, inParking }
+
 class MyCarProvider with ChangeNotifier {
   final SecureStorage secureStorage = SecureStorage();
 
@@ -198,10 +199,8 @@ class MyCarProvider with ChangeNotifier {
   Map<String, Car> listMyCarNoActive = Map<String, Car>();
   String? firstCar;
   String key = "";
-  String? firstCarBooked;
+  String firstCarBooked = "";
   String carBooked = "";
-  // ignore: prefer_collection_literals
-  // Map<String, String> carBook = Map();
   getMyCar() async {
     String accessToken = await secureStorage.readSecureData("token");
     List<Car>? myCars = [];
@@ -212,19 +211,20 @@ class MyCarProvider with ChangeNotifier {
         Map<String, Car> tmp = Map<String, Car>();
         tmp[item.nPlates] = item;
         listMyCar.addAll(tmp);
-        if (!item.status.contains("active")){
+        if (!item.status.contains("active")) {
           listMyCarNoActive.addAll(tmp);
         }
       }
       firstCar = listMyCar.keys.first;
-      key = listMyCar[0]!.id;     
+      key = listMyCar[0]!.id;
     });
     notifyListeners();
   }
 
   getIdCar() {
-    status ="";
-    startTime ="";
+    status = "";
+    startTime = "";
+    firstCarBooked = "";
     secureStorage.deleteSecureData("idCar");
     listMyCar.forEach((key, value) {
       if (firstCar!.contains(key)) {
@@ -237,63 +237,68 @@ class MyCarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String status ="";
-  getIdCarBooked() {    
+  String status = "";
+  getIdCarBooked() {
     secureStorage.deleteSecureData("idCar");
     listMyCarNoActive.forEach((key, value) async {
-      if (firstCarBooked!.contains(key)) {
+      if (firstCarBooked.contains(key)) {
         this.key = value.id;
         secureStorage.writeSecureData("idCar", this.key);
-        if (value.status.contains(StatusCarEnum.booked.name)){
-          status ="";
+        if (value.status.contains(StatusCarEnum.booked.name)) {
+          status = "";
           status = value.status;
           return;
         }
-        if (value.status.contains(StatusCarEnum.inParking.name)){
-          status ="";
+        if (value.status.contains(StatusCarEnum.inParking.name)) {
+          status = "";
           status = value.status;
           return;
-        }        
+        }
       }
     });
     notifyListeners();
   }
 
-  String startTime ="";
-  int countTime =0;
-  String parkingName= "";
-  int hoursBook = 0;
-  int minutesBook = 0;
-  int secondsBook = 0;
+  String startTime = "";
+  int countTime = 0;
+  String parkingName = "";
   DateTime now = DateTime.now();
-  String price="";
+  String price = "";
+  final format = NumberFormat("#,##0,000");
   getBookingByIdCar() async {
-    startTime ="";
-    parkingName= "";
-    countTime =0;
+    startTime = "";
+    parkingName = "";
+    countTime = 0;
     String accessToken = await secureStorage.readSecureData("token");
     String url = "${UrlApi.serverPath}/bookings/car/$key";
     BookingRepImpl().getBookingByIdCar(url, accessToken).then((value) {
-      if (value.statusCode == 200){
-        now =  DateTime.now().subtract(Duration(hours: value.result!.startTime!.add(const Duration(hours: 7)).hour,minutes: value.result!.startTime!.add(const Duration(hours: 7)).minute,seconds: value.result!.startTime!.add(const Duration(hours: 7)).second));
-        hoursBook = DateTime.now().hour - value.result!.startTime!.add(const Duration(hours: 7)).hour;
-        minutesBook = DateTime.now().minute - value.result!.startTime!.minute;
-        secondsBook = DateTime.now().second -  value.result!.startTime!.second;        
-        startTime = DateFormat('KK:mm:a').format(value.result!.startTime!.add(const Duration(hours: 7)));
+      if (value.statusCode == 200) {
+        now = DateTime.now().subtract(Duration(
+            hours: value.result!.startTime!.add(const Duration(hours: 7)).hour,
+            minutes:
+                value.result!.startTime!.add(const Duration(hours: 7)).minute,
+            seconds:
+                value.result!.startTime!.add(const Duration(hours: 7)).second));
+        startTime = DateFormat('KK:mm:a')
+            .format(value.result!.startTime!.add(const Duration(hours: 7)));
         secureStorage.writeSecureData("startTime", startTime);
         parkingName = value.result!.parking!.name!;
         secureStorage.writeSecureData("idParking", value.result!.parking!.id!);
-        price = value.result!.price!;
+        price = format
+                .format(double.parse(value.result!.price!
+                    .substring(0, value.result!.price!.length - 4)))
+                .toString() +
+            " VND/H";
       }
     });
     notifyListeners();
   }
 
   resetAfterPay() {
-    startTime ="";
-    status="";
-    price ="";
-    parkingName="";
+    startTime = "";
+    status = "";
+    price = "";
+    parkingName = "";
   }
 
   getList() async {

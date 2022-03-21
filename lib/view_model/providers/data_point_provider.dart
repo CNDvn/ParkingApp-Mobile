@@ -213,14 +213,14 @@ class MapProvider with ChangeNotifier {
     location.clear();
     polyPoints.clear();
     clearGetAddressParking();
-    destination = LatLng(0, 0);
+    // destination = LatLng(0, 0);
+    updatePosition();
     flag =false;
     notifyListeners();
   }
 
   reset() async {
     mapController = MapController();
-    getJsonData();
     notifyListeners();
   }
 

@@ -1,7 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:parkingappmobile/configs/exception/show_alert_dialog.dart';
+import 'package:parkingappmobile/configs/toast/toast.dart';
 import 'package:parkingappmobile/repository/impl/bookign_rep_impl.dart';
 import 'package:parkingappmobile/view_model/providers/booking_detail_provider.dart';
+import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
+import 'package:parkingappmobile/view_model/providers/my_car_provider.dart';
 import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +34,7 @@ class TrackingCarProvider with ChangeNotifier {
   checkOut(BuildContext context) async {
     BookingDetailProvider bookingDetailProvider =
         Provider.of<BookingDetailProvider>(context, listen: false);
+    final format = NumberFormat("#,##0,000");
     String idParking = await secureStorage.readSecureData("idParking");
     String idCar = await secureStorage.readSecureData("idCar");
     String firstNameSto = await secureStorage.readSecureData('firstName');
@@ -47,18 +54,96 @@ class TrackingCarProvider with ChangeNotifier {
         //user
         bookingDetailProvider.fullName = '$firstNameSto $lastNameSto';
         //booking
-        bookingDetailProvider.startTime =
-            DateFormat('KK:mm:a').format(value.result!.booking!.startTime!.add(const Duration(hours: 7)));
-        bookingDetailProvider.checkInTime =
-            DateFormat('KK:mm:a').format(value.result!.booking!.checkinTime!.add(const Duration(hours: 7)));
-        bookingDetailProvider.price = value.result!.booking!.price!.split(".").first+" VND/H";
-        bookingDetailProvider.amount = value.result!.amount.toString().split(".").first+" VND";
+        bookingDetailProvider.startTime = DateFormat('KK:mm:a').format(
+            value.result!.booking!.startTime!.add(const Duration(hours: 7)));
+        bookingDetailProvider.checkInTime = DateFormat('KK:mm:a').format(
+            value.result!.booking!.checkinTime!.add(const Duration(hours: 7)));
+        bookingDetailProvider.price = format
+                .format(double.parse(value.result!.booking!.price!
+                    .substring(0, value.result!.booking!.price!.length - 4)))
+                .toString() +
+            " VND/H";
+        bookingDetailProvider.amount = format
+                .format(double.parse(value.result!.amount.toString()
+                    .substring(0, value.result!.amount.toString().length - 4)))
+                .toString() +
+            " VND/H";
         secureStorage.writeSecureData("idBooking", value.result!.booking!.id!);
         flag = true;
         id = value.result!.id!;
+        showToastSuccess("Check-out Successfull");
         Navigator.pushReplacementNamed(context, "/BookingDetails");
       }
     });
     notifyListeners();
+  }
+
+  showDiaLog(BuildContext context) async {
+    final didRequestSignOut = await showAlertDialog(context,
+        title: 'Cancel Booked',
+        content: 'Are you sure that you want to Cancel Booked?',
+        defaultActionText: 'Ok',
+        cancelActionText: 'Cancel');
+    if (didRequestSignOut == true) {
+      cancelBook(context);
+    }
+  }
+
+  cancelBook(BuildContext context) async {
+    MyCarProvider myCarProvider =
+        Provider.of<MyCarProvider>(context, listen: false);
+    MapProvider mapProvider = Provider.of<MapProvider>(context, listen: false);
+    BookingDetailProvider providerBooking =
+        Provider.of<BookingDetailProvider>(context, listen: false);
+    myCarProvider.getBookingByIdCar();
+    DateTime time = myCarProvider.now;
+    String idCar = await secureStorage.readSecureData("idCar");
+    String url = '${UrlApi.serverPath}/bookings/cancel/car/$idCar';
+    String accessToken = await secureStorage.readSecureData("token");
+    if (time.minute < 2) {
+      if (time.hour == 0) {
+        BookingRepImpl().putBookCancelByIdCar1(url, accessToken).then((value) {
+          myCarProvider.listMyCarNoActive.remove(myCarProvider.firstCarBooked);
+          myCarProvider.firstCarBooked = "";
+          myCarProvider.resetAfterPay();
+          mapProvider.reset();
+          Navigator.pushNamedAndRemoveUntil(
+              context, "/BottomTabBar", (route) => false);
+        });
+      }
+    } else {
+      if (time.second > 0) {
+        BookingRepImpl()
+            .putBookCancelByIdCar(url, accessToken)
+            .then((value) async {
+          secureStorage.writeSecureData("idBooking", value.result!.id!);
+          providerBooking.payment(context);
+          final didrequestPayment = await showAlertDialog(context,
+              title: "Payment",
+              content: "You have run out of free time!!!"
+                  "Total Price: ${value.result!.payment!.amount}"
+                  "End Time: ${value.result!.payment!.endTime}",
+              defaultActionText: "Ok");
+          if (didrequestPayment == true) {
+            myCarProvider.listMyCarNoActive
+                .remove(myCarProvider.firstCarBooked);
+            myCarProvider.firstCarBooked = "";
+            myCarProvider.resetAfterPay();
+            mapProvider.reset();
+            Navigator.pushNamedAndRemoveUntil(
+                context, "/BottomTabBar", (route) => false);
+          }
+        });
+      } else {
+        BookingRepImpl().putBookCancelByIdCar1(url, accessToken).then((value) {
+          myCarProvider.listMyCarNoActive.remove(myCarProvider.firstCarBooked);
+          myCarProvider.firstCarBooked = "";
+          myCarProvider.resetAfterPay();
+          mapProvider.reset();
+          Navigator.pushNamedAndRemoveUntil(
+              context, "/BottomTabBar", (route) => false);
+        });
+      }
+    }
   }
 }
