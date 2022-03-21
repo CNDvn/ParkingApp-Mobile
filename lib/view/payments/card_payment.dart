@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/repository/impl/wallet_rep_impl.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
+import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
-class CardPayment extends StatelessWidget {
-  const CardPayment({Key? key, 
-  // required this.card
-  }) : super(key: key);
-  // CardBank card;
+import '../../model/response/get_wallet_res.dart';
+
+class CardPayment extends StatefulWidget {
+  CardPayment({Key? key, this.wallet}) : super(key: key);
+  Result? wallet;
+
+  @override
+  State<CardPayment> createState() => _CardPaymentState();
+}
+
+class _CardPaymentState extends State<CardPayment> {
+  final formatDetail = NumberFormat("#,##0,000");
+
   @override
   Widget build(BuildContext context) {
+    final SecureStorage secureStorage = SecureStorage();
     Size size = MediaQuery.of(context).size;
     return Container(
+      height: size.height * 0.4,
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -30,69 +45,113 @@ class CardPayment extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
-        child: Column(children: <Widget>[
-          Row(
-            children: const [
-              Text("My Card",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 1.6))
-            ],
-          ),
-          Row(
+        child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:const [
-               Text("* * * *",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 2)),
-               Text("* * * *",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 2)),
-               Text("* * * *",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 2)),
-              Text(
-                  // card.cardNumber[card.cardNumber.length - 4].toString() +
-                  //     card.cardNumber[card.cardNumber.length - 3].toString() +
-                  //     card.cardNumber[card.cardNumber.length - 2].toString() +
-                  //     card.cardNumber[card.cardNumber.length - 1].toString(),
-                  "999",
-                  style:  TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 1.6)),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text("Card Holder",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 1.6)),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:const [
-               Text("DIEP LOC",
-                // card.cardHolder,
-                  style:  TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 1.6)),
-            ],
-          ),
-          SizedBox(
-            height: size.height * 0.01,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children:const [
-               Text("Expires",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 1.6)),
-              Text("01/2022",
-                // card.dateValidFrom,
-                  style:  TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 18, height: 1.6))
-            ],
-          ),
-        ]),
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text("My Wallet",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 1.6))
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text("* * * *",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 2)),
+                  Text("* * * *",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 2)),
+                  Text("* * * *",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 2)),
+                  Text("* * * *",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 2)),
+                ],
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Current balance",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 1.6)),
+                  Text(
+                      widget.wallet?.currentBalance != null
+                          ? formatDetail.format(double.parse(
+                                  widget.wallet!.currentBalance!)) +
+                              " VND"
+                          : "",
+                      // card.dateValidFrom,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 1.6))
+                ],
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Frozen Money",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 1.6)),
+                  Text(
+                      widget.wallet?.frozenMoney != null
+                          ? formatDetail.format(
+                                  double.parse(widget.wallet!.frozenMoney!)) +
+                              " VND"
+                          : "",
+                      // card.dateValidFrom,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          height: 1.6))
+                ],
+              ),
+              FloatingActionButton(
+                onPressed: () {
+                  secureStorage.readSecureData("token").then((token) => {
+                        WalletRepImpl()
+                            .getWallet(UrlApi.walletPath, token)
+                            .then((value) async {
+                          setState(() {
+                            widget.wallet = value.result;
+                          });
+                        })
+                      });
+                },
+                backgroundColor: AppColor.whiteText,
+                child: Icon(
+                  Icons.refresh,
+                  size: 36,
+                  color: AppColor.blueText,
+                ),
+              ),
+            ]),
       ),
     );
   }
