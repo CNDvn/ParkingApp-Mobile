@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
+import 'package:parkingappmobile/constants/assets_path.dart';
 
 class CardPromotion extends StatelessWidget {
   const CardPromotion({
     Key? key,
     required this.size,
+    required this.image,
+    required this.nameParking,
+    required this.address,
+    required this.description,
+    required this.code,
+    required this.percent,
   }) : super(key: key);
   final Size size;
+  final String image;
+  final String nameParking;
+  final String address;
+  final String description;
+  final String code;
+  final int percent;
 
   @override
   Widget build(BuildContext context) {
@@ -20,75 +33,78 @@ class CardPromotion extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Tiem Duy dep zai",
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
-                          height: 2.0),
-                    ),
-                  ],
+            Container(
+              width: 1000,
+              padding: EdgeInsets.all(2), // Border width
+              decoration: BoxDecoration(
+                  color: Colors.black, borderRadius: BorderRadius.circular(20)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: SizedBox.fromSize(
+                  size: Size.fromRadius(48), // Image radius
+                  child: Image.network(image, fit: BoxFit.cover),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.network(
-                    "https://thuexerangdong.com/wp-content/uploads/2020/06/gia-gui-xe-o-to-thang-tphcm-luon-la-mot-trong-nhung-moi-quan-tam-hang-dau-hien-nay-doi-voi-nhung-ai-dang-va-se-so-huu-o-to-rieng.jpg",
-                    width: size.width * 0.4,
-                    height: size.height * 0.2,
-                  ),
-                ),
-              ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Address: ",
-                  style: TextStyle(fontSize: 16, color: AppColor.greyText),
-                ),
-                Text(
-                  "Tran Duy Hung",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                    height: 1.6,
-                  ),
-                ),
-              ],
+            Text(
+              nameParking,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 16.0, height: 2.0),
+            ),
+            Text(
+              "Address: " + address,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+                height: 1.6,
+              ),
             ),
             const Divider(
               color: Colors.black,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Total Timing",
-                  style: TextStyle(fontSize: 16, color: AppColor.greyText),
+                  description,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16.0, height: 2.0),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RichText(
+                  text: TextSpan(
+                      text: "CODE: ",
+                      style: TextStyle(
+                          color: AppColor.blackText,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: code,
+                            style: TextStyle(color: AppColor.greenToast))
+                      ]),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.access_alarm,
-                      color: AppColor.lightButton,
-                      size: 24.0,
-                    ),
                     Text(
-                      "50%",
-                      style: TextStyle(
+                      percent.toString(),
+                      style: const TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 15,
+                          fontSize: 25,
                           height: 1.6,
-                          color: AppColor.lightButton),
+                          color: Colors.red),
                     ),
+                    Image.asset(AssetPath.promotionPercent,
+                        width: 50, color: Colors.red),
                   ],
                 )
               ],
