@@ -59,5 +59,6 @@ class TrackingCarProvider with ChangeNotifier {
         Navigator.pushReplacementNamed(context, "/BookingDetails");
       }
     });
+    notifyListeners();
   }
 }

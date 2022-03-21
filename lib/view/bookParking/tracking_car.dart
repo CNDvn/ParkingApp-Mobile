@@ -93,14 +93,15 @@ class _TrackingCarState extends State<TrackingCar> {
       providerTracking.insertStorage();
       providerBooking.getInformation();
       //------------------
-      providerTracking.checkOut(context);
+      // providerTracking.checkOut(context);      
       setState(() {
         if (providerTracking.flag) {
           timer?.cancel();
         }
       });
+      Navigator.pushReplacementNamed(context, "/QRCodePage");
     }
-
+    
     return Scaffold(
         backgroundColor: AppColor.whiteBackground,
         drawer: const DrawerDefault(),

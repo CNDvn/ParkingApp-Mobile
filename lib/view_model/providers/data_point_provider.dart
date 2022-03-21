@@ -233,6 +233,7 @@ class MapProvider with ChangeNotifier {
     }
     LatLng pos = await determinePosition();
     point = pos;
+    destination = pos;
     Future.delayed(const Duration(milliseconds: 50), () {
       mapController.move(point, zoomMap);
     });

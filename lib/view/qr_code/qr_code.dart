@@ -5,7 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_text_style.dart';
 import 'package:parkingappmobile/view/viewPark/view_park.dart';
+import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
+import 'package:parkingappmobile/view_model/service/service_storage.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRCodePage extends StatefulWidget {
@@ -53,7 +56,9 @@ class _QRCodePageState extends State<QRCodePage> {
                         color: Colors.black87,
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
+                        // Navigator.popAndPushNamed(context, "/TrackingCar");
+                        Navigator.pushNamedAndRemoveUntil(context, "/TrackingCar", (route) => false);
                       },
                     )),
                   ]),
@@ -74,51 +79,15 @@ class _QRCodePageState extends State<QRCodePage> {
                       height: size.height * 0.6,
                       width: size.width * 0.8,
                       child: _buildQrView(context)),
-                  FittedBox(
-                    fit: BoxFit.contain,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        if (result != null)
-                          Text(
-                              'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                        else
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                margin: const EdgeInsets.all(8),
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    await controller?.pauseCamera();
-                                  },
-                                  child: const Icon(Icons.not_started_outlined),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.all(8),
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    await controller?.resumeCamera();
-                                  },
-                                  child: const Icon(Icons.pause),
-                                ),
-                              )
-                            ],
-                          ),
-                      ],
-                    ),
-                  )
                 ]),
             SizedBox(
+              height: size.height * 0.02,
+            ),
+            SizedBox(
               child: ButtonDefault(
-                  content: "Validate",
-                  voidCallBack: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const ViewPark();
-                    }));
+                  content: "Reset Camera",
+                  voidCallBack: () async {
+                    await controller?.resumeCamera();
                   }),
             ),
             SizedBox(
@@ -152,12 +121,22 @@ class _QRCodePageState extends State<QRCodePage> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    TrackingCarProvider providerTracking =
+        Provider.of<TrackingCarProvider>(context, listen: false);
+    final SecureStorage secureStorage = SecureStorage();
     setState(() {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
+        if (result!.code!.isNotEmpty) {
+          controller.pauseCamera();
+          secureStorage.writeSecureData("idParking", result!.code.toString());
+          Future.delayed(const Duration(seconds: 2), () {
+            providerTracking.checkOut(context);
+          });
+        }
       });
     });
   }
