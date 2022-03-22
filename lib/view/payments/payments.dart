@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/response/banks_res.dart';
 import 'package:parkingappmobile/model/response/get_wallet_res.dart';
 import 'package:parkingappmobile/repository/impl/banks_rep_impl.dart';
