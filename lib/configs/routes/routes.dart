@@ -5,6 +5,7 @@ import 'package:parkingappmobile/view/bookParking/booking_details.dart';
 import 'package:parkingappmobile/view/login/signin_page.dart';
 import 'package:parkingappmobile/view/my_car/qrcode_mycar.dart';
 import 'package:parkingappmobile/view/password/enter_newpassword.dart';
+import 'package:parkingappmobile/view/protect/protect_routing.dart';
 import 'package:parkingappmobile/view/qr_code/qr_code.dart';
 import 'package:parkingappmobile/view/sign_up/enter_password.dart';
 import 'package:parkingappmobile/view/sign_up/sign_up_page.dart';
@@ -14,7 +15,7 @@ import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 class Routes {
   static final Map<String, Widget Function(BuildContext)> routes = {
     // "/": (context) => const Welcome(),
-    "/": (context) => const SignInPage(),    
+    "/SignInPage": (context) => const SignInPage(),
     //SignUp
     "/SignUpPage": (context) => const SignUpPage(),
     "/EnterPassword": (context) => const EnterPassword(),
@@ -31,5 +32,6 @@ class Routes {
     "/EnterChangePassword": (context) => const EnterChangePassword(),
     //QRCode
     "/QRCodeMyCar": (context) => const QRCodeMyCar(),
+    "/": (context) => const ProtectRouting(),
   };
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/model/response/history_res.dart';
 import 'package:parkingappmobile/view/history/card_history.dart';
 
+// ignore: must_be_immutable
 class History extends StatefulWidget {
   List<Result>? history;
   History({Key? key, this.history}) : super(key: key);

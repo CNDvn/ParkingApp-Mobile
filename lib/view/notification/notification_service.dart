@@ -15,6 +15,7 @@ class NotificationService {
 
   Future<void> init() async {
     final AndroidInitializationSettings initializationSettingsAndroid =
+        // ignore: prefer_const_constructors
         AndroidInitializationSettings('notification');
 
     final InitializationSettings initializationSettings =

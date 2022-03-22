@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
 
-  print("message ID: " + message.messageId!);
+  log("message ID: " + message.messageId!);
 }
 
 Future<void> main() async {
@@ -24,6 +26,7 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatefulWidget {
   MyApp({Key? key}) : super(key: key);
   String? message;
@@ -43,7 +46,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     messaging = FirebaseMessaging.instance;
     _registerOnFireBase();
     getMessage();
@@ -63,6 +65,7 @@ class _MyAppState extends State<MyApp> {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification notification = message.notification!;
+      // ignore: unused_local_variable
       AndroidNotification? android = message.notification!.android;
       if (message.notification != null) {
         await NotificationService().flutterLocalNotificationsPlugin.show(

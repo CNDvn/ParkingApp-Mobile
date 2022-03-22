@@ -9,6 +9,7 @@ import 'package:parkingappmobile/view/payments/payments.dart';
 import 'package:parkingappmobile/view/userProfile/user_profile.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
 import 'package:parkingappmobile/widgets/Drawer/drawer.dart';
+import 'package:parkingappmobile/widgets/process_circle/process_circle.dart';
 import 'package:provider/provider.dart';
 
 class BottomTabBar extends StatefulWidget {
@@ -20,8 +21,9 @@ class BottomTabBar extends StatefulWidget {
 
 class _BottomTabBarState extends State<BottomTabBar>
     with AutomaticKeepAliveClientMixin<BottomTabBar> {
-  GlobalKey<ScaffoldState>? scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   int currentTab = 0;
+  String name ="";
   TabController? _tabController;
   List<Widget> screens = [
     const GoogleMap(),
@@ -35,9 +37,10 @@ class _BottomTabBarState extends State<BottomTabBar>
     super.dispose();
   }
 
-  void onTapHandler(int index) {
+  void onTapHandler(int index,String name) {
     setState(() {
       currentTab = index;
+      name = index.toString();
     });
   }
 
@@ -67,7 +70,7 @@ class _BottomTabBarState extends State<BottomTabBar>
                 color: Colors.black87,
               ),
               onPressed: () {
-                scaffoldKey!.currentState?.openDrawer();
+                scaffoldKey.currentState?.openDrawer();
               },
             )),
             SizedBox(
@@ -97,6 +100,7 @@ class _BottomTabBarState extends State<BottomTabBar>
       ]),
       floatingActionButton: ActionButtonMid(
         currentTab: currentTab,
+        name: name,      
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -112,14 +116,14 @@ class _BottomTabBarState extends State<BottomTabBar>
                 children: [
                   IconButtonStyle(
                       voidCallback: () {
-                        onTapHandler(0);
+                        onTapHandler(0,'0');
                       },
                       icon: Icons.home_outlined,
                       currentTab: currentTab,
                       tab: 0),
                   IconButtonStyle(
                       voidCallback: () {
-                        onTapHandler(1);
+                        onTapHandler(1,'1');
                       },
                       icon: Icons.payment,
                       currentTab: currentTab,
@@ -131,14 +135,14 @@ class _BottomTabBarState extends State<BottomTabBar>
                 children: [
                   IconButtonStyle(
                       voidCallback: () {
-                        onTapHandler(2);
+                        onTapHandler(2,'2');
                       },
                       icon: Icons.history,
                       currentTab: currentTab,
                       tab: 2),
                   IconButtonStyle(
                       voidCallback: () {
-                        onTapHandler(3);
+                        onTapHandler(3,'3');
                       },
                       icon: Icons.directions_car,
                       currentTab: currentTab,

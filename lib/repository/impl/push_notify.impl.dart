@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,12 +12,15 @@ class PushNotifyImp implements PushNotifyRepo {
       String url, String accessToken, PushNotifyReq req) async {
     var result = PushNotifyRes();
     try {
+      // ignore: unused_local_variable
       Response response = await Dio().put(url,
           data: req.toJson(),
           options: Options(headers: {
             HttpHeaders.authorizationHeader: 'Bearer $accessToken'
           }));
-    } catch (e) {}
+    } catch (e) {
+      log(e.toString());
+    }
     return result;
   }
 }

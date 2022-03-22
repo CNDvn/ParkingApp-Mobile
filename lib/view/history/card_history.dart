@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/response/history_res.dart';
 
+// ignore: must_be_immutable
 class CardHistory extends StatelessWidget {
   Result? history;
   CardHistory({Key? key, this.history, required this.isComplete})
