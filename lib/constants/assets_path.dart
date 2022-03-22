@@ -24,6 +24,6 @@ class AssetPath {
   static const String qscanCode = '$prePath/qscan_code.jpeg';
   static const String settings = '$prePath/settings.jpg';
   static const String trackingCar = '$prePath/circleprocessing.json';
-  static const String promotionPercent = '$prePath/promotion.png';  
-  static const String bell = '$prePath/bell.png';   
+  static const String promotionPercent = '$prePath/promotion.png';
+  static const String bell = '$prePath/bell.png';
 }
