@@ -60,32 +60,36 @@ class _PaymentsState extends State<Payments> {
               height: size.height * 0.1,
             ),
             const Text(
-              "Add money to the account",
+              "Your Wallet",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w700, fontSize: 18, height: 1.6),
             ),
-            Row(
+            Column(
               children: [
                 Text(
                   'Choose a bank: ',
                   style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 ),
+                // ignore: unnecessary_null_comparison
                 if (listBank != null)
-                  DropdownButton(
-                    value: provider.dropdownValue,
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: listBank.map((ResultBanks items) {
-                      return DropdownMenuItem(
-                        value: items.id,
-                        child: Text(items.name!),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        provider.dropdownValue = newValue!;
-                      });
-                    },
+                  SizedBox(
+                    width: size.width,
+                    child: DropdownButton(
+                      value: provider.dropdownValue,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: listBank.map((ResultBanks items) {
+                        return DropdownMenuItem(
+                          value: items.id,
+                          child: Text(items.name!),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          provider.dropdownValue = newValue!;
+                        });
+                      },
+                    ),
                   ),
               ],
             ),
@@ -104,11 +108,10 @@ class _PaymentsState extends State<Payments> {
                   ),
                 ),
                 const Text(" VND"),
-                FloatingActionButton(
+                ElevatedButton(
                   onPressed: () {
                     provider.submitData(context);
                   },
-                  backgroundColor: AppColor.lightButton,
                   child: const Icon(
                     Icons.add,
                     size: 36,

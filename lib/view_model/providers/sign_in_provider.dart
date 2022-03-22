@@ -8,7 +8,6 @@ import 'package:parkingappmobile/model/request/sign_in_req.dart';
 import 'package:parkingappmobile/repository/impl/auth_rep_impl.dart';
 import 'package:parkingappmobile/repository/impl/push_notify.impl.dart';
 import 'package:parkingappmobile/repository/impl/users_me_rep_impl.dart';
-import 'package:parkingappmobile/view/bottomNavigationBar/bottom_tab_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:parkingappmobile/configs/exception/exception.dart';
 import 'package:parkingappmobile/view_model/auth.dart';
@@ -123,7 +122,7 @@ class SignInProvider with ChangeNotifier {
       checkPassword(_password.value ?? "");
       notifyListeners();
     } else if (!submitValid && isValid) {
-      showDialogCustom(context);
+      // showDialogCustom(context);
       AuthRepImpl()
           .postSignIn(
               UrlApi.signinPath,
@@ -140,7 +139,7 @@ class SignInProvider with ChangeNotifier {
         await PushNotifyImp()
             .pushNotify(
                 UrlApi.pushNotify, token, PushNotifyReq(token: deviceToken))
-            .then((value) => print(value));
+            .then((value) => log(value.toString()));
         await UsersMeRepImpl()
             .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
         userProvider.getProfile();
@@ -189,6 +188,12 @@ class SignInProvider with ChangeNotifier {
               "token", value.result!.accessToken);
           await secureStorage.writeSecureData(
               "customer", value.result!.refreshToken);
+          final deviceToken = await secureStorage.readSecureData("deviceToken");
+        final token = await secureStorage.readSecureData("token");
+        PushNotifyImp()
+            .pushNotify(
+                UrlApi.pushNotify, token, PushNotifyReq(token: deviceToken))
+            .then((value) => log(value.toString()));
           UsersMeRepImpl()
               .getUsersMe(UrlApi.usersMePath, value.result!.accessToken);
           userProvider.getProfile();
@@ -196,10 +201,15 @@ class SignInProvider with ChangeNotifier {
           showToastSuccess(value.result!.message);
           clearPhoneController();
           clearPasswordController();
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const BottomTabBar();
-          }));
-        });
+          // Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //   return const BottomTabBar();
+          // }));
+          Navigator.pushReplacementNamed(context, "/BottomTabBar");
+        }).onError((error, stackTrace) {
+        log(error.toString());
+        Navigator.pushReplacementNamed(context, "/");       
+      });
+       notifyListeners();
       }
     } on Exception catch (e) {
       _showSignInError(context, e);
@@ -208,6 +218,7 @@ class SignInProvider with ChangeNotifier {
 
   Future<void> _signOut(BuildContext context) async {
     try {
+      showDialogCustom(context);
       await auth.signOut();
       String accessToken = await secureStorage.readSecureData("token");
       AuthRepImpl().postSignOut(UrlApi.signOut, accessToken);

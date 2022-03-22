@@ -7,6 +7,7 @@ import 'package:parkingappmobile/view_model/url_api/url_api.dart';
 
 import '../../model/response/get_wallet_res.dart';
 
+// ignore: must_be_immutable
 class CardPayment extends StatefulWidget {
   CardPayment({Key? key, this.wallet}) : super(key: key);
   Result? wallet;
@@ -132,7 +133,7 @@ class _CardPaymentState extends State<CardPayment> {
                           height: 1.6))
                 ],
               ),
-              FloatingActionButton(
+              ElevatedButton(
                 onPressed: () {
                   secureStorage.readSecureData("token").then((token) => {
                         WalletRepImpl()
@@ -144,7 +145,6 @@ class _CardPaymentState extends State<CardPayment> {
                         })
                       });
                 },
-                backgroundColor: AppColor.whiteText,
                 child: Icon(
                   Icons.refresh,
                   size: 36,
