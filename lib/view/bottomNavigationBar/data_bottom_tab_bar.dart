@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/model/entity/type_car.dart';
-import 'package:parkingappmobile/view/qr_code/qr_code.dart';
 import 'package:parkingappmobile/repository/impl/car_rep_impl.dart';
 import 'package:parkingappmobile/view/my_car/create_car.dart';
 import 'package:parkingappmobile/view_model/providers/data_point_provider.dart';
@@ -48,14 +45,18 @@ class IconButtonStyle extends StatelessWidget {
 
 final List<IconData> iconMid = [
   Icons.near_me_sharp,
-  Icons.camera_alt,
+  Icons.account_balance_wallet,
   Icons.query_builder,
   Icons.add
 ];
 
+// ignore: must_be_immutable
 class ActionButtonMid extends StatelessWidget {
-  const ActionButtonMid({Key? key, required this.currentTab}) : super(key: key);
-  final int currentTab;
+  ActionButtonMid(
+      {Key? key, required this.currentTab, required this.name})
+      : super(key: key);
+  int currentTab;
+  String name;
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +64,14 @@ class ActionButtonMid extends StatelessWidget {
     MyCarProvider myCarProvider = Provider.of<MyCarProvider>(context);
     final SecureStorage secureStorage = SecureStorage();
     return FloatingActionButton(
+        // ignore: unnecessary_string_interpolations
+        heroTag: '$name',
         backgroundColor: AppColor.lightButton,
         child: Icon(
           iconMid[currentTab],
           size: 36,
         ),
-        onPressed: () async {
+        onPressed: () async {          
           switch (currentTab) {
             case 0:
               mapProvider.updatePosition();
@@ -85,19 +88,14 @@ class ActionButtonMid extends StatelessWidget {
                   return CreateCar(
                     typeCars: typeCars,
                   );
-                }));
-              }).onError((error, stackTrace) {
-                log(error.toString());
-              });
+                }
+                ));
+              }).onError((error, stackTrace) {});
               break;
             default:
               break;
           }
-          if (currentTab == 1) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return const QRCodePage();
-            }));
-          }
+          if (currentTab == 1) {}
         });
   }
 }

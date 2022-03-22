@@ -42,7 +42,7 @@ class _ListCarHistoryState extends State<ListCarHistory> {
                 0, size.height * 0.05, 0, size.height * 0.05),
           ),
           const Text(
-            "Select the car you want to see the history",
+            "Your Car's History",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontWeight: FontWeight.w700, fontSize: 18, height: 1.6),

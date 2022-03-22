@@ -10,6 +10,7 @@ import 'package:parkingappmobile/view_model/providers/sign_in_provider.dart';
 import 'package:parkingappmobile/view_model/providers/sign_up_provider.dart';
 import 'package:parkingappmobile/view_model/providers/tracking_car_provider.dart';
 import 'package:parkingappmobile/view_model/providers/user_profile_provider.dart';
+import 'package:parkingappmobile/view_model/providers/wallet_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -51,6 +52,9 @@ class MainProviders {
     ),
     ChangeNotifierProvider<CarDetailProvider>(
       create: (context) => CarDetailProvider(),
+    ),
+    ChangeNotifierProvider<WalletProvider>(
+      create: (context) => WalletProvider(),
     ),
   ];
 }

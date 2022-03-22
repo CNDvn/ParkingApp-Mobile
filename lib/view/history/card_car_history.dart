@@ -8,6 +8,7 @@ import '../../model/entity/car.dart';
 import '../../view_model/service/service_storage.dart';
 import '../../view_model/url_api/url_api.dart';
 
+// ignore: must_be_immutable
 class CardCarHistory extends StatefulWidget {
   CardCarHistory({Key? key, this.car}) : super(key: key);
   Car? car;
