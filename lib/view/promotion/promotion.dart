@@ -64,7 +64,7 @@ class Promotion extends StatelessWidget {
                     image: "https://i.ibb.co/z4wSzZB/ec493909f47a.jpg",
                     nameParking: "Bãi Giữ Xe Bà Huệ",
                     address: "Nguyễn Huệ Quận 1",
-                    description: "Áp dụng cho thành viên có sinh nhật tháng 3",
+                    description: "Áp dụng cho tháng 3",
                     code: "BB10XH",
                     percent: 20,
                   ),

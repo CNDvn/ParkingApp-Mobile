@@ -79,9 +79,15 @@ dependencies:
   url_launcher: ^6.0.20
   shared_preferences: ^2.0.13
   flutter_local_notifications: ^9.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.9.2"
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/1024.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
