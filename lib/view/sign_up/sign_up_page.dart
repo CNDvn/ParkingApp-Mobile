@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:parkingappmobile/configs/themes/app_color.dart';
 import 'package:parkingappmobile/constants/assets_path.dart';
 import 'package:parkingappmobile/view/login/background_login.dart';
+import 'package:parkingappmobile/view_model/auth.dart';
 import 'package:parkingappmobile/view_model/providers/sign_up_provider.dart';
 import 'package:parkingappmobile/widgets/button/button.dart';
 import 'package:parkingappmobile/widgets/input_date/input_date.dart';
@@ -30,8 +31,10 @@ class SignUpPage extends StatelessWidget {
                       Icons.arrow_back,
                       color: Colors.black87,
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
+                    onPressed: ()async {
+                      final AuthBase auth = Auth();
+                      auth.signOut();
+                      Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
                     },
                   )),
                 ]),

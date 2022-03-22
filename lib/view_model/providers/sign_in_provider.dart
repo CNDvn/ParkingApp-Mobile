@@ -201,13 +201,9 @@ class SignInProvider with ChangeNotifier {
           showToastSuccess(value.result!.message);
           clearPhoneController();
           clearPasswordController();
-          // Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //   return const BottomTabBar();
-          // }));
           Navigator.pushReplacementNamed(context, "/BottomTabBar");
         }).onError((error, stackTrace) {
-        log(error.toString());
-        Navigator.pushReplacementNamed(context, "/");       
+        log(error.toString());     
       });
        notifyListeners();
       }
@@ -242,7 +238,7 @@ class SignInProvider with ChangeNotifier {
     if (didRequestSignOut == true) {
       mapProvider.resetAll();
       _signOut(context);
-      Navigator.pushReplacementNamed(context, "/");
+      Navigator.pushReplacementNamed(context, "/SignInPage");
     }
   }
 }
