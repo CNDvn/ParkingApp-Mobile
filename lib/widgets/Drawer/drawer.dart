@@ -126,7 +126,9 @@ class _DrawerDefaultState extends State<DrawerDefault> {
               "Promotion code",
               style: TextStyle(fontWeight: FontWeight.w900),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, "/Promotion");
+            },
           ),
           const Divider(
             indent: 20,

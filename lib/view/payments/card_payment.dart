@@ -148,7 +148,7 @@ class _CardPaymentState extends State<CardPayment> {
                 child: Icon(
                   Icons.refresh,
                   size: 36,
-                  color: AppColor.blueText,
+                  color: AppColor.whiteText,
                 ),
               ),
             ]),
