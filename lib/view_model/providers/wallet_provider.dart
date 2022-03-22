@@ -22,7 +22,6 @@ class WalletProvider with ChangeNotifier {
         .hasMatch(textPrice)) {
       showToastFail("Price invalid");
     } else {
-      showToastSuccess("Success");
       CashTransfersRepImpl()
           .postTransfers(
               UrlApi.cashTransfersPath,
@@ -30,15 +29,14 @@ class WalletProvider with ChangeNotifier {
                   amount: int.parse(textPrice), bankId: dropdownValue!),
               accessToken)
           .then((value) async {
-        if (await canLaunch(value.result!)) {
-          await launch(
-            value.result!,
-            forceSafariVC: false,
-          );
-          priceController.clear();
-          priceController.text = "";
-        }
+        await launch(
+          value.result!,
+          forceSafariVC: false,
+        );
+        priceController.clear();
+        priceController.text = "";
       });
+      showToastSuccess("Success");
     }
   }
 }
